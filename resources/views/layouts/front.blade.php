@@ -40,13 +40,28 @@
                     </a>
                 </div>
                 <div class="hidden sm:ml-6 sm:flex sm:items-center sm:gap-8">
-                    <a href="{{ route('front.home') }}" class="text-slate-900 inline-flex items-center px-1 pt-1 border-b-2 border-blue-500 text-sm font-medium">
-                        Home
+                    <a href="{{ route('front.home') }}"
+                       @class([
+                           'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors',
+                           'text-slate-900 border-blue-500' => request()->routeIs('front.home'),
+                           'text-slate-500 hover:text-slate-900 border-transparent hover:border-blue-400' => !request()->routeIs('front.home'),
+                       ])">
+                        Beranda
                     </a>
-                    <a href="{{ route('front.packages.index') }}" class="text-slate-500 hover:text-slate-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-blue-400 text-sm font-medium transition-colors">
+                    <a href="{{ route('front.packages.index') }}"
+                       @class([
+                           'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors',
+                           'text-slate-900 border-blue-500' => request()->routeIs('front.packages.*'),
+                           'text-slate-500 hover:text-slate-900 border-transparent hover:border-blue-400' => !request()->routeIs('front.packages.*'),
+                       ])">
                         Paket Wisata
                     </a>
-                    <a href="#why-ezitour" class="text-slate-500 hover:text-slate-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-blue-400 text-sm font-medium transition-colors">
+                    <a href="{{ route('front.about') }}"
+                       @class([
+                           'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors',
+                           'text-slate-900 border-blue-500' => request()->routeIs('front.about'),
+                           'text-slate-500 hover:text-slate-900 border-transparent hover:border-blue-400' => !request()->routeIs('front.about'),
+                       ])">
                         Tentang Kami
                     </a>
                 </div>
@@ -93,6 +108,7 @@
                     <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Layanan</h3>
                     <ul class="space-y-3">
                         <li><a href="{{ route('front.packages.index') }}" class="text-slate-400 hover:text-blue-400 text-sm transition-colors">Paket Wisata</a></li>
+                        <li><a href="{{ route('front.about') }}" class="text-slate-400 hover:text-blue-400 text-sm transition-colors">Tentang Kami</a></li>
                         <li><a href="#" class="text-slate-400 hover:text-blue-400 text-sm transition-colors">Sewa Mobil</a></li>
                         <li><a href="#" class="text-slate-400 hover:text-blue-400 text-sm transition-colors">Custom Trip</a></li>
                     </ul>

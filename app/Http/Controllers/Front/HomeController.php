@@ -13,4 +13,9 @@ class HomeController extends Controller
 
         return view('front.home', compact('packages'));
     }
+
+    public function about()
+    {
+        return view('front.about');
+    }
 }
