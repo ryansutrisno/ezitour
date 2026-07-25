@@ -1,3 +1,10 @@
+## [1.2.0](https://github.com/ryansutrisno/ezitour/compare/v1.1.0...v1.2.0) (2026-07-25)
+
+
+### ✨ Features
+
+* add spatie/laravel-settings integration with Filament admin pages ([a715d00](https://github.com/ryansutrisno/ezitour/commit/a715d00fc76b400ea89d5634d618eb63c7c0015e))
+
 ## [1.1.0](https://github.com/ryansutrisno/ezitour/compare/v1.0.0...v1.1.0) (2026-07-25)
 
 
