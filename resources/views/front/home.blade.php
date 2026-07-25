@@ -3,6 +3,8 @@
 @section('title', 'EziTour - Liburan Impian Tanpa Ribet')
 
 @section('content')
+    @php($home = app(App\Settings\HomeSettings::class))
+
     {{-- ============================================================
     (a) HERO — gradient mesh + inline SVG travel scene (no external images)
     ============================================================ --}}
@@ -20,16 +22,16 @@
                 <div class="text-center lg:text-left">
                     <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-pill bg-white shadow-soft text-blue-700 text-xs font-semibold border border-blue-100">
                         <span class="flex h-2 w-2 rounded-full bg-sand-500"></span>
-                        Travel partner tepercaya sejak 2019
+                        {{ $home->heroBadge }}
                     </span>
 
                     <h1 class="mt-5 font-display font-extrabold tracking-tight text-slate-900 text-4xl sm:text-5xl lg:text-6xl leading-[1.05]">
-                        Liburan Impian,
-                        <span class="block bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">Tanpa Ribet.</span>
+                        {{ $home->heroHeadline }}
+                        <span class="block bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">{{ $home->heroHeadlineAccent }}</span>
                     </h1>
 
                     <p class="mt-5 text-base sm:text-lg text-slate-600 sm:max-w-xl lg:max-w-lg mx-auto lg:mx-0 leading-relaxed">
-                        Pilih paket wisata favoritmu, kami urus sisanya. Dari transportasi, supir berpengalaman, hingga tiket masuk wisata. Kamu tinggal duduk manis dan nikmati perjalanannya!
+                        {{ $home->heroSubheadline }}
                     </p>
 
                     {{-- Search box --}}
@@ -127,22 +129,22 @@
             <dl class="grid grid-cols-2 lg:grid-cols-4 gap-8">
                 <div class="text-center">
                     <dt class="sr-only">Destinasi</dt>
-                    <dd class="font-display text-3xl sm:text-4xl font-extrabold text-white">500+</dd>
+                    <dd class="font-display text-3xl sm:text-4xl font-extrabold text-white">{{ $home->statDestinations }}</dd>
                     <p class="mt-1 text-sm text-blue-200">Destinasi wisata</p>
                 </div>
                 <div class="text-center">
                     <dt class="sr-only">Traveler</dt>
-                    <dd class="font-display text-3xl sm:text-4xl font-extrabold text-white">10K+</dd>
+                    <dd class="font-display text-3xl sm:text-4xl font-extrabold text-white">{{ $home->statTravelers }}</dd>
                     <p class="mt-1 text-sm text-blue-200">Traveler puas</p>
                 </div>
                 <div class="text-center">
                     <dt class="sr-only">Rating</dt>
-                    <dd class="font-display text-3xl sm:text-4xl font-extrabold text-sand-300">4.9</dd>
+                    <dd class="font-display text-3xl sm:text-4xl font-extrabold text-sand-300">{{ $home->statRating }}</dd>
                     <p class="mt-1 text-sm text-blue-200">Rating rata-rata</p>
                 </div>
                 <div class="text-center">
                     <dt class="sr-only">Support</dt>
-                    <dd class="font-display text-3xl sm:text-4xl font-extrabold text-white">24/7</dd>
+                    <dd class="font-display text-3xl sm:text-4xl font-extrabold text-white">{{ $home->statSupport }}</dd>
                     <p class="mt-1 text-sm text-blue-200">Dukungan pelanggan</p>
                 </div>
             </dl>
