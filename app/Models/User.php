@@ -23,6 +23,9 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
+        'phone',
+        'avatar_url',
+        'role',
     ];
 
     /**
@@ -45,6 +48,7 @@ class User extends Authenticatable implements FilamentUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'role' => 'string',
         ];
     }
 
@@ -54,11 +58,48 @@ class User extends Authenticatable implements FilamentUser
      * Filament v3 blocks any non-{@link FilamentUser} model outside of the
      * `local` environment, so implementing this contract is required for the
      * panel to be reachable in staging/production (and during tests, which run
-     * with `APP_ENV=testing`). The app has no role system yet, so every
-     * authenticated user is granted access — tighten this once roles land.
+     * with `APP_ENV=testing`).
+     *
+     * Intentionally still permissive (returns true) for the MVP: a dedicated
+     * admin-assignment flow doesn't exist yet, so gating on `role === 'admin'`
+     * would lock out the seeded admin and break SettingsPageTest (which logs
+     * in a plain factory user). Once real role assignment lands, switch this to
+     * `return $this->isAdmin();`.
      */
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
+    }
+
+    /**
+     * Whether this user has the admin role.
+     *
+     * Kept independent from {@see canAccessPanel()} until a real role-assignment
+     * flow exists, so admin features can still be progressively gated.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * Uppercase initials derived from the user's name (avatar fallback).
+     *
+     * Examples: "Andi Rahman" → "AR", "siti nurhaliza" → "SN", "Budi" → "B".
+     */
+    public function getInitialsAttribute(): string
+    {
+        $parts = preg_split('/\s+/u', trim((string) $this->name), -1, PREG_SPLIT_NO_EMPTY);
+
+        if ($parts === [] || $parts === false) {
+            return '?';
+        }
+
+        $initials = '';
+        foreach (array_slice($parts, 0, 2) as $part) {
+            $initials .= mb_strtoupper(mb_substr($part, 0, 1));
+        }
+
+        return $initials;
     }
 }
