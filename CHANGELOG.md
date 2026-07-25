@@ -1,3 +1,16 @@
+## [1.3.0](https://github.com/ryansutrisno/ezitour/compare/v1.2.0...v1.3.0) (2026-07-25)
+
+
+### ✨ Features
+
+* add Testimonial + FAQ CRUD and footer social icons ([a8ef7c6](https://github.com/ryansutrisno/ezitour/commit/a8ef7c6464e6bdd759a7e7b01521f1cbb64f09d6))
+
+
+### 🔧 Chores
+
+* update app branding and contact details ([ae5e23b](https://github.com/ryansutrisno/ezitour/commit/ae5e23b6faf779009e347672ef37ca30bccf2f03))
+* update support email to hallo@trazmedia.com ([2b48241](https://github.com/ryansutrisno/ezitour/commit/2b48241f9bc7c99edd864e1f97ee9609cbd6bca5))
+
 ## [1.2.0](https://github.com/ryansutrisno/ezitour/compare/v1.1.0...v1.2.0) (2026-07-25)
 
 
