@@ -1,3 +1,20 @@
+## 1.0.0 (2026-07-25)
+
+
+### 🐛 Bug Fixes
+
+* update payment routes to POST and add CI/CD ([3e8396c](https://github.com/ryansutrisno/ezitour/commit/3e8396c8bbe4ef70764b6294b40440bbf65ff6f4))
+
+
+### ♻️ Refactoring
+
+* clean up code, remove unused imports and update config ([6dc7ecd](https://github.com/ryansutrisno/ezitour/commit/6dc7ecdc7b0a5bcc57415427c17f281f82ea7a8b))
+
+
+### 👷 CI/CD
+
+* remove the unused linter GitHub workflow ([b0adcfc](https://github.com/ryansutrisno/ezitour/commit/b0adcfcb2ffc6d5219d4ac011369866934e403b3))
+
 # Changelog
 
 All notable changes to **EziTour** will be documented in this file.
