@@ -302,7 +302,7 @@
                             Jelajahi Paket
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                         </a>
-                        <a href="mailto:support@ezitour.com" class="inline-flex justify-center items-center px-7 py-3.5 rounded-button text-sm font-semibold text-white border-2 border-white/30 hover:bg-white/10 transition-colors">Hubungi Kami</a>
+                        <a href="mailto:hallo@trazmedia.com" class="inline-flex justify-center items-center px-7 py-3.5 rounded-button text-sm font-semibold text-white border-2 border-white/30 hover:bg-white/10 transition-colors">Hubungi Kami</a>
                     </div>
                 </div>
             </div>

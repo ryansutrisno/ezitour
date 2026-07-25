@@ -42,7 +42,7 @@ class SettingsPageTest extends TestCase
     {
         $settings = app(ContactSettings::class);
 
-        $this->assertSame('support@ezitour.com', $settings->email);
+        $this->assertSame('hallo@trazmedia.com', $settings->email);
         $this->assertSame('+62 851 0326 3777', $settings->phone);
     }
 
