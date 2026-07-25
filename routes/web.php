@@ -12,6 +12,7 @@ use App\Http\Controllers\Front\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('front.home');
+Route::get('/tentang', [HomeController::class, 'about'])->name('front.about');
 Route::get('/packages', [PackageController::class, 'index'])->name('front.packages.index');
 Route::get('/packages/{slug}', [PackageController::class, 'show'])->name('front.packages.show');
 
