@@ -123,12 +123,15 @@
             </div>
 
             <div class="flex flex-wrap items-center gap-2.5">
-                {{-- Pay Now Button --}}
+                {{-- Pay Now Button (POST form: state-mutating endpoint, must not be GET) --}}
                 @if($canPay && !$hasPendingPayment)
-                    <a href="{{ route('payments.create', $booking) }}" class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-sm font-semibold rounded-button shadow-soft transition-all">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-                        Bayar Sekarang
-                    </a>
+                    <form method="POST" action="{{ route('payments.create', $booking) }}" class="inline">
+                        @csrf
+                        <button type="submit" class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-sm font-semibold rounded-button shadow-soft transition-all">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                            Bayar Sekarang
+                        </button>
+                    </form>
                 @endif
 
                 {{-- Continue Payment Button (pending transaction with snap token) --}}
@@ -141,12 +144,15 @@
                     </button>
                 @endif
 
-                {{-- Retry Payment Button --}}
+                {{-- Retry Payment Button (POST form: state-mutating endpoint, must not be GET) --}}
                 @if($canRetry)
-                    <a href="{{ route('payments.retry', $booking) }}" class="inline-flex items-center px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-button shadow-soft transition-all">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                        Coba Lagi
-                    </a>
+                    <form method="POST" action="{{ route('payments.retry', $booking) }}" class="inline">
+                        @csrf
+                        <button type="submit" class="inline-flex items-center px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-button shadow-soft transition-all">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                            Coba Lagi
+                        </button>
+                    </form>
                 @endif
 
                 {{-- Completed badge (paid) --}}

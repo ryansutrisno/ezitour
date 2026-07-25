@@ -37,8 +37,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
     // Payment Routes
-    Route::get('/payments/{booking}/create', [PaymentController::class, 'create'])->name('payments.create');
-    Route::get('/payments/{booking}/retry', [PaymentController::class, 'retry'])->name('payments.retry');
+    Route::post('/payments/{booking}/create', [PaymentController::class, 'create'])->name('payments.create');
+    Route::post('/payments/{booking}/retry', [PaymentController::class, 'retry'])->name('payments.retry');
     Route::get('/payments/finish', [PaymentController::class, 'finish'])->name('payments.finish');
     Route::get('/payments/unfinish', [PaymentController::class, 'unfinish'])->name('payments.unfinish');
     Route::get('/payments/error', [PaymentController::class, 'error'])->name('payments.error');
