@@ -3,6 +3,9 @@
 @section('title', 'Tentang Kami - EziTour')
 
 @section('content')
+    @php($home = app(App\Settings\HomeSettings::class))
+    @php($about = app(App\Settings\AboutSettings::class))
+
     {{-- ============================================================
     (1) HERO — gradient mesh, konsisten dengan home
     ============================================================ --}}
@@ -45,22 +48,22 @@
             <dl class="grid grid-cols-2 lg:grid-cols-4 gap-8">
                 <div class="text-center">
                     <dt class="sr-only">Destinasi</dt>
-                    <dd class="font-display text-3xl sm:text-4xl font-extrabold text-white">500+</dd>
+                    <dd class="font-display text-3xl sm:text-4xl font-extrabold text-white">{{ $home->statDestinations }}</dd>
                     <p class="mt-1 text-sm text-blue-200">Destinasi wisata</p>
                 </div>
                 <div class="text-center">
                     <dt class="sr-only">Traveler</dt>
-                    <dd class="font-display text-3xl sm:text-4xl font-extrabold text-white">10K+</dd>
+                    <dd class="font-display text-3xl sm:text-4xl font-extrabold text-white">{{ $home->statTravelers }}</dd>
                     <p class="mt-1 text-sm text-blue-200">Traveler puas</p>
                 </div>
                 <div class="text-center">
                     <dt class="sr-only">Rating</dt>
-                    <dd class="font-display text-3xl sm:text-4xl font-extrabold text-sand-300">4.9</dd>
+                    <dd class="font-display text-3xl sm:text-4xl font-extrabold text-sand-300">{{ $home->statRating }}</dd>
                     <p class="mt-1 text-sm text-blue-200">Rating rata-rata</p>
                 </div>
                 <div class="text-center">
                     <dt class="sr-only">Support</dt>
-                    <dd class="font-display text-3xl sm:text-4xl font-extrabold text-white">24/7</dd>
+                    <dd class="font-display text-3xl sm:text-4xl font-extrabold text-white">{{ $home->statSupport }}</dd>
                     <p class="mt-1 text-sm text-blue-200">Dukungan pelanggan</p>
                 </div>
             </dl>
@@ -91,15 +94,15 @@
 
                     <div class="mt-8 flex flex-wrap gap-6">
                         <div>
-                            <p class="font-display text-2xl font-extrabold text-blue-600">2019</p>
+                            <p class="font-display text-2xl font-extrabold text-blue-600">{{ $about->foundedYear }}</p>
                             <p class="text-sm text-slate-500">Tahun berdiri</p>
                         </div>
                         <div class="border-l border-slate-200 pl-6">
-                            <p class="font-display text-2xl font-extrabold text-blue-600">34</p>
+                            <p class="font-display text-2xl font-extrabold text-blue-600">{{ $about->provincesCovered }}</p>
                             <p class="text-sm text-slate-500">Provinsi terjangkau</p>
                         </div>
                         <div class="border-l border-slate-200 pl-6">
-                            <p class="font-display text-2xl font-extrabold text-blue-600">200+</p>
+                            <p class="font-display text-2xl font-extrabold text-blue-600">{{ $about->partnersCount }}</p>
                             <p class="text-sm text-slate-500">Mitra lokal</p>
                         </div>
                     </div>
@@ -169,7 +172,7 @@
                     </div>
                     <h3 class="mt-5 font-display text-xl font-bold text-slate-900">Visi</h3>
                     <p class="mt-3 text-slate-600 leading-relaxed">
-                        Menjadi platform perjalanan wisata paling tepercaya di Indonesia — yang menghubungkan setiap traveler dengan pengalaman otentik di setiap sudut Nusantara, dari Sabang sampai Merauke.
+                        {{ $about->visionText }}
                     </p>
                 </div>
 
@@ -180,9 +183,9 @@
                     </div>
                     <h3 class="mt-5 font-display text-xl font-bold text-slate-900">Misi</h3>
                     <ul class="mt-3 space-y-2.5 text-slate-600 leading-relaxed">
-                        <li class="flex items-start"><svg class="w-5 h-5 mr-2.5 text-blue-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Menyederhanakan perencanaan perjalanan lewat teknologi yang intuitif.</li>
-                        <li class="flex items-start"><svg class="w-5 h-5 mr-2.5 text-blue-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Memberdayakan mitra lokal — supir, vendor, dan komunitas wisata.</li>
-                        <li class="flex items-start"><svg class="w-5 h-5 mr-2.5 text-blue-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Memberi kepastian harga yang jujur dan layanan yang bisa diandalkan.</li>
+                        @foreach($about->missionPoints as $missionPoint)
+                            <li class="flex items-start"><svg class="w-5 h-5 mr-2.5 text-blue-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>{{ $missionPoint['point'] }}</li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
