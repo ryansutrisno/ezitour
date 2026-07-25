@@ -9,6 +9,7 @@ use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\MidtransNotificationController;
 use App\Http\Controllers\Front\PackageController;
 use App\Http\Controllers\Front\PaymentController;
+use App\Http\Controllers\Front\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('front.home');
@@ -37,6 +38,11 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
     Route::post('/packages/{slug}/book', [BookingController::class, 'store'])->name('front.booking.store');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+
+    // Profile Routes
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('front.profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('front.profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('front.profile.password');
 
     // Payment Routes
     Route::post('/payments/{booking}/create', [PaymentController::class, 'create'])->name('payments.create');

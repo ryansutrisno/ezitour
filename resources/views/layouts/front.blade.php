@@ -76,6 +76,7 @@
                 <div class="flex items-center gap-3">
                     @auth
                         <a href="{{ route('dashboard.index') }}" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">Dashboard</a>
+                        <a href="{{ route('front.profile.edit') }}" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">Profil</a>
                         <form action="{{ route('logout') }}" method="POST" class="inline">
                             @csrf
                             <button type="submit" class="inline-flex items-center text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-button shadow-soft transition-colors">Logout</button>

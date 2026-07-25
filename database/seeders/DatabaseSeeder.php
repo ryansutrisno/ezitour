@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@ezitour.com',
             'password' => Hash::make('password'),
+            'role' => 'admin',
         ]);
 
         $this->call([
