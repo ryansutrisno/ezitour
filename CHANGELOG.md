@@ -1,3 +1,10 @@
+## [1.1.0](https://github.com/ryansutrisno/ezitour/compare/v1.0.0...v1.1.0) (2026-07-25)
+
+
+### ✨ Features
+
+* add about page and navigation enhancements ([f8c3ba5](https://github.com/ryansutrisno/ezitour/commit/f8c3ba5bd4e9c02decef4571e7e7b78786826b1f))
+
 ## 1.0.0 (2026-07-25)
 
 
