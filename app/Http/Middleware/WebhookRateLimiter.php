@@ -10,10 +10,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * WebhookRateLimiter - Rate limiting middleware for webhook endpoints
- * 
+ *
  * This middleware limits the number of notification requests per IP address
  * to prevent abuse and potential DDoS attacks on the webhook endpoint.
- * 
+ *
  * Requirements: 4.2 - Limit notification requests per IP and log excessive requests
  */
 class WebhookRateLimiter
@@ -52,7 +52,7 @@ class WebhookRateLimiter
 
         if ($this->limiter->tooManyAttempts($key, $this->maxAttempts)) {
             $this->logExcessiveRequests($request, $key);
-            
+
             return $this->buildTooManyRequestsResponse($key);
         }
 
@@ -69,12 +69,12 @@ class WebhookRateLimiter
      */
     protected function resolveRequestSignature(Request $request): string
     {
-        return 'webhook_rate_limit:' . $request->ip();
+        return 'webhook_rate_limit:'.$request->ip();
     }
 
     /**
      * Log excessive requests from an IP address.
-     * 
+     *
      * Requirements: 4.2 - Log excessive requests
      */
     protected function logExcessiveRequests(Request $request, string $key): void

@@ -11,7 +11,7 @@ use Tests\TestCase;
 /**
  * Feature: payment-integration
  * Task 16: Update Dashboard to Show Payment Status
- * 
+ *
  * Tests untuk memverifikasi:
  * - Dashboard menampilkan payment status
  * - Filter paid/unpaid bookings berfungsi
@@ -22,6 +22,7 @@ class DashboardFilterTest extends TestCase
     use RefreshDatabase;
 
     protected User $user;
+
     protected Package $package;
 
     protected function setUp(): void
@@ -29,7 +30,7 @@ class DashboardFilterTest extends TestCase
         parent::setUp();
 
         $this->user = User::factory()->create();
-        
+
         $this->package = Package::create([
             'name' => 'Test Package',
             'slug' => 'test-package',
@@ -102,7 +103,7 @@ class DashboardFilterTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertViewHas('paymentFilter', 'paid');
-        
+
         $bookings = $response->viewData('bookings');
         $this->assertCount(1, $bookings);
         $this->assertEquals('paid', $bookings->first()->status);
@@ -137,7 +138,7 @@ class DashboardFilterTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertViewHas('paymentFilter', 'unpaid');
-        
+
         $bookings = $response->viewData('bookings');
         $this->assertCount(1, $bookings);
         $this->assertEquals('pending', $bookings->first()->status);

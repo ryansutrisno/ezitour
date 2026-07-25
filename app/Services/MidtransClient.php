@@ -10,10 +10,10 @@ use Midtrans\Transaction;
 
 /**
  * MidtransClient - Wrapper untuk Midtrans API
- * 
+ *
  * Class ini menangani komunikasi HTTP dengan Midtrans API,
  * mengelola autentikasi dengan server key, dan memformat request/response data.
- * 
+ *
  * Requirements: 11.1 - Comprehensive logging for all API failures
  */
 class MidtransClient
@@ -82,11 +82,12 @@ class MidtransClient
     /**
      * Request Snap Token dari Midtrans
      *
-     * @param array $params Parameter untuk Snap Token request
-     *                      - transaction_details: ['order_id' => string, 'gross_amount' => int]
-     *                      - customer_details: ['first_name' => string, 'email' => string, 'phone' => string]
-     *                      - item_details: [['id' => string, 'price' => int, 'quantity' => int, 'name' => string]]
+     * @param  array  $params  Parameter untuk Snap Token request
+     *                         - transaction_details: ['order_id' => string, 'gross_amount' => int]
+     *                         - customer_details: ['first_name' => string, 'email' => string, 'phone' => string]
+     *                         - item_details: [['id' => string, 'price' => int, 'quantity' => int, 'name' => string]]
      * @return string Snap Token
+     *
      * @throws MidtransApiException Jika API call gagal
      */
     public function getSnapToken(array $params): string
@@ -96,7 +97,7 @@ class MidtransClient
 
         try {
             $this->validateSnapParams($params);
-            
+
             // Log API call attempt
             PaymentLogger::logMidtransApiCall('snap/v1/transactions', $params, $environment);
 
@@ -163,8 +164,9 @@ class MidtransClient
     /**
      * Get transaction status dari Midtrans API
      *
-     * @param string $orderId Order ID untuk dicek statusnya
+     * @param  string  $orderId  Order ID untuk dicek statusnya
      * @return array Transaction status data
+     *
      * @throws MidtransApiException Jika API call gagal
      */
     public function getTransactionStatus(string $orderId): array
@@ -220,13 +222,13 @@ class MidtransClient
 
     /**
      * Verify notification signature dari Midtrans
-     * 
+     *
      * Signature dihitung dengan formula:
      * SHA512(order_id + status_code + gross_amount + server_key)
-     * 
+     *
      * Requirements: 11.3 - Log signature verification failures with IP address
      *
-     * @param array $notification Data notification dari Midtrans webhook
+     * @param  array  $notification  Data notification dari Midtrans webhook
      * @return bool True jika signature valid, false jika tidak
      */
     public function verifySignature(array $notification): bool
@@ -238,23 +240,24 @@ class MidtransClient
 
         if (empty($orderId) || empty($statusCode) || empty($grossAmount) || empty($signatureKey)) {
             PaymentLogger::logSignatureVerificationFailure($notification);
-            
+
             Log::warning('Incomplete notification data for signature verification', [
                 'order_id' => $orderId,
-                'has_status_code' => !empty($statusCode),
-                'has_gross_amount' => !empty($grossAmount),
-                'has_signature_key' => !empty($signatureKey),
+                'has_status_code' => ! empty($statusCode),
+                'has_gross_amount' => ! empty($grossAmount),
+                'has_signature_key' => ! empty($signatureKey),
                 'ip_address' => request()->ip(),
             ]);
+
             return false;
         }
 
         // Calculate expected signature
-        $expectedSignature = hash('sha512', $orderId . $statusCode . $grossAmount . $this->serverKey);
+        $expectedSignature = hash('sha512', $orderId.$statusCode.$grossAmount.$this->serverKey);
 
         $isValid = hash_equals($expectedSignature, $signatureKey);
 
-        if (!$isValid) {
+        if (! $isValid) {
             // Log signature verification failure with full context
             PaymentLogger::logSignatureVerificationFailure($notification);
         }
@@ -279,15 +282,13 @@ class MidtransClient
      */
     public function getSnapBaseUrl(): string
     {
-        return $this->isProduction 
+        return $this->isProduction
             ? 'https://app.midtrans.com/snap/snap.js'
             : 'https://app.sandbox.midtrans.com/snap/snap.js';
     }
 
     /**
      * Check apakah dalam production mode
-     *
-     * @return bool
      */
     public function isProduction(): bool
     {
@@ -296,8 +297,6 @@ class MidtransClient
 
     /**
      * Get client key untuk frontend
-     *
-     * @return string
      */
     public function getClientKey(): string
     {
@@ -307,13 +306,12 @@ class MidtransClient
     /**
      * Validate Snap Token request parameters
      *
-     * @param array $params
      * @throws \InvalidArgumentException
      */
     protected function validateSnapParams(array $params): void
     {
         // Validate transaction_details
-        if (!isset($params['transaction_details'])) {
+        if (! isset($params['transaction_details'])) {
             throw new \InvalidArgumentException('transaction_details is required');
         }
 
@@ -323,15 +321,15 @@ class MidtransClient
             throw new \InvalidArgumentException('order_id is required in transaction_details');
         }
 
-        if (!isset($transactionDetails['gross_amount']) || $transactionDetails['gross_amount'] <= 0) {
+        if (! isset($transactionDetails['gross_amount']) || $transactionDetails['gross_amount'] <= 0) {
             throw new \InvalidArgumentException('gross_amount must be a positive number');
         }
 
         // Validate customer_details (optional but recommended)
         if (isset($params['customer_details'])) {
             $customerDetails = $params['customer_details'];
-            
-            if (isset($customerDetails['email']) && !filter_var($customerDetails['email'], FILTER_VALIDATE_EMAIL)) {
+
+            if (isset($customerDetails['email']) && ! filter_var($customerDetails['email'], FILTER_VALIDATE_EMAIL)) {
                 throw new \InvalidArgumentException('Invalid email format in customer_details');
             }
         }
@@ -339,10 +337,10 @@ class MidtransClient
         // Validate item_details (optional but recommended)
         if (isset($params['item_details'])) {
             foreach ($params['item_details'] as $index => $item) {
-                if (!isset($item['price']) || $item['price'] < 0) {
+                if (! isset($item['price']) || $item['price'] < 0) {
                     throw new \InvalidArgumentException("Invalid price in item_details at index {$index}");
                 }
-                if (!isset($item['quantity']) || $item['quantity'] <= 0) {
+                if (! isset($item['quantity']) || $item['quantity'] <= 0) {
                     throw new \InvalidArgumentException("Invalid quantity in item_details at index {$index}");
                 }
             }
@@ -351,29 +349,23 @@ class MidtransClient
 
     /**
      * Check if exception is a timeout error
-     *
-     * @param \Throwable $e
-     * @return bool
      */
     protected function isTimeoutError(\Throwable $e): bool
     {
         $message = strtolower($e->getMessage());
-        
-        return str_contains($message, 'timeout') 
+
+        return str_contains($message, 'timeout')
             || str_contains($message, 'timed out')
             || str_contains($message, 'operation timed out');
     }
 
     /**
      * Check if exception is a network error
-     *
-     * @param \Throwable $e
-     * @return bool
      */
     protected function isNetworkError(\Throwable $e): bool
     {
         $message = strtolower($e->getMessage());
-        
+
         return str_contains($message, 'could not resolve')
             || str_contains($message, 'connection refused')
             || str_contains($message, 'network is unreachable')
@@ -383,15 +375,12 @@ class MidtransClient
 
     /**
      * Extract HTTP status code from exception if available
-     *
-     * @param \Throwable $e
-     * @return int|null
      */
     protected function extractHttpStatusCode(\Throwable $e): ?int
     {
         // Check if exception has getCode that returns HTTP status
         $code = $e->getCode();
-        
+
         if ($code >= 100 && $code < 600) {
             return $code;
         }

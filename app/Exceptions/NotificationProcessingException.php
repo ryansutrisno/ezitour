@@ -6,10 +6,10 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * Exception thrown when notification processing fails.
- * 
+ *
  * This exception handles errors during Midtrans webhook notification processing
  * without breaking the webhook response.
- * 
+ *
  * Requirements: 11.2 - Log notification processing failures without breaking webhook
  */
 class NotificationProcessingException extends PaymentException
@@ -27,12 +27,12 @@ class NotificationProcessingException extends PaymentException
     /**
      * Create a new NotificationProcessingException instance.
      *
-     * @param string $message Technical error message
-     * @param string $userMessage User-friendly message
-     * @param string|null $orderId Order ID from notification
-     * @param array $notificationData Raw notification data
-     * @param array $context Additional context
-     * @param \Throwable|null $previous Previous exception
+     * @param  string  $message  Technical error message
+     * @param  string  $userMessage  User-friendly message
+     * @param  string|null  $orderId  Order ID from notification
+     * @param  array  $notificationData  Raw notification data
+     * @param  array  $context  Additional context
+     * @param  \Throwable|null  $previous  Previous exception
      */
     public function __construct(
         string $message,
@@ -57,9 +57,6 @@ class NotificationProcessingException extends PaymentException
 
     /**
      * Create exception for missing order ID
-     *
-     * @param array $notificationData
-     * @return static
      */
     public static function missingOrderId(array $notificationData): static
     {
@@ -73,10 +70,6 @@ class NotificationProcessingException extends PaymentException
 
     /**
      * Create exception for transaction not found
-     *
-     * @param string $orderId
-     * @param array $notificationData
-     * @return static
      */
     public static function transactionNotFound(string $orderId, array $notificationData = []): static
     {
@@ -90,12 +83,6 @@ class NotificationProcessingException extends PaymentException
 
     /**
      * Create exception for amount mismatch (potential fraud)
-     *
-     * @param string $orderId
-     * @param string $expectedAmount
-     * @param string $receivedAmount
-     * @param array $notificationData
-     * @return static
      */
     public static function amountMismatch(string $orderId, string $expectedAmount, string $receivedAmount, array $notificationData = []): static
     {
@@ -122,12 +109,6 @@ class NotificationProcessingException extends PaymentException
 
     /**
      * Create exception for database update failure
-     *
-     * @param string $orderId
-     * @param string $errorMessage
-     * @param array $notificationData
-     * @param \Throwable|null $previous
-     * @return static
      */
     public static function databaseError(string $orderId, string $errorMessage, array $notificationData = [], ?\Throwable $previous = null): static
     {
@@ -143,17 +124,14 @@ class NotificationProcessingException extends PaymentException
 
     /**
      * Sanitize notification data for logging
-     *
-     * @param array $data
-     * @return array
      */
     protected function sanitizeNotificationData(array $data): array
     {
         $sanitized = $data;
-        
+
         // Mask signature key
         if (isset($sanitized['signature_key'])) {
-            $sanitized['signature_key'] = substr($sanitized['signature_key'], 0, 20) . '...';
+            $sanitized['signature_key'] = substr($sanitized['signature_key'], 0, 20).'...';
         }
 
         return $sanitized;
@@ -161,8 +139,6 @@ class NotificationProcessingException extends PaymentException
 
     /**
      * Get order ID
-     *
-     * @return string|null
      */
     public function getOrderId(): ?string
     {

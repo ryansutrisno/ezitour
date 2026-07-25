@@ -5,8 +5,8 @@ namespace App\Services;
 use App\Models\Booking;
 use App\Models\Package;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class BookingCreationService
 {
@@ -18,10 +18,6 @@ class BookingCreationService
      * Create booking from validated data.
      * Returns the created booking or throws exception on failure.
      *
-     * @param User $user
-     * @param Package $package
-     * @param array $bookingData
-     * @return Booking
      * @throws Exception
      */
     public function createBooking(User $user, Package $package, array $bookingData): Booking
@@ -47,22 +43,21 @@ class BookingCreationService
      * Create booking from pending session data.
      * Retrieves session data, creates booking, and clears session.
      *
-     * @param User $user
-     * @return Booking|null
      * @throws Exception
      */
     public function createFromSession(User $user): ?Booking
     {
         $sessionData = $this->checkoutSessionService->retrieve();
 
-        if (!$sessionData) {
+        if (! $sessionData) {
             return null;
         }
 
         $package = Package::find($sessionData['package_id']);
 
-        if (!$package) {
+        if (! $package) {
             $this->checkoutSessionService->clear();
+
             return null;
         }
 
@@ -80,10 +75,6 @@ class BookingCreationService
 
     /**
      * Calculate total price for booking.
-     *
-     * @param Package $package
-     * @param int $participants
-     * @return float
      */
     public function calculateTotalPrice(Package $package, int $participants): float
     {

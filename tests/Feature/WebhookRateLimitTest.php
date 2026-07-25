@@ -15,12 +15,12 @@ use Tests\TestCase;
 /**
  * Feature: payment-integration
  * Task 19.2: Add rate limiting to webhook endpoint
- * 
+ *
  * Tests untuk memverifikasi:
  * - Rate limiting pada webhook endpoint
  * - Logging excessive requests
  * - Proper response headers
- * 
+ *
  * Requirements: 4.2
  */
 class WebhookRateLimitTest extends TestCase
@@ -28,8 +28,11 @@ class WebhookRateLimitTest extends TestCase
     use RefreshDatabase;
 
     protected User $user;
+
     protected Package $package;
+
     protected Booking $booking;
+
     protected Transaction $transaction;
 
     protected function setUp(): void
@@ -60,7 +63,7 @@ class WebhookRateLimitTest extends TestCase
 
         $this->transaction = Transaction::create([
             'booking_id' => $this->booking->id,
-            'order_id' => 'BOOK-' . $this->booking->id . '-' . time() . '-test',
+            'order_id' => 'BOOK-'.$this->booking->id.'-'.time().'-test',
             'snap_token' => 'test-snap-token',
             'gross_amount' => $this->booking->total_amount,
             'transaction_status' => Transaction::STATUS_PENDING,

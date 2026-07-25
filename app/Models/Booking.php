@@ -133,8 +133,6 @@ class Booking extends Model
 
     /**
      * Get the pending transaction for this booking (if any).
-     * 
-     * @return Transaction|null
      */
     public function getPendingTransaction(): ?Transaction
     {
@@ -146,8 +144,6 @@ class Booking extends Model
 
     /**
      * Check if booking has expired transaction that can be retried.
-     * 
-     * @return bool
      */
     public function hasExpiredTransaction(): bool
     {

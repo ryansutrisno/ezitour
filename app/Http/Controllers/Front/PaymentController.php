@@ -6,7 +6,6 @@ use App\Exceptions\PaymentException;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Services\PaymentErrorHandler;
-use App\Services\PaymentLogger;
 use App\Services\PaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,13 +13,13 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * PaymentController - Handle payment initiation and callbacks
- * 
+ *
  * This controller handles:
  * - Payment initiation (create Snap Token)
  * - Payment finish callback
  * - Payment unfinish callback
  * - Payment error callback
- * 
+ *
  * Requirements: 1.2, 1.3, 1.4, 1.5, 3.5
  */
 class PaymentController extends Controller
@@ -32,8 +31,6 @@ class PaymentController extends Controller
 
     /**
      * Create a new PaymentController instance.
-     *
-     * @param PaymentService $paymentService
      */
     public function __construct(PaymentService $paymentService)
     {
@@ -42,26 +39,24 @@ class PaymentController extends Controller
 
     /**
      * Create payment and get Snap Token for a booking
-     * 
+     *
      * Requirements: 1.2, 1.3
      * - Display "Pay Now" button for pending booking
      * - Request Snap Token from Midtrans API
      *
-     * @param Request $request
-     * @param Booking $booking
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function create(Request $request, Booking $booking)
     {
         // Validate booking ownership
-        if (!$this->validateBookingOwnership($booking)) {
+        if (! $this->validateBookingOwnership($booking)) {
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Anda tidak memiliki akses ke booking ini.',
                 ], 403);
             }
-            
+
             return redirect()->route('dashboard.index')
                 ->with('error', 'Anda tidak memiliki akses ke booking ini.');
         }
@@ -74,7 +69,7 @@ class PaymentController extends Controller
                     'message' => 'Booking ini sudah dibayar.',
                 ], 400);
             }
-            
+
             return redirect()->route('dashboard.index')
                 ->with('error', 'Booking ini sudah dibayar.');
         }
@@ -132,18 +127,17 @@ class PaymentController extends Controller
 
     /**
      * Handle payment finish callback from Midtrans
-     * 
+     *
      * This is called when customer completes payment on Midtrans page
      * Requirements: 1.4
      *
-     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function finish(Request $request)
     {
         $orderId = $request->get('order_id');
         $transactionStatus = $request->get('transaction_status');
-        
+
         Log::info('Payment finish callback received', [
             'order_id' => $orderId,
             'transaction_status' => $transactionStatus,
@@ -157,9 +151,9 @@ class PaymentController extends Controller
                 Log::info('Checking payment status from Midtrans API', [
                     'order_id' => $orderId,
                 ]);
-                
+
                 $this->paymentService->checkPaymentStatus($orderId);
-                
+
                 Log::info('Payment status checked and updated successfully', [
                     'order_id' => $orderId,
                 ]);
@@ -180,17 +174,16 @@ class PaymentController extends Controller
 
     /**
      * Handle payment unfinish callback from Midtrans
-     * 
+     *
      * This is called when customer closes payment page without completing
      * Requirements: 1.4
      *
-     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function unfinish(Request $request)
     {
         $orderId = $request->get('order_id');
-        
+
         Log::info('Payment unfinish callback received', [
             'order_id' => $orderId,
             'user_id' => Auth::id(),
@@ -202,11 +195,10 @@ class PaymentController extends Controller
 
     /**
      * Handle payment error callback from Midtrans
-     * 
+     *
      * This is called when payment fails or encounters an error
      * Requirements: 1.4
      *
-     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function error(Request $request)
@@ -214,7 +206,7 @@ class PaymentController extends Controller
         $orderId = $request->get('order_id');
         $statusCode = $request->get('status_code');
         $statusMessage = $request->get('status_message');
-        
+
         Log::warning('Payment error callback received', [
             'order_id' => $orderId,
             'status_code' => $statusCode,
@@ -228,9 +220,6 @@ class PaymentController extends Controller
 
     /**
      * Validate that the authenticated user owns the booking
-     *
-     * @param Booking $booking
-     * @return bool
      */
     protected function validateBookingOwnership(Booking $booking): bool
     {
@@ -239,9 +228,6 @@ class PaymentController extends Controller
 
     /**
      * Get appropriate message based on transaction status
-     *
-     * @param string|null $transactionStatus
-     * @return string
      */
     protected function getFinishMessage(?string $transactionStatus): string
     {
@@ -257,7 +243,7 @@ class PaymentController extends Controller
 
     /**
      * Retry payment for a booking with failed/expired transaction
-     * 
+     *
      * Requirements: 8.1, 8.2, 8.3, 8.4, 8.5
      * - Allow creating new payment attempt after failure
      * - Generate new Snap Token
@@ -265,21 +251,19 @@ class PaymentController extends Controller
      * - Use the same Booking
      * - Mark previous failed Transaction as superseded
      *
-     * @param Request $request
-     * @param Booking $booking
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function retry(Request $request, Booking $booking)
     {
         // Validate booking ownership
-        if (!$this->validateBookingOwnership($booking)) {
+        if (! $this->validateBookingOwnership($booking)) {
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Anda tidak memiliki akses ke booking ini.',
                 ], 403);
             }
-            
+
             return redirect()->route('dashboard.index')
                 ->with('error', 'Anda tidak memiliki akses ke booking ini.');
         }
@@ -292,20 +276,20 @@ class PaymentController extends Controller
                     'message' => 'Booking ini sudah dibayar.',
                 ], 400);
             }
-            
+
             return redirect()->route('dashboard.index')
                 ->with('error', 'Booking ini sudah dibayar.');
         }
 
         // Check if booking can retry payment
-        if (!$this->paymentService->canRetryPayment($booking)) {
+        if (! $this->paymentService->canRetryPayment($booking)) {
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Tidak dapat mengulang pembayaran untuk booking ini.',
                 ], 400);
             }
-            
+
             return redirect()->route('dashboard.index')
                 ->with('error', 'Tidak dapat mengulang pembayaran untuk booking ini.');
         }

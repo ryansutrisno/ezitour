@@ -6,7 +6,6 @@ use App\Models\Car;
 use App\Models\Destination;
 use App\Models\Package;
 use App\Models\PackageItem;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -44,22 +43,22 @@ class PackageSeeder extends Seeder
                 'description' => 'Menjelajahi keajaiban sejarah Candi Borobudur dan Prambanan dalam satu hari.',
                 'total_price' => 750000, // Estimasi harga
                 'thumbnail_url' => 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?q=80&w=2070&auto=format&fit=crop',
-                'items' => ['Candi Borobudur', 'Gereja Ayam (Bukit Rhema)', 'Candi Prambanan']
+                'items' => ['Candi Borobudur', 'Gereja Ayam (Bukit Rhema)', 'Candi Prambanan'],
             ],
             [
                 'name' => 'Jogja Instagramable Spot',
                 'description' => 'Kunjungi tempat-tempat hits dan instagramable di Jogja. Cocok untuk anak muda!',
                 'total_price' => 600000,
                 'thumbnail_url' => 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2070&auto=format&fit=crop',
-                'items' => ['HeHa Sky View', 'Tebing Breksi', 'Malioboro']
+                'items' => ['HeHa Sky View', 'Tebing Breksi', 'Malioboro'],
             ],
             [
                 'name' => 'Jogja Beach & Sunset',
                 'description' => 'Menikmati angin laut selatan dan sunset romantis di Parangtritis.',
                 'total_price' => 550000,
                 'thumbnail_url' => 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2070&auto=format&fit=crop',
-                'items' => ['Pantai Parangtritis', 'Malioboro']
-            ]
+                'items' => ['Pantai Parangtritis', 'Malioboro'],
+            ],
         ];
 
         foreach ($packages as $pkgData) {

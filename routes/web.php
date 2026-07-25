@@ -35,7 +35,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
     Route::post('/packages/{slug}/book', [BookingController::class, 'store'])->name('front.booking.store');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-    
+
     // Payment Routes
     Route::get('/payments/{booking}/create', [PaymentController::class, 'create'])->name('payments.create');
     Route::get('/payments/{booking}/retry', [PaymentController::class, 'retry'])->name('payments.retry');

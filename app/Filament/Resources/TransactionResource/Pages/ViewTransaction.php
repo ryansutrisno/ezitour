@@ -27,22 +27,22 @@ class ViewTransaction extends ViewRecord
                         $paymentService = app(PaymentService::class);
                         $oldStatus = $this->record->transaction_status;
                         $status = $paymentService->checkPaymentStatus($this->record->order_id);
-                        
+
                         // Refresh the record to show updated data
                         $this->record->refresh();
                         $newStatus = $this->record->transaction_status;
-                        
+
                         $midtransStatus = $status['transaction_status'] ?? 'unknown';
                         $message = $oldStatus !== $newStatus
                             ? "Status updated from '{$oldStatus}' to '{$newStatus}'"
                             : "Current status: {$midtransStatus} (no change)";
-                        
+
                         Notification::make()
                             ->title('Status Checked Successfully')
                             ->body($message)
                             ->success()
                             ->send();
-                            
+
                         // Redirect to refresh the page with new data
                         return redirect(TransactionResource::getUrl('view', ['record' => $this->record]));
                     } catch (\Exception $e) {

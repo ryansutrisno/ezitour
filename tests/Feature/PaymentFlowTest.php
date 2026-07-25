@@ -15,7 +15,7 @@ use Tests\TestCase;
 /**
  * Feature: payment-integration
  * Checkpoint 14: Payment Flow Complete
- * 
+ *
  * Tests untuk memverifikasi:
  * - Complete payment flow end-to-end
  * - Retry flow
@@ -26,7 +26,9 @@ class PaymentFlowTest extends TestCase
     use RefreshDatabase;
 
     protected User $user;
+
     protected Package $package;
+
     protected Booking $booking;
 
     protected function setUp(): void
@@ -68,7 +70,7 @@ class PaymentFlowTest extends TestCase
         $mockClient->shouldReceive('getSnapToken')
             ->once()
             ->andReturn('test-snap-token-123');
-        
+
         $this->app->instance(MidtransClient::class, $mockClient);
 
         // Step 1: Create payment
@@ -104,7 +106,7 @@ class PaymentFlowTest extends TestCase
         // Create a pending transaction first
         $transaction = Transaction::create([
             'booking_id' => $this->booking->id,
-            'order_id' => 'BOOK-' . $this->booking->id . '-' . time() . '-test',
+            'order_id' => 'BOOK-'.$this->booking->id.'-'.time().'-test',
             'snap_token' => 'test-snap-token',
             'gross_amount' => $this->booking->total_amount,
             'transaction_status' => Transaction::STATUS_PENDING,
@@ -116,7 +118,7 @@ class PaymentFlowTest extends TestCase
         $mockClient->shouldReceive('verifySignature')
             ->once()
             ->andReturn(true);
-        
+
         $this->app->instance(MidtransClient::class, $mockClient);
 
         // Simulate Midtrans notification
@@ -151,7 +153,7 @@ class PaymentFlowTest extends TestCase
         // Create a pending transaction
         $transaction = Transaction::create([
             'booking_id' => $this->booking->id,
-            'order_id' => 'BOOK-' . $this->booking->id . '-' . time() . '-test',
+            'order_id' => 'BOOK-'.$this->booking->id.'-'.time().'-test',
             'snap_token' => 'test-snap-token',
             'gross_amount' => $this->booking->total_amount,
             'transaction_status' => Transaction::STATUS_PENDING,
@@ -163,7 +165,7 @@ class PaymentFlowTest extends TestCase
         $mockClient->shouldReceive('verifySignature')
             ->once()
             ->andReturn(true);
-        
+
         $this->app->instance(MidtransClient::class, $mockClient);
 
         // Simulate failed payment notification
@@ -196,7 +198,7 @@ class PaymentFlowTest extends TestCase
         // Create a failed transaction first
         $oldTransaction = Transaction::create([
             'booking_id' => $this->booking->id,
-            'order_id' => 'BOOK-' . $this->booking->id . '-' . time() . '-old',
+            'order_id' => 'BOOK-'.$this->booking->id.'-'.time().'-old',
             'snap_token' => 'old-snap-token',
             'gross_amount' => $this->booking->total_amount,
             'transaction_status' => Transaction::STATUS_FAILED,
@@ -208,7 +210,7 @@ class PaymentFlowTest extends TestCase
         $mockClient->shouldReceive('getSnapToken')
             ->once()
             ->andReturn('new-snap-token-456');
-        
+
         $this->app->instance(MidtransClient::class, $mockClient);
 
         // Retry payment
@@ -228,7 +230,7 @@ class PaymentFlowTest extends TestCase
         $newTransaction = Transaction::where('booking_id', $this->booking->id)
             ->where('transaction_status', Transaction::STATUS_PENDING)
             ->first();
-        
+
         $this->assertNotNull($newTransaction);
         $this->assertEquals('new-snap-token-456', $newTransaction->snap_token);
         $this->assertNotEquals($oldTransaction->order_id, $newTransaction->order_id);
@@ -242,7 +244,7 @@ class PaymentFlowTest extends TestCase
         // Create an expired transaction
         $expiredTransaction = Transaction::create([
             'booking_id' => $this->booking->id,
-            'order_id' => 'BOOK-' . $this->booking->id . '-' . time() . '-expired',
+            'order_id' => 'BOOK-'.$this->booking->id.'-'.time().'-expired',
             'snap_token' => 'expired-snap-token',
             'gross_amount' => $this->booking->total_amount,
             'transaction_status' => Transaction::STATUS_EXPIRED,
@@ -255,7 +257,7 @@ class PaymentFlowTest extends TestCase
         $mockClient->shouldReceive('getSnapToken')
             ->once()
             ->andReturn('retry-snap-token');
-        
+
         $this->app->instance(MidtransClient::class, $mockClient);
 
         // Retry payment after expiration
@@ -275,7 +277,7 @@ class PaymentFlowTest extends TestCase
         $newTransaction = Transaction::where('booking_id', $this->booking->id)
             ->where('transaction_status', Transaction::STATUS_PENDING)
             ->first();
-        
+
         $this->assertNotNull($newTransaction);
     }
 
@@ -293,7 +295,7 @@ class PaymentFlowTest extends TestCase
         // Create a paid transaction
         $paidTransaction = Transaction::create([
             'booking_id' => $this->booking->id,
-            'order_id' => 'BOOK-' . $this->booking->id . '-' . time() . '-paid',
+            'order_id' => 'BOOK-'.$this->booking->id.'-'.time().'-paid',
             'snap_token' => 'paid-snap-token',
             'gross_amount' => $this->booking->total_amount,
             'transaction_status' => Transaction::STATUS_PAID,
@@ -303,7 +305,7 @@ class PaymentFlowTest extends TestCase
         // Create another transaction that fails
         $failedTransaction = Transaction::create([
             'booking_id' => $this->booking->id,
-            'order_id' => 'BOOK-' . $this->booking->id . '-' . time() . '-failed',
+            'order_id' => 'BOOK-'.$this->booking->id.'-'.time().'-failed',
             'snap_token' => 'failed-snap-token',
             'gross_amount' => $this->booking->total_amount,
             'transaction_status' => Transaction::STATUS_FAILED,
@@ -359,7 +361,7 @@ class PaymentFlowTest extends TestCase
         // Create a pending transaction
         $transaction = Transaction::create([
             'booking_id' => $this->booking->id,
-            'order_id' => 'BOOK-' . $this->booking->id . '-' . time() . '-test',
+            'order_id' => 'BOOK-'.$this->booking->id.'-'.time().'-test',
             'snap_token' => 'test-snap-token',
             'gross_amount' => $this->booking->total_amount,
             'transaction_status' => Transaction::STATUS_PENDING,
@@ -371,7 +373,7 @@ class PaymentFlowTest extends TestCase
         $mockClient->shouldReceive('verifySignature')
             ->once()
             ->andReturn(false);
-        
+
         $this->app->instance(MidtransClient::class, $mockClient);
 
         // Simulate notification with invalid signature

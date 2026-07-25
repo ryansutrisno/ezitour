@@ -7,15 +7,11 @@ use Illuminate\Support\Facades\Session;
 class CheckoutSessionService
 {
     private const SESSION_KEY = 'pending_booking';
+
     private const SESSION_TTL = 30; // minutes
 
     /**
      * Store booking data in session.
-     *
-     * @param array $bookingData
-     * @param int $packageId
-     * @param string $packageSlug
-     * @return void
      */
     public function store(array $bookingData, int $packageId, string $packageSlug): void
     {
@@ -34,13 +30,12 @@ class CheckoutSessionService
 
     /**
      * Retrieve pending booking data from session.
-     *
-     * @return array|null
      */
     public function retrieve(): ?array
     {
-        if (!$this->isValid()) {
+        if (! $this->isValid()) {
             $this->clear();
+
             return null;
         }
 
@@ -49,8 +44,6 @@ class CheckoutSessionService
 
     /**
      * Check if there's pending booking data.
-     *
-     * @return bool
      */
     public function hasPendingBooking(): bool
     {
@@ -59,8 +52,6 @@ class CheckoutSessionService
 
     /**
      * Clear pending booking data from session.
-     *
-     * @return void
      */
     public function clear(): void
     {
@@ -69,14 +60,12 @@ class CheckoutSessionService
 
     /**
      * Check if session data is still valid (not expired).
-     *
-     * @return bool
      */
     public function isValid(): bool
     {
         $data = Session::get(self::SESSION_KEY);
 
-        if (!$data || !isset($data['created_at'])) {
+        if (! $data || ! isset($data['created_at'])) {
             return false;
         }
 
@@ -88,8 +77,6 @@ class CheckoutSessionService
 
     /**
      * Get the session TTL in minutes.
-     *
-     * @return int
      */
     public function getTtlMinutes(): int
     {

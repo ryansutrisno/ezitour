@@ -86,7 +86,7 @@ class TransactionsRelationManager extends RelationManager
                         try {
                             $paymentService = app(PaymentService::class);
                             $status = $paymentService->checkPaymentStatus($record->order_id);
-                            
+
                             Notification::make()
                                 ->title('Status Checked')
                                 ->body("Current status: {$status['transaction_status']}")

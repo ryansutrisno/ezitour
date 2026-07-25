@@ -23,7 +23,7 @@ return new class extends Migration
                 'paid',
                 'failed',
                 'expired',
-                'superseded'
+                'superseded',
             ])->default('pending');
             $table->timestamp('transaction_time')->nullable();
             $table->timestamp('settlement_time')->nullable();

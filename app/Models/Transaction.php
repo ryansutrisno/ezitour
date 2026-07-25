@@ -13,9 +13,13 @@ class Transaction extends Model
      * Transaction status constants
      */
     public const STATUS_PENDING = 'pending';
+
     public const STATUS_PAID = 'paid';
+
     public const STATUS_FAILED = 'failed';
+
     public const STATUS_EXPIRED = 'expired';
+
     public const STATUS_SUPERSEDED = 'superseded';
 
     /**
@@ -109,8 +113,6 @@ class Transaction extends Model
 
     /**
      * Check if transaction has expired based on expiry_time.
-     * 
-     * @return bool
      */
     public function hasExpired(): bool
     {
@@ -120,7 +122,7 @@ class Transaction extends Model
         }
 
         // If no expiry_time set, cannot determine expiry
-        if (!$this->expiry_time) {
+        if (! $this->expiry_time) {
             return false;
         }
 
@@ -131,12 +133,10 @@ class Transaction extends Model
     /**
      * Get time remaining until expiry in minutes.
      * Returns null if no expiry_time set or already expired.
-     * 
-     * @return int|null
      */
     public function getTimeRemainingMinutes(): ?int
     {
-        if (!$this->expiry_time || $this->hasExpired()) {
+        if (! $this->expiry_time || $this->hasExpired()) {
             return null;
         }
 
@@ -145,13 +145,11 @@ class Transaction extends Model
 
     /**
      * Get formatted time remaining string.
-     * 
-     * @return string|null
      */
     public function getTimeRemainingFormatted(): ?string
     {
         $minutes = $this->getTimeRemainingMinutes();
-        
+
         if ($minutes === null || $minutes <= 0) {
             return null;
         }

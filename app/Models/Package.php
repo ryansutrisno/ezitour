@@ -10,7 +10,7 @@ class Package extends Model
     use HasFactory;
 
     protected $guarded = [];
-    
+
     public function items()
     {
         return $this->hasMany(PackageItem::class)->orderBy('sequence_order');
@@ -19,7 +19,7 @@ class Package extends Model
     public function destinations()
     {
         return $this->belongsToMany(Destination::class, 'package_items')
-                    ->withPivot('sequence_order')
-                    ->orderByPivot('sequence_order');
+            ->withPivot('sequence_order')
+            ->orderByPivot('sequence_order');
     }
 }

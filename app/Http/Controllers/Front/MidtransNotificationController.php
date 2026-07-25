@@ -13,10 +13,10 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * MidtransNotificationController - Handle webhook notifications from Midtrans
- * 
+ *
  * This controller receives payment status notifications from Midtrans
  * and delegates processing to PaymentService.
- * 
+ *
  * Requirements: 4.1, 4.8, 11.2
  */
 class MidtransNotificationController extends Controller
@@ -28,8 +28,6 @@ class MidtransNotificationController extends Controller
 
     /**
      * Create a new controller instance.
-     *
-     * @param PaymentService $paymentService
      */
     public function __construct(PaymentService $paymentService)
     {
@@ -38,18 +36,15 @@ class MidtransNotificationController extends Controller
 
     /**
      * Handle incoming payment notification from Midtrans webhook
-     * 
+     *
      * This endpoint receives POST requests from Midtrans containing
      * payment status updates. The notification is verified and processed
      * to update transaction and booking status.
-     * 
+     *
      * Requirements:
      * - 4.1: Verify notification signature
      * - 4.8: Respond with HTTP 200 to acknowledge receipt
      * - 11.2: Log notification processing failures without breaking webhook
-     *
-     * @param Request $request
-     * @return JsonResponse
      */
     public function handle(Request $request): JsonResponse
     {

@@ -8,7 +8,7 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     * 
+     *
      * Adds expiry_time column to transactions table for payment expiration handling.
      * Requirements: 9.1 - Set expiry_time when creating transaction
      */

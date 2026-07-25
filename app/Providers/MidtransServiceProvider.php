@@ -4,8 +4,8 @@ namespace App\Providers;
 
 use App\Services\MidtransClient;
 use App\Services\PaymentService;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\ServiceProvider;
 
 class MidtransServiceProvider extends ServiceProvider
 {
@@ -16,7 +16,7 @@ class MidtransServiceProvider extends ServiceProvider
     {
         // Register MidtransClient as singleton
         $this->app->singleton(MidtransClient::class, function ($app) {
-            return new MidtransClient();
+            return new MidtransClient;
         });
 
         // Register PaymentService as singleton
@@ -35,8 +35,6 @@ class MidtransServiceProvider extends ServiceProvider
 
     /**
      * Validate Midtrans configuration on application startup
-     *
-     * @return void
      */
     protected function validateMidtransConfiguration(): void
     {
@@ -54,13 +52,13 @@ class MidtransServiceProvider extends ServiceProvider
         }
 
         // Log configuration status
-        if (!empty($serverKey) && !empty($clientKey)) {
+        if (! empty($serverKey) && ! empty($clientKey)) {
             $environment = $isProduction ? 'PRODUCTION' : 'SANDBOX';
             Log::info("Midtrans configuration validated successfully. Environment: {$environment}");
         }
 
         // Validate environment mode is boolean
-        if (!is_bool($isProduction)) {
+        if (! is_bool($isProduction)) {
             Log::warning('Midtrans is_production should be a boolean value (true/false).');
         }
     }

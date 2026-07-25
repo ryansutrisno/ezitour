@@ -6,6 +6,55 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    /* ---- Typography ----
+       Body: Instrument Sans (neutral, highly legible).
+       Display: Plus Jakarta Sans — Indonesian-made geometric grotesque with a
+       warm, characterful presence. Pairs cleanly with Instrument Sans and
+       gives the brand a distinctive voice for headings. */
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+        'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+
+    /* ---- Brand palette: "Ocean & Sand" ----
+       Primary — refined Ocean blue. We override Tailwind's default `blue` scale
+       with a deeper, slightly teal-leaning travel blue. Every existing `blue-*`
+       utility (including the checkout reference gradient) instantly picks up
+       the new palette, keeping the whole app cohesive with zero churn.
+       Accent — warm Sand (tropical amber) for highlights, ratings and CTAs. */
+    --color-blue-50: oklch(0.971 0.014 245);
+    --color-blue-100: oklch(0.932 0.032 246);
+    --color-blue-200: oklch(0.882 0.059 247);
+    --color-blue-300: oklch(0.809 0.105 248);
+    --color-blue-400: oklch(0.707 0.165 250);
+    --color-blue-500: oklch(0.603 0.220 251);
+    --color-blue-600: oklch(0.521 0.223 254);
+    --color-blue-700: oklch(0.451 0.205 256);
+    --color-blue-800: oklch(0.392 0.170 258);
+    --color-blue-900: oklch(0.342 0.135 260);
+
+    --color-sand-50: oklch(0.978 0.020 90);
+    --color-sand-100: oklch(0.952 0.048 85);
+    --color-sand-200: oklch(0.918 0.085 80);
+    --color-sand-300: oklch(0.875 0.125 75);
+    --color-sand-400: oklch(0.823 0.158 72);
+    --color-sand-500: oklch(0.762 0.178 68);
+    --color-sand-600: oklch(0.686 0.175 64);
+    --color-sand-700: oklch(0.583 0.155 60);
+    --color-sand-800: oklch(0.473 0.124 56);
+    --color-sand-900: oklch(0.383 0.097 52);
+
+    /* ---- Radius tokens ----
+       Single source of truth, aligned to the checkout reference (0.75rem / rounded-xl).
+       Enables `rounded-card`, `rounded-input`, `rounded-button`, `rounded-pill`. */
+    --radius-card: 0.75rem;
+    --radius-input: 0.75rem;
+    --radius-button: 0.75rem;
+    --radius-pill: 9999px;
+
+    /* ---- Soft layered shadows ----
+       Replace flat shadow-lg with real depth plus a subtle brand glow on hover.
+       Enables `shadow-soft`, `shadow-card`, `shadow-hover`. */
+    --shadow-soft: 0 1px 2px 0 rgb(15 23 42 / 0.04), 0 1px 3px 0 rgb(15 23 42 / 0.06);
+    --shadow-card: 0 1px 2px 0 rgb(15 23 42 / 0.04), 0 6px 18px -4px rgb(15 23 42 / 0.08);
+    --shadow-hover: 0 4px 10px -2px rgb(15 23 42 / 0.08), 0 18px 40px -8px rgb(37 99 235 / 0.20);
 }

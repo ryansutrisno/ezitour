@@ -3,15 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PackageResource\Pages;
-use App\Filament\Resources\PackageResource\RelationManagers;
 use App\Models\Package;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PackageResource extends Resource
 {
@@ -27,8 +24,7 @@ class PackageResource extends Resource
                     ->required()
                     ->maxLength(255)
                     ->live(onBlur: true)
-                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => 
-                        $operation === 'create' ? $set('slug', \Illuminate\Support\Str::slug($state)) : null
+                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', \Illuminate\Support\Str::slug($state)) : null
                     ),
                 Forms\Components\TextInput::make('slug')
                     ->required()
@@ -70,7 +66,7 @@ class PackageResource extends Resource
                             ->columnSpanFull()
                             ->afterStateUpdated(function ($state, Forms\Set $set, Forms\Get $get) {
                                 // If external URL is provided and no file uploaded, use the URL
-                                if ($state && !$get('thumbnail_url')) {
+                                if ($state && ! $get('thumbnail_url')) {
                                     $set('thumbnail_url', $state);
                                 }
                             }),

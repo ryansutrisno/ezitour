@@ -6,11 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\BookingCreationService;
 use App\Services\CheckoutSessionService;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Exception;
 
 class RegisterController extends Controller
 {

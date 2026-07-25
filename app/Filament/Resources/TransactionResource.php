@@ -9,10 +9,10 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Notifications\Notification;
 
 class TransactionResource extends Resource
 {
@@ -136,15 +136,15 @@ class TransactionResource extends Resource
                             $paymentService = app(PaymentService::class);
                             $oldStatus = $record->transaction_status;
                             $status = $paymentService->checkPaymentStatus($record->order_id);
-                            
+
                             $midtransStatus = $status['transaction_status'] ?? 'unknown';
                             $record->refresh();
                             $newStatus = $record->transaction_status;
-                            
+
                             $message = $oldStatus !== $newStatus
                                 ? "Status updated from '{$oldStatus}' to '{$newStatus}'"
                                 : "Current status: {$midtransStatus} (no change)";
-                            
+
                             Notification::make()
                                 ->title('Status Checked')
                                 ->body($message)

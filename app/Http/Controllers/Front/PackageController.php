@@ -13,8 +13,8 @@ class PackageController extends Controller
         $query = Package::query();
 
         if ($request->filled('keyword')) {
-            $query->where('name', 'like', '%' . $request->keyword . '%')
-                  ->orWhere('description', 'like', '%' . $request->keyword . '%');
+            $query->where('name', 'like', '%'.$request->keyword.'%')
+                ->orWhere('description', 'like', '%'.$request->keyword.'%');
         }
 
         $packages = $query->latest()->paginate(9);

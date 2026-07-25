@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * PaymentLogger - Centralized logging service for payment operations
- * 
+ *
  * This service provides comprehensive logging for all payment-related activities
  * with consistent formatting and full context.
- * 
+ *
  * Requirements: 11.1, 11.2, 11.3, 11.4
  */
 class PaymentLogger
@@ -24,10 +24,6 @@ class PaymentLogger
 
     /**
      * Log payment creation attempt
-     *
-     * @param Booking $booking
-     * @param string $orderId
-     * @return void
      */
     public static function logPaymentCreationAttempt(Booking $booking, string $orderId): void
     {
@@ -44,10 +40,6 @@ class PaymentLogger
 
     /**
      * Log successful payment creation
-     *
-     * @param Booking $booking
-     * @param Transaction $transaction
-     * @return void
      */
     public static function logPaymentCreationSuccess(Booking $booking, Transaction $transaction): void
     {
@@ -64,13 +56,8 @@ class PaymentLogger
 
     /**
      * Log payment creation failure
-     * 
-     * Requirements: 11.1 - Log all Midtrans API failures with full context
      *
-     * @param Booking $booking
-     * @param string $orderId
-     * @param \Throwable $exception
-     * @return void
+     * Requirements: 11.1 - Log all Midtrans API failures with full context
      */
     public static function logPaymentCreationFailure(Booking $booking, string $orderId, \Throwable $exception): void
     {
@@ -90,11 +77,6 @@ class PaymentLogger
 
     /**
      * Log Midtrans API call
-     *
-     * @param string $endpoint
-     * @param array $params
-     * @param string $environment
-     * @return void
      */
     public static function logMidtransApiCall(string $endpoint, array $params, string $environment): void
     {
@@ -110,11 +92,6 @@ class PaymentLogger
 
     /**
      * Log Midtrans API success
-     *
-     * @param string $endpoint
-     * @param string|null $orderId
-     * @param string $environment
-     * @return void
      */
     public static function logMidtransApiSuccess(string $endpoint, ?string $orderId, string $environment): void
     {
@@ -129,15 +106,8 @@ class PaymentLogger
 
     /**
      * Log Midtrans API failure
-     * 
-     * Requirements: 11.1 - Log all Midtrans API failures with full context
      *
-     * @param string $endpoint
-     * @param string|null $orderId
-     * @param \Throwable $exception
-     * @param string $environment
-     * @param int|null $httpStatusCode
-     * @return void
+     * Requirements: 11.1 - Log all Midtrans API failures with full context
      */
     public static function logMidtransApiFailure(
         string $endpoint,
@@ -161,9 +131,6 @@ class PaymentLogger
 
     /**
      * Log notification received
-     *
-     * @param array $notification
-     * @return void
      */
     public static function logNotificationReceived(array $notification): void
     {
@@ -180,11 +147,6 @@ class PaymentLogger
 
     /**
      * Log notification processing success
-     *
-     * @param string $orderId
-     * @param string $oldStatus
-     * @param string $newStatus
-     * @return void
      */
     public static function logNotificationProcessed(string $orderId, string $oldStatus, string $newStatus): void
     {
@@ -199,12 +161,8 @@ class PaymentLogger
 
     /**
      * Log notification processing failure
-     * 
-     * Requirements: 11.2 - Log notification processing failures
      *
-     * @param array $notification
-     * @param \Throwable $exception
-     * @return void
+     * Requirements: 11.2 - Log notification processing failures
      */
     public static function logNotificationProcessingFailure(array $notification, \Throwable $exception): void
     {
@@ -222,11 +180,8 @@ class PaymentLogger
 
     /**
      * Log signature verification failure
-     * 
-     * Requirements: 11.3 - Log signature verification failures with IP address
      *
-     * @param array $notification
-     * @return void
+     * Requirements: 11.3 - Log signature verification failures with IP address
      */
     public static function logSignatureVerificationFailure(array $notification): void
     {
@@ -242,14 +197,10 @@ class PaymentLogger
 
     /**
      * Log payment status change
-     * 
+     *
      * Requirements: 11.4 - Log all payment status changes with timestamp
      *
-     * @param Transaction $transaction
-     * @param string $oldStatus
-     * @param string $newStatus
-     * @param string|null $trigger Source of the status change
-     * @return void
+     * @param  string|null  $trigger  Source of the status change
      */
     public static function logPaymentStatusChange(
         Transaction $transaction,
@@ -273,12 +224,6 @@ class PaymentLogger
 
     /**
      * Log booking status change
-     *
-     * @param Booking $booking
-     * @param string $oldStatus
-     * @param string $newStatus
-     * @param Transaction|null $transaction
-     * @return void
      */
     public static function logBookingStatusChange(
         Booking $booking,
@@ -300,10 +245,6 @@ class PaymentLogger
 
     /**
      * Log payment retry attempt
-     *
-     * @param Booking $booking
-     * @param int $retryCount
-     * @return void
      */
     public static function logPaymentRetryAttempt(Booking $booking, int $retryCount): void
     {
@@ -319,9 +260,6 @@ class PaymentLogger
 
     /**
      * Log transaction expiration
-     *
-     * @param Transaction $transaction
-     * @return void
      */
     public static function logTransactionExpired(Transaction $transaction): void
     {
@@ -337,12 +275,8 @@ class PaymentLogger
 
     /**
      * Log manual payment status check attempt
-     * 
-     * Requirements: 7.4 - Log manual check attempts
      *
-     * @param string $orderId
-     * @param int|null $adminId
-     * @return void
+     * Requirements: 7.4 - Log manual check attempts
      */
     public static function logManualStatusCheckAttempt(string $orderId, ?int $adminId = null): void
     {
@@ -357,14 +291,8 @@ class PaymentLogger
 
     /**
      * Log manual payment status check success
-     * 
-     * Requirements: 7.4 - Log manual check attempts
      *
-     * @param string $orderId
-     * @param array $midtransStatus
-     * @param string|null $oldStatus
-     * @param string|null $newStatus
-     * @return void
+     * Requirements: 7.4 - Log manual check attempts
      */
     public static function logManualStatusCheckSuccess(
         string $orderId,
@@ -386,12 +314,8 @@ class PaymentLogger
 
     /**
      * Log manual payment status check failure
-     * 
-     * Requirements: 7.4 - Log manual check attempts
      *
-     * @param string $orderId
-     * @param \Throwable $exception
-     * @return void
+     * Requirements: 7.4 - Log manual check attempts
      */
     public static function logManualStatusCheckFailure(string $orderId, \Throwable $exception): void
     {
@@ -408,12 +332,6 @@ class PaymentLogger
 
     /**
      * Log amount mismatch (potential fraud)
-     *
-     * @param string $orderId
-     * @param string $expectedAmount
-     * @param string $receivedAmount
-     * @param array $notification
-     * @return void
      */
     public static function logAmountMismatch(
         string $orderId,
@@ -435,12 +353,8 @@ class PaymentLogger
 
     /**
      * Log raw notification for debugging
-     * 
-     * Requirements: 11.5 - Store raw notification payload for debugging
      *
-     * @param array $notification
-     * @param Transaction $transaction
-     * @return void
+     * Requirements: 11.5 - Store raw notification payload for debugging
      */
     public static function logRawNotification(array $notification, Transaction $transaction): void
     {
@@ -455,17 +369,14 @@ class PaymentLogger
 
     /**
      * Sanitize notification data for logging
-     *
-     * @param array $notification
-     * @return array
      */
     protected static function sanitizeNotificationForLog(array $notification): array
     {
         $sanitized = $notification;
-        
+
         // Mask signature key for security
         if (isset($sanitized['signature_key'])) {
-            $sanitized['signature_key'] = substr($sanitized['signature_key'], 0, 20) . '...';
+            $sanitized['signature_key'] = substr($sanitized['signature_key'], 0, 20).'...';
         }
 
         return $sanitized;
@@ -473,16 +384,14 @@ class PaymentLogger
 
     /**
      * Get the log channel to use
-     * 
-     * Falls back to default channel if payment channel is not configured
      *
-     * @return string
+     * Falls back to default channel if payment channel is not configured
      */
     protected static function getChannel(): string
     {
         // Check if payment channel exists in config
         $channels = config('logging.channels', []);
-        
+
         if (isset($channels[self::CHANNEL])) {
             return self::CHANNEL;
         }

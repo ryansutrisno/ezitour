@@ -11,26 +11,25 @@ class DashboardController extends Controller
 {
     /**
      * Display the user's dashboard with booking history.
-     * 
+     *
      * Requirements: 6.1 - Display current payment status for bookings
      * Task 16: Add filter for paid/unpaid bookings
      *
-     * @param Request $request
      * @return \Illuminate\View\View
      */
     public function index(Request $request)
     {
         $paymentFilter = $request->get('payment_status', 'all');
-        
+
         $query = Booking::where('user_id', Auth::id())
             ->with([
-                'package', 
-                'car', 
+                'package',
+                'car',
                 'driver',
                 'transactions' => function ($query) {
                     $query->latest();
                 },
-                'latestTransaction'
+                'latestTransaction',
             ]);
 
         // Apply payment status filter
@@ -48,7 +47,7 @@ class DashboardController extends Controller
         $unpaidCount = Booking::where('user_id', Auth::id())->where('status', '!=', 'paid')->count();
 
         return view('front.dashboard.index', compact(
-            'bookings', 
+            'bookings',
             'paymentFilter',
             'allCount',
             'paidCount',

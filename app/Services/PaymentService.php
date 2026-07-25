@@ -13,14 +13,14 @@ use Illuminate\Support\Str;
 
 /**
  * PaymentService - Core business logic untuk payment processing
- * 
+ *
  * Class ini menangani:
  * - Create payment transactions
  * - Generate Snap Tokens dari Midtrans
  * - Process payment notifications
  * - Update transaction dan booking status
  * - Handle payment retry logic
- * 
+ *
  * Requirements: 11.1, 11.2, 11.3, 11.4 - Comprehensive error handling and logging
  */
 class PaymentService
@@ -32,8 +32,6 @@ class PaymentService
 
     /**
      * Create a new PaymentService instance.
-     *
-     * @param MidtransClient $midtransClient
      */
     public function __construct(MidtransClient $midtransClient)
     {
@@ -42,26 +40,23 @@ class PaymentService
 
     /**
      * Generate unique Order ID untuk transaksi
-     * 
+     *
      * Format: BOOK-{booking_id}-{timestamp}-{random}
      * Contoh: BOOK-123-1703750400-a8f3
-     *
-     * @param Booking $booking
-     * @return string
      */
     public function generateOrderId(Booking $booking): string
     {
         $timestamp = now()->timestamp;
         $random = Str::lower(Str::random(4));
-        
+
         return sprintf('BOOK-%d-%d-%s', $booking->id, $timestamp, $random);
     }
 
     /**
      * Create a new payment transaction and get Snap Token
      *
-     * @param Booking $booking
      * @return array ['snap_token' => string, 'transaction' => Transaction]
+     *
      * @throws PaymentException
      */
     public function createPayment(Booking $booking): array
@@ -128,13 +123,8 @@ class PaymentService
         });
     }
 
-
     /**
      * Build Snap parameters untuk Midtrans API request
-     *
-     * @param Booking $booking
-     * @param string $orderId
-     * @return array
      */
     protected function buildSnapParams(Booking $booking, string $orderId): array
     {
@@ -160,9 +150,6 @@ class PaymentService
 
     /**
      * Build customer details untuk Snap parameters
-     *
-     * @param Booking $booking
-     * @return array
      */
     protected function buildCustomerDetails(Booking $booking): array
     {
@@ -177,10 +164,6 @@ class PaymentService
 
     /**
      * Build item details untuk Snap parameters
-     *
-     * @param Booking $booking
-     * @param int $grossAmount
-     * @return array
      */
     protected function buildItemDetails(Booking $booking, int $grossAmount): array
     {
@@ -189,7 +172,7 @@ class PaymentService
 
         return [
             [
-                'id' => 'PKG-' . ($package->id ?? $booking->package_id),
+                'id' => 'PKG-'.($package->id ?? $booking->package_id),
                 'price' => $grossAmount,
                 'quantity' => 1,
                 'name' => Str::limit($packageName, 50),
@@ -199,11 +182,6 @@ class PaymentService
 
     /**
      * Create transaction record in database
-     *
-     * @param Booking $booking
-     * @param string $orderId
-     * @param string $snapToken
-     * @return Transaction
      */
     protected function createTransactionRecord(Booking $booking, string $orderId, string $snapToken): Transaction
     {
@@ -225,7 +203,6 @@ class PaymentService
     /**
      * Validate booking can be paid
      *
-     * @param Booking $booking
      * @throws \Exception
      */
     protected function validateBookingForPayment(Booking $booking): void
@@ -248,8 +225,6 @@ class PaymentService
 
     /**
      * Get MidtransClient instance
-     *
-     * @return MidtransClient
      */
     public function getMidtransClient(): MidtransClient
     {
@@ -259,8 +234,8 @@ class PaymentService
     /**
      * Process payment notification from Midtrans webhook
      *
-     * @param array $notification Raw notification data from Midtrans
-     * @return void
+     * @param  array  $notification  Raw notification data from Midtrans
+     *
      * @throws \App\Exceptions\InvalidSignatureException
      * @throws NotificationProcessingException
      */
@@ -270,7 +245,7 @@ class PaymentService
         PaymentLogger::logNotificationReceived($notification);
 
         // Step 1: Verify notification signature
-        if (!$this->midtransClient->verifySignature($notification)) {
+        if (! $this->midtransClient->verifySignature($notification)) {
             // Signature verification failure is already logged by MidtransClient
             throw new \App\Exceptions\InvalidSignatureException(
                 'Invalid notification signature'
@@ -289,7 +264,7 @@ class PaymentService
         // Find the transaction
         $transaction = Transaction::where('order_id', $orderId)->first();
 
-        if (!$transaction) {
+        if (! $transaction) {
             throw NotificationProcessingException::transactionNotFound($orderId, $notification);
         }
 
@@ -298,11 +273,11 @@ class PaymentService
         if ($notificationAmount !== null) {
             $expectedAmount = number_format((float) $transaction->gross_amount, 2, '.', '');
             $receivedAmount = number_format((float) $notificationAmount, 2, '.', '');
-            
+
             if ($expectedAmount !== $receivedAmount) {
                 // Log amount mismatch as potential fraud
                 PaymentLogger::logAmountMismatch($orderId, $expectedAmount, $receivedAmount, $notification);
-                
+
                 throw NotificationProcessingException::amountMismatch(
                     $orderId,
                     $expectedAmount,
@@ -318,7 +293,7 @@ class PaymentService
 
         // Step 4 & 6: Update Transaction status and store raw notification
         try {
-            DB::transaction(function () use ($transaction, $notification, $internalStatus, $midtransStatus, $oldStatus) {
+            DB::transaction(function () use ($transaction, $notification, $internalStatus, $oldStatus) {
                 // Update transaction with notification data
                 $transaction->update([
                     'transaction_status' => $internalStatus,
@@ -365,10 +340,6 @@ class PaymentService
      * - settlement -> paid
      * - pending -> pending
      * - deny, cancel, expire -> failed
-     *
-     * @param string|null $midtransStatus
-     * @param string|null $fraudStatus
-     * @return string
      */
     protected function mapMidtransStatus(?string $midtransStatus, ?string $fraudStatus = null): string
     {
@@ -398,25 +369,25 @@ class PaymentService
 
     /**
      * Update booking status based on transaction status
-     * 
+     *
      * This method implements the status synchronization logic:
      * - Property 9: Cascading Status Update (paid transaction -> paid booking)
      * - Property 10: Failed Payment Isolation (failed transaction -> booking stays pending)
      * - Property 11: Latest Transaction Priority (only latest transaction updates booking)
      * - Property 12: Status Immutability (paid booking cannot be downgraded)
      *
-     * @param Transaction $transaction
      * @return bool True if booking was updated, false otherwise
      */
     public function updateBookingStatus(Transaction $transaction): bool
     {
         $booking = $transaction->booking;
 
-        if (!$booking) {
+        if (! $booking) {
             Log::error('Booking not found for transaction', [
                 'transaction_id' => $transaction->id,
                 'order_id' => $transaction->order_id,
             ]);
+
             return false;
         }
 
@@ -429,6 +400,7 @@ class PaymentService
                 'order_id' => $transaction->order_id,
                 'transaction_status' => $transaction->transaction_status,
             ]);
+
             return false;
         }
 
@@ -440,6 +412,7 @@ class PaymentService
                 'current_transaction_id' => $transaction->id,
                 'latest_transaction_id' => $latestTransaction->id,
             ]);
+
             return false;
         }
 
@@ -450,6 +423,7 @@ class PaymentService
                 'order_id' => $transaction->order_id,
                 'transaction_status' => $transaction->transaction_status,
             ]);
+
             return false;
         }
 
@@ -479,8 +453,6 @@ class PaymentService
     /**
      * Update booking status to paid (legacy method, calls updateBookingStatus)
      *
-     * @param Transaction $transaction
-     * @return void
      * @deprecated Use updateBookingStatus() instead
      */
     protected function updateBookingToPaid(Transaction $transaction): void
@@ -490,14 +462,11 @@ class PaymentService
 
     /**
      * Parse settlement time from notification
-     *
-     * @param array $notification
-     * @return \Carbon\Carbon|null
      */
     protected function parseSettlementTime(array $notification): ?\Carbon\Carbon
     {
         $settlementTime = $notification['settlement_time'] ?? null;
-        
+
         if (empty($settlementTime)) {
             return null;
         }
@@ -509,13 +478,14 @@ class PaymentService
                 'settlement_time' => $settlementTime,
                 'error' => $e->getMessage(),
             ]);
+
             return null;
         }
     }
 
     /**
      * Retry payment for a booking with failed or expired transaction
-     * 
+     *
      * This method implements the payment retry mechanism:
      * - Property 14: Payment Retry Creates New Transaction
      *   - Check if booking has failed/expired transaction
@@ -523,8 +493,8 @@ class PaymentService
      *   - Create new transaction with new Snap Token
      *   - Use the same booking_id
      *
-     * @param Booking $booking
      * @return array ['snap_token' => string, 'transaction' => Transaction]
+     *
      * @throws PaymentException
      */
     public function retryPayment(Booking $booking): array
@@ -604,7 +574,6 @@ class PaymentService
     /**
      * Validate booking can retry payment
      *
-     * @param Booking $booking
      * @throws \Exception
      */
     protected function validateBookingForRetry(Booking $booking): void
@@ -627,14 +596,14 @@ class PaymentService
             ])
             ->exists();
 
-        if (!$hasRetryableTransaction) {
+        if (! $hasRetryableTransaction) {
             // If no transactions exist at all, this should use createPayment instead
             $hasAnyTransaction = $booking->transactions()->exists();
-            
-            if (!$hasAnyTransaction) {
+
+            if (! $hasAnyTransaction) {
                 throw new \Exception('Tidak ada transaksi sebelumnya. Gunakan pembayaran baru.');
             }
-            
+
             throw new \Exception('Tidak ada transaksi yang gagal atau kadaluarsa untuk diulang.');
         }
 
@@ -647,7 +616,6 @@ class PaymentService
     /**
      * Mark all previous failed/expired transactions as superseded
      *
-     * @param Booking $booking
      * @return int Number of transactions marked as superseded
      */
     protected function markPreviousTransactionsAsSuperseded(Booking $booking): int
@@ -673,9 +641,6 @@ class PaymentService
 
     /**
      * Check if a booking can retry payment
-     *
-     * @param Booking $booking
-     * @return bool
      */
     public function canRetryPayment(Booking $booking): bool
     {
@@ -700,11 +665,11 @@ class PaymentService
 
     /**
      * Check and update expired transactions
-     * 
+     *
      * This method scans for pending transactions that have passed their expiry_time
      * and updates their status to 'expired'.
-     * 
-     * Requirements: 9.2 - WHEN payment expires THEN THE Payment_System SHALL update 
+     *
+     * Requirements: 9.2 - WHEN payment expires THEN THE Payment_System SHALL update
      * Transaction status to "expired"
      *
      * @return int Number of transactions marked as expired
@@ -720,7 +685,7 @@ class PaymentService
 
         foreach ($expiredTransactions as $transaction) {
             $oldStatus = $transaction->transaction_status;
-            
+
             $transaction->update([
                 'transaction_status' => Transaction::STATUS_EXPIRED,
             ]);
@@ -743,22 +708,21 @@ class PaymentService
 
     /**
      * Check if a specific transaction has expired and update its status
-     * 
-     * Requirements: 9.2 - WHEN payment expires THEN THE Payment_System SHALL update 
+     *
+     * Requirements: 9.2 - WHEN payment expires THEN THE Payment_System SHALL update
      * Transaction status to "expired"
      *
-     * @param Transaction $transaction
      * @return bool True if transaction was expired, false otherwise
      */
     public function checkAndExpireTransaction(Transaction $transaction): bool
     {
         // Only check pending transactions
-        if (!$transaction->isPending()) {
+        if (! $transaction->isPending()) {
             return false;
         }
 
         // Check if transaction has expired
-        if (!$transaction->hasExpired()) {
+        if (! $transaction->hasExpired()) {
             return false;
         }
 
@@ -778,21 +742,20 @@ class PaymentService
 
     /**
      * Get time remaining for a pending transaction
-     * 
+     *
      * Requirements: 9.4 - THE Payment_System SHALL display time remaining for pending payments
      *
-     * @param Transaction $transaction
      * @return array|null ['minutes' => int, 'formatted' => string] or null if not applicable
      */
     public function getTransactionTimeRemaining(Transaction $transaction): ?array
     {
         // Only applicable for pending transactions
-        if (!$transaction->isPending()) {
+        if (! $transaction->isPending()) {
             return null;
         }
 
         $minutes = $transaction->getTimeRemainingMinutes();
-        
+
         if ($minutes === null) {
             return null;
         }
@@ -806,12 +769,9 @@ class PaymentService
 
     /**
      * Check if booking has any expired transactions that can be retried
-     * 
-     * Requirements: 9.3 - WHEN Transaction expires THEN THE Payment_System SHALL 
-     * allow customer to retry payment
      *
-     * @param Booking $booking
-     * @return bool
+     * Requirements: 9.3 - WHEN Transaction expires THEN THE Payment_System SHALL
+     * allow customer to retry payment
      */
     public function hasExpiredTransactionForRetry(Booking $booking): bool
     {
@@ -833,15 +793,15 @@ class PaymentService
 
     /**
      * Check payment status from Midtrans API
-     * 
+     *
      * This method calls Midtrans API to get the current status of a transaction
      * and updates the local transaction record if needed.
-     * 
-     * Requirements: 7.4 - THE Payment_System SHALL allow admin to manually check 
+     *
+     * Requirements: 7.4 - THE Payment_System SHALL allow admin to manually check
      * payment status from Midtrans API
      *
-     * @param string $orderId
      * @return array Status information from Midtrans
+     *
      * @throws MidtransApiException
      */
     public function checkPaymentStatus(string $orderId): array
@@ -852,7 +812,7 @@ class PaymentService
         // Find the transaction
         $transaction = Transaction::where('order_id', $orderId)->first();
 
-        if (!$transaction) {
+        if (! $transaction) {
             $exception = new \Exception("Transaction not found: {$orderId}");
             PaymentLogger::logManualStatusCheckFailure($orderId, $exception);
             throw $exception;
@@ -868,7 +828,7 @@ class PaymentService
             $midtransStatus = $status['transaction_status'] ?? null;
             $fraudStatus = $status['fraud_status'] ?? null;
             $newStatus = $oldStatus;
-            
+
             if ($midtransStatus) {
                 $newStatus = $this->mapMidtransStatus($midtransStatus, $fraudStatus);
 
@@ -879,8 +839,8 @@ class PaymentService
                         'payment_type' => $status['payment_type'] ?? $transaction->payment_type,
                         'status_code' => $status['status_code'] ?? $transaction->status_code,
                         'fraud_status' => $fraudStatus ?? $transaction->fraud_status,
-                        'settlement_time' => isset($status['settlement_time']) 
-                            ? \Carbon\Carbon::parse($status['settlement_time']) 
+                        'settlement_time' => isset($status['settlement_time'])
+                            ? \Carbon\Carbon::parse($status['settlement_time'])
                             : $transaction->settlement_time,
                     ]);
 

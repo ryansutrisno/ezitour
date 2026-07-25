@@ -27,9 +27,6 @@ class CheckoutController extends Controller
      * Requirements: 1.1, 1.3
      * - Display package details, booking form, and auth section (if guest)
      * - Hide auth section for authenticated users
-     *
-     * @param string $slug
-     * @return View
      */
     public function show(string $slug): View
     {
@@ -57,10 +54,6 @@ class CheckoutController extends Controller
      * - Store booking data in session for guests
      * - Create booking and redirect to payment for authenticated users
      * - Validate all booking data before processing
-     *
-     * @param Request $request
-     * @param string $slug
-     * @return RedirectResponse
      */
     public function store(Request $request, string $slug): RedirectResponse
     {
@@ -96,12 +89,12 @@ class CheckoutController extends Controller
                     'user_id' => Auth::id(),
                     'package_id' => $package->id,
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
                 ]);
-                
+
                 return redirect()->back()
                     ->withInput()
-                    ->with('error', 'Gagal membuat booking. Silakan coba lagi. Error: ' . $e->getMessage());
+                    ->with('error', 'Gagal membuat booking. Silakan coba lagi. Error: '.$e->getMessage());
             }
         }
 
@@ -126,10 +119,6 @@ class CheckoutController extends Controller
      * - Authenticate user without full page redirect
      * - Display error messages inline without losing booking form data
      * - Proceed to create booking and redirect to payment on success
-     *
-     * @param Request $request
-     * @param string $slug
-     * @return RedirectResponse
      */
     public function login(Request $request, string $slug): RedirectResponse
     {
@@ -140,7 +129,7 @@ class CheckoutController extends Controller
         ]);
 
         // Attempt authentication
-        if (!Auth::attempt($credentials)) {
+        if (! Auth::attempt($credentials)) {
             return redirect()->route('front.checkout.show', $slug)
                 ->withErrors(['login_email' => 'Email atau password salah.'])
                 ->withInput($request->only('email'))
@@ -179,10 +168,6 @@ class CheckoutController extends Controller
      * - Create account and log user in automatically
      * - Display error messages inline without losing booking form data
      * - Proceed to create booking and redirect to payment on success
-     *
-     * @param Request $request
-     * @param string $slug
-     * @return RedirectResponse
      */
     public function register(Request $request, string $slug): RedirectResponse
     {
@@ -198,7 +183,7 @@ class CheckoutController extends Controller
             // Add prefix to error keys to distinguish from login errors
             $errors = [];
             foreach ($e->errors() as $key => $messages) {
-                $errors['register_' . $key] = $messages;
+                $errors['register_'.$key] = $messages;
             }
 
             return redirect()->route('front.checkout.show', $slug)

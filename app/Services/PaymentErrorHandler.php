@@ -5,14 +5,13 @@ namespace App\Services;
 use App\Exceptions\MidtransApiException;
 use App\Exceptions\NotificationProcessingException;
 use App\Exceptions\PaymentException;
-use Illuminate\Support\Facades\Log;
 
 /**
  * PaymentErrorHandler - Centralized error handling for payment operations
- * 
+ *
  * This service provides user-friendly error messages for different error types
  * and handles API timeouts and network errors gracefully.
- * 
+ *
  * Requirements: 1.5, 3.5
  */
 class PaymentErrorHandler
@@ -21,10 +20,15 @@ class PaymentErrorHandler
      * Error type constants
      */
     public const ERROR_TYPE_TIMEOUT = 'timeout';
+
     public const ERROR_TYPE_NETWORK = 'network';
+
     public const ERROR_TYPE_API = 'api';
+
     public const ERROR_TYPE_VALIDATION = 'validation';
+
     public const ERROR_TYPE_BOOKING = 'booking';
+
     public const ERROR_TYPE_UNKNOWN = 'unknown';
 
     /**
@@ -65,9 +69,6 @@ class PaymentErrorHandler
 
     /**
      * Get user-friendly error response from exception
-     *
-     * @param \Throwable $exception
-     * @return array
      */
     public static function getErrorResponse(\Throwable $exception): array
     {
@@ -92,24 +93,21 @@ class PaymentErrorHandler
 
     /**
      * Determine error type from exception
-     *
-     * @param \Throwable $exception
-     * @return string
      */
     public static function determineErrorType(\Throwable $exception): string
     {
         // Check for MidtransApiException subtypes
         if ($exception instanceof MidtransApiException) {
             $message = strtolower($exception->getMessage());
-            
+
             if (str_contains($message, 'timeout')) {
                 return self::ERROR_TYPE_TIMEOUT;
             }
-            
+
             if (str_contains($message, 'network') || str_contains($message, 'connect')) {
                 return self::ERROR_TYPE_NETWORK;
             }
-            
+
             return self::ERROR_TYPE_API;
         }
 
@@ -121,26 +119,26 @@ class PaymentErrorHandler
         // Check for PaymentException
         if ($exception instanceof PaymentException) {
             $message = strtolower($exception->getMessage());
-            
+
             if (str_contains($message, 'booking')) {
                 return self::ERROR_TYPE_BOOKING;
             }
-            
+
             if (str_contains($message, 'valid')) {
                 return self::ERROR_TYPE_VALIDATION;
             }
-            
+
             return self::ERROR_TYPE_API;
         }
 
         // Check for generic timeout/network errors
         $message = strtolower($exception->getMessage());
-        
+
         if (str_contains($message, 'timeout') || str_contains($message, 'timed out')) {
             return self::ERROR_TYPE_TIMEOUT;
         }
-        
-        if (str_contains($message, 'could not resolve') || 
+
+        if (str_contains($message, 'could not resolve') ||
             str_contains($message, 'connection refused') ||
             str_contains($message, 'network')) {
             return self::ERROR_TYPE_NETWORK;
@@ -151,9 +149,6 @@ class PaymentErrorHandler
 
     /**
      * Check if error type allows retry
-     *
-     * @param string $errorType
-     * @return bool
      */
     public static function canRetry(string $errorType): bool
     {
@@ -167,9 +162,6 @@ class PaymentErrorHandler
 
     /**
      * Get user-friendly message for display
-     *
-     * @param \Throwable $exception
-     * @return string
      */
     public static function getUserMessage(\Throwable $exception): string
     {
@@ -187,9 +179,6 @@ class PaymentErrorHandler
 
     /**
      * Get error title for display
-     *
-     * @param \Throwable $exception
-     * @return string
      */
     public static function getErrorTitle(\Throwable $exception): string
     {
@@ -201,9 +190,6 @@ class PaymentErrorHandler
 
     /**
      * Get suggestion for user
-     *
-     * @param \Throwable $exception
-     * @return string
      */
     public static function getSuggestion(\Throwable $exception): string
     {
@@ -215,10 +201,6 @@ class PaymentErrorHandler
 
     /**
      * Handle exception and return JSON response
-     *
-     * @param \Throwable $exception
-     * @param int $statusCode
-     * @return \Illuminate\Http\JsonResponse
      */
     public static function jsonResponse(\Throwable $exception, int $statusCode = 500): \Illuminate\Http\JsonResponse
     {
@@ -227,15 +209,11 @@ class PaymentErrorHandler
 
     /**
      * Handle exception and return redirect with error message
-     *
-     * @param \Throwable $exception
-     * @param string $route
-     * @return \Illuminate\Http\RedirectResponse
      */
     public static function redirectWithError(\Throwable $exception, string $route): \Illuminate\Http\RedirectResponse
     {
         $errorResponse = self::getErrorResponse($exception);
-        
+
         return redirect()->route($route)
             ->with('error', $errorResponse['message'])
             ->with('error_title', $errorResponse['title'])
@@ -245,14 +223,11 @@ class PaymentErrorHandler
 
     /**
      * Format error for flash message
-     *
-     * @param \Throwable $exception
-     * @return string
      */
     public static function formatFlashMessage(\Throwable $exception): string
     {
         $errorResponse = self::getErrorResponse($exception);
-        
-        return $errorResponse['message'] . ' ' . $errorResponse['suggestion'];
+
+        return $errorResponse['message'].' '.$errorResponse['suggestion'];
     }
 }
