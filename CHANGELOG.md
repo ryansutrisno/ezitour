@@ -1,3 +1,10 @@
+## [1.4.0](https://github.com/ryansutrisno/ezitour/compare/v1.3.0...v1.4.0) (2026-07-25)
+
+
+### ✨ Features
+
+* add user profile management with avatar upload ([3826789](https://github.com/ryansutrisno/ezitour/commit/3826789da7c778d5b1ce5f43aa2210fa2c3bab63))
+
 ## [1.3.0](https://github.com/ryansutrisno/ezitour/compare/v1.2.0...v1.3.0) (2026-07-25)
 
 
