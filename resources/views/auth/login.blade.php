@@ -40,7 +40,7 @@
             </ul>
         </div>
 
-        <p class="relative text-sm text-blue-200">&copy; {{ date('Y') }} EziTour. Dibuat dengan rasa di Indonesia.</p>
+        <p class="relative text-sm text-blue-200">&copy; {{ date('Y') }} EziTour. Powered by Trazmedia Segoro Digital.</p>
     </div>
 
     {{-- Right: form --}}

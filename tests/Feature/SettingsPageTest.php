@@ -43,7 +43,7 @@ class SettingsPageTest extends TestCase
         $settings = app(ContactSettings::class);
 
         $this->assertSame('support@ezitour.com', $settings->email);
-        $this->assertSame('+62 812 3456 7890', $settings->phone);
+        $this->assertSame('+62 851 0326 3777', $settings->phone);
     }
 
     public function test_seeded_about_settings_hydrate_with_mission_points(): void

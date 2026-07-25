@@ -155,7 +155,7 @@
             </div>
             <div class="mt-12 border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
                 <p class="text-slate-500 text-sm">&copy; {{ date('Y') }} EziTour. All rights reserved.</p>
-                <p class="text-slate-500 text-sm">Dibuat dengan rasa di Indonesia.</p>
+                <p class="text-slate-500 text-sm">Powered by Trazmedia Segoro Digital.</p>
             </div>
         </div>
     </footer>

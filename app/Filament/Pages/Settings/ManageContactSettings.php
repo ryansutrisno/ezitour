@@ -35,7 +35,7 @@ class ManageContactSettings extends SettingsPage
                         ->label('Nomor Telepon')
                         ->required()
                         ->maxLength(64)
-                        ->helperText('Contoh: +62 812 3456 7890'),
+                        ->helperText('Contoh: +62 851 0326 3777'),
                     Forms\Components\TextInput::make('whatsapp')
                         ->label('Nomor WhatsApp')
                         ->tel()
