@@ -74,7 +74,7 @@ class SettingsPageTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
 
         $pages = [
             '/admin/manage-general-settings',
@@ -92,7 +92,7 @@ class SettingsPageTest extends TestCase
 
     public function test_settings_pages_appear_under_pengaturan_navigation_group(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
 
         $response = $this->actingAs($user)->get('/admin/manage-general-settings');
 
