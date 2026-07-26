@@ -1,3 +1,10 @@
+## [1.6.0](https://github.com/ryansutrisno/ezitour/compare/v1.5.0...v1.6.0) (2026-07-26)
+
+
+### ✨ Features
+
+* mvp cleanup (locale id, canAccessPanel security, error pages) ([4a4d2a6](https://github.com/ryansutrisno/ezitour/commit/4a4d2a6f22d49eb855eeadaee60897b74997d1e8))
+
 ## [1.5.0](https://github.com/ryansutrisno/ezitour/compare/v1.4.0...v1.5.0) (2026-07-26)
 
 
