@@ -58,24 +58,17 @@ class User extends Authenticatable implements FilamentUser
      * Filament v3 blocks any non-{@link FilamentUser} model outside of the
      * `local` environment, so implementing this contract is required for the
      * panel to be reachable in staging/production (and during tests, which run
-     * with `APP_ENV=testing`).
-     *
-     * Intentionally still permissive (returns true) for the MVP: a dedicated
-     * admin-assignment flow doesn't exist yet, so gating on `role === 'admin'`
-     * would lock out the seeded admin and break SettingsPageTest (which logs
-     * in a plain factory user). Once real role assignment lands, switch this to
-     * `return $this->isAdmin();`.
+     * with `APP_ENV=testing`). Access is now gated on the `admin` role — the
+     * seeded admin user and any explicitly-assigned admin can enter, while
+     * regular travelers are kept out.
      */
     public function canAccessPanel(Panel $panel): bool
     {
-        return true;
+        return $this->isAdmin();
     }
 
     /**
      * Whether this user has the admin role.
-     *
-     * Kept independent from {@see canAccessPanel()} until a real role-assignment
-     * flow exists, so admin features can still be progressively gated.
      */
     public function isAdmin(): bool
     {
