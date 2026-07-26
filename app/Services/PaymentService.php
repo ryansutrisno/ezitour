@@ -5,10 +5,13 @@ namespace App\Services;
 use App\Exceptions\MidtransApiException;
 use App\Exceptions\NotificationProcessingException;
 use App\Exceptions\PaymentException;
+use App\Mail\PaymentFailed;
+use App\Mail\PaymentSuccess;
 use App\Models\Booking;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 /**
@@ -329,6 +332,45 @@ class PaymentService
                 $notification,
                 $e
             );
+        }
+
+        // Dispatch the relevant notification email now that the DB transaction
+        // has committed. Best-effort: a mail failure must never break the
+        // webhook response (Requirement 4.8).
+        $this->dispatchPaymentEmails($transaction->fresh(), $internalStatus);
+    }
+
+    /**
+     * Send the customer-facing email that matches the resolved status.
+     *
+     * - paid       -> PaymentSuccess (E-Ticket)
+     * - failed/expire -> PaymentFailed (retry prompt)
+     *
+     * Note: for MVP this fires on every settlement/failed webhook. Duplicate
+     * notifications from Midtrans can therefore produce duplicate emails —
+     * idempotency (e.g. a `confirmation_sent_at` marker) is a future concern.
+     */
+    protected function dispatchPaymentEmails(Transaction $transaction, string $internalStatus): void
+    {
+        $booking = $transaction->booking;
+
+        if (! $booking) {
+            return;
+        }
+
+        try {
+            if ($internalStatus === Transaction::STATUS_PAID) {
+                Mail::to($booking->user)->send(new PaymentSuccess($booking, $transaction));
+            } elseif (in_array($internalStatus, [Transaction::STATUS_FAILED, Transaction::STATUS_EXPIRED], true)) {
+                Mail::to($booking->user)->send(new PaymentFailed($booking, $transaction));
+            }
+        } catch (\Throwable $e) {
+            Log::warning('Failed to send payment notification email', [
+                'booking_id' => $booking->id,
+                'transaction_id' => $transaction->id,
+                'internal_status' => $internalStatus,
+                'error' => $e->getMessage(),
+            ]);
         }
     }
 

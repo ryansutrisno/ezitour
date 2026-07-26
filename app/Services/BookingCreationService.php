@@ -2,11 +2,14 @@
 
 namespace App\Services;
 
+use App\Mail\BookingConfirmed;
 use App\Models\Booking;
 use App\Models\Package;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class BookingCreationService
 {
@@ -22,7 +25,7 @@ class BookingCreationService
      */
     public function createBooking(User $user, Package $package, array $bookingData): Booking
     {
-        return DB::transaction(function () use ($user, $package, $bookingData) {
+        $booking = DB::transaction(function () use ($user, $package, $bookingData) {
             $totalAmount = $this->calculateTotalPrice($package, (int) $bookingData['participants']);
 
             $booking = Booking::create([
@@ -37,6 +40,28 @@ class BookingCreationService
 
             return $booking;
         });
+
+        // Dispatch confirmation email after the transaction commits so we never
+        // mail a booking that got rolled back.
+        $this->sendBookingConfirmedEmail($booking);
+
+        return $booking;
+    }
+
+    /**
+     * Queue the booking-confirmation email, swallowing mail failures so they
+     * never break the booking flow.
+     */
+    protected function sendBookingConfirmedEmail(Booking $booking): void
+    {
+        try {
+            Mail::to($booking->user)->send(new BookingConfirmed($booking));
+        } catch (\Throwable $e) {
+            Log::warning('Failed to send BookingConfirmed email', [
+                'booking_id' => $booking->id,
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 
     /**
