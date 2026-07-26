@@ -1,3 +1,10 @@
+## [1.5.0](https://github.com/ryansutrisno/ezitour/compare/v1.4.0...v1.5.0) (2026-07-26)
+
+
+### ✨ Features
+
+* add email notifications for booking and payment events ([2331f20](https://github.com/ryansutrisno/ezitour/commit/2331f2030b329fd84e2f40bc23d2484b3409f0c9))
+
 ## [1.4.0](https://github.com/ryansutrisno/ezitour/compare/v1.3.0...v1.4.0) (2026-07-25)
 
 
