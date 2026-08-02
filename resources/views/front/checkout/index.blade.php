@@ -92,10 +92,13 @@
 <script>
     // Price calculation variables
     const basePricePerPax = {{ $package->total_price }};
-    // Active tiers sorted by sort_order (ASC). Empty array = linear pricing.
     const tiers = {{ $package->priceTiers()->orderBy('sort_order')->get(['name','min_pax','max_pax','price_per_pax'])->toJson() }};
+    const couponUrl = '{{ route('front.checkout.coupon', $package->slug) }}';
+    const csrfToken = '{{ csrf_token() }}';
 
-    // Resolve the first matching tier for a participant count.
+    // Coupon state — tracks the currently applied coupon (validated server-side).
+    let couponState = { code: null, discount: 0, applied: false };
+
     function resolveTier(participants) {
         for (const tier of tiers) {
             const minOk = tier.min_pax <= participants;
@@ -105,64 +108,159 @@
         return null;
     }
 
-    // Real-time price calculation
+    // Real-time price calculation (tier + coupon stacking).
     function updateTotalPrice() {
         const participants = parseInt(document.getElementById('participants').value) || 1;
         const tier = resolveTier(participants);
         const pricePerPax = tier ? parseFloat(tier.price_per_pax) : basePricePerPax;
         const subtotal = pricePerPax * participants;
         const baseSubtotal = basePricePerPax * participants;
-        const discountAmount = Math.max(0, baseSubtotal - subtotal);
-        const discountPercent = baseSubtotal > 0 ? Math.round((discountAmount / baseSubtotal) * 100) : 0;
+        const tierDiscount = Math.max(0, baseSubtotal - subtotal);
+        const tierDiscountPercent = baseSubtotal > 0 ? Math.round((tierDiscount / baseSubtotal) * 100) : 0;
+
+        // Final total = tier subtotal - coupon discount.
+        const couponDiscount = couponState.applied ? couponState.discount : 0;
+        const finalTotal = Math.max(0, subtotal - couponDiscount);
 
         // Core price displays
         document.getElementById('display-participants').textContent = participants;
-        document.getElementById('display-total-price').textContent = formatRupiah(subtotal);
-        document.getElementById('summary-total-price').textContent = formatRupiah(subtotal);
+        document.getElementById('display-total-price').textContent = formatRupiah(finalTotal);
+        document.getElementById('summary-total-price').textContent = formatRupiah(finalTotal);
 
         // Per-pax price display (strike-through original if tier applied)
         const paxPriceEls = document.querySelectorAll('[data-role="per-pax-price"]');
         paxPriceEls.forEach(function(el) {
-            if (tier && discountAmount > 0) {
+            if (tier && tierDiscount > 0) {
                 el.innerHTML = '<span class="line-through text-gray-400 mr-1.5">' + formatRupiah(basePricePerPax) + '</span><span class="text-blue-600">' + formatRupiah(pricePerPax) + '</span>';
             } else {
                 el.textContent = formatRupiah(basePricePerPax);
             }
         });
 
-        // Discount badge — show/hide
+        // Tier discount badge
         const badge = document.getElementById('discount-badge');
         const summaryBadge = document.getElementById('summary-discount-row');
         if (badge) {
-            if (tier && discountAmount > 0) {
+            if (tier && tierDiscount > 0) {
                 badge.classList.remove('hidden');
-                badge.innerHTML = 'Hemat ' + formatRupiah(discountAmount) + ' (' + discountPercent + '%) — ' + tier.name;
+                badge.innerHTML = 'Hemat ' + formatRupiah(tierDiscount) + ' (' + tierDiscountPercent + '%) — ' + tier.name;
             } else {
                 badge.classList.add('hidden');
             }
         }
         if (summaryBadge) {
-            if (tier && discountAmount > 0) {
+            if (tier && tierDiscount > 0) {
                 summaryBadge.classList.remove('hidden');
-                summaryBadge.querySelector('[data-role="discount-amount"]').textContent = '- ' + formatRupiah(discountAmount);
+                summaryBadge.querySelector('[data-role="discount-amount"]').textContent = '- ' + formatRupiah(tierDiscount);
             } else {
                 summaryBadge.classList.add('hidden');
             }
         }
+
+        // Coupon discount display row
+        const couponRow = document.getElementById('coupon-discount-row');
+        if (couponRow) {
+            if (couponState.applied && couponDiscount > 0) {
+                couponRow.classList.remove('hidden');
+                const display = couponRow.querySelector('[data-role="coupon-discount-display"]');
+                if (display) display.textContent = '- ' + formatRupiah(couponDiscount);
+            } else {
+                couponRow.classList.add('hidden');
+            }
+        }
     }
 
-    // Format number to Rupiah
+    // AJAX coupon validation.
+    async function applyCoupon() {
+        const input = document.getElementById('coupon-input');
+        const messageEl = document.getElementById('coupon-message');
+        const applyBtn = document.getElementById('apply-coupon-btn');
+        const removeBtn = document.getElementById('remove-coupon-btn');
+        const code = (input.value || '').trim();
+
+        if (! code) { resetCoupon(); return; }
+
+        applyBtn.disabled = true;
+        applyBtn.textContent = '...';
+        messageEl.classList.add('hidden');
+
+        try {
+            const participants = parseInt(document.getElementById('participants').value) || 1;
+            const res = await fetch(couponUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+                body: JSON.stringify({ code: code, participants: participants }),
+            });
+            const data = await res.json();
+
+            if (data.valid) {
+                couponState = { code: code.toUpperCase(), discount: data.discount, applied: true };
+                messageEl.className = 'mt-2 text-sm text-green-600 font-medium';
+                messageEl.innerHTML = '🎉 Promo ' + code.toUpperCase() + ' berhasil! Hemat ' + data.formatted_discount;
+                messageEl.classList.remove('hidden');
+                applyBtn.classList.add('hidden');
+                removeBtn.classList.remove('hidden');
+                input.readOnly = true;
+                updateTotalPrice();
+            } else {
+                messageEl.className = 'mt-2 text-sm text-red-600 font-medium';
+                messageEl.textContent = data.error || 'Promo tidak valid.';
+                messageEl.classList.remove('hidden');
+            }
+        } catch (e) {
+            messageEl.className = 'mt-2 text-sm text-red-600 font-medium';
+            messageEl.textContent = 'Gagal memvalidasi promo. Silakan coba lagi.';
+            messageEl.classList.remove('hidden');
+        } finally {
+            applyBtn.disabled = false;
+            applyBtn.textContent = 'Pakai';
+        }
+    }
+
+    function resetCoupon() {
+        const input = document.getElementById('coupon-input');
+        const messageEl = document.getElementById('coupon-message');
+        const applyBtn = document.getElementById('apply-coupon-btn');
+        const removeBtn = document.getElementById('remove-coupon-btn');
+
+        couponState = { code: null, discount: 0, applied: false };
+        input.value = '';
+        input.readOnly = false;
+        messageEl.classList.add('hidden');
+        applyBtn.classList.remove('hidden');
+        removeBtn.classList.add('hidden');
+        updateTotalPrice();
+    }
+
     function formatRupiah(number) {
         return 'Rp ' + Math.round(number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
 
-    // Initialize on page load
+    // Initialize on page load.
     document.addEventListener('DOMContentLoaded', function() {
         const participantsInput = document.getElementById('participants');
         if (participantsInput) {
-            participantsInput.addEventListener('input', updateTotalPrice);
-            updateTotalPrice(); // Initial calculation
+            participantsInput.addEventListener('input', function() {
+                updateTotalPrice();
+                // If a coupon is applied, the participant change affects the subtotal —
+                // re-validate so the discount stays accurate.
+                if (couponState.applied) { resetCoupon(); }
+            });
+            updateTotalPrice();
         }
+
+        const applyBtn = document.getElementById('apply-coupon-btn');
+        const removeBtn = document.getElementById('remove-coupon-btn');
+        const couponInput = document.getElementById('coupon-input');
+        if (applyBtn) applyBtn.addEventListener('click', applyCoupon);
+        if (removeBtn) removeBtn.addEventListener('click', resetCoupon);
+        if (couponInput) couponInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); applyCoupon(); }
+        });
     });
 </script>
 @endpush

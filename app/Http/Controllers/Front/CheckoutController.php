@@ -7,6 +7,8 @@ use App\Models\Package;
 use App\Models\User;
 use App\Services\BookingCreationService;
 use App\Services\CheckoutSessionService;
+use App\Services\CouponService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +19,8 @@ class CheckoutController extends Controller
 {
     public function __construct(
         private CheckoutSessionService $checkoutSessionService,
-        private BookingCreationService $bookingCreationService
+        private BookingCreationService $bookingCreationService,
+        private CouponService $couponService
     ) {}
 
     /**
@@ -64,29 +67,58 @@ class CheckoutController extends Controller
             'travel_date' => 'required|date|after:today',
             'participants' => 'required|integer|min:1|max:50',
             'pickup_location' => 'required|string|max:500',
+            'coupon_code' => 'nullable|string|max:50',
         ]);
 
-        // Calculate total amount
-        $totalAmount = $this->bookingCreationService->calculateTotalPrice(
-            $package,
-            (int) $validated['participants']
-        );
+        // Calculate tier-aware subtotal (used for coupon validation threshold).
+        $pricing = $package->calculatePricing((int) $validated['participants']);
+
+        // Resolve coupon (if provided) — re-validate server-side for defense in depth.
+        // Only authenticated users can use coupons; guests go through auth first.
+        $couponId = null;
+        $couponDiscount = 0.0;
+        $couponModel = null;
+
+        $user = $request->user();
+        if (! empty($validated['coupon_code']) && $user) {
+            $result = $this->couponService->validate(
+                $validated['coupon_code'],
+                $pricing['subtotal'],
+                $user
+            );
+
+            if (! $result['valid']) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Promo: '.$result['error']);
+            }
+
+            $couponId = $result['coupon']->id;
+            $couponDiscount = $result['discount'];
+            $couponModel = $result['coupon'];
+        }
 
         // If user is authenticated, create booking directly
-        if (Auth::check()) {
+        if ($user) {
             try {
                 $booking = $this->bookingCreationService->createBooking(
-                    Auth::user(),
+                    $user,
                     $package,
-                    $validated
+                    $validated,
+                    $couponId,
+                    $couponDiscount
                 );
+
+                // Increment coupon usage AFTER booking is committed.
+                if ($couponModel) {
+                    $this->couponService->incrementUsage($couponModel, $user);
+                }
 
                 return redirect()->route('payments.create', $booking)
                     ->with('success', 'Booking berhasil dibuat! Silakan lanjutkan pembayaran.');
             } catch (\Exception $e) {
-                // Log the actual error for debugging
                 \Log::error('Failed to create booking for authenticated user', [
-                    'user_id' => Auth::id(),
+                    'user_id' => $user->id,
                     'package_id' => $package->id,
                     'error' => $e->getMessage(),
                     'trace' => $e->getTraceAsString(),
@@ -100,7 +132,7 @@ class CheckoutController extends Controller
 
         // For guest users, store booking data in session
         $this->checkoutSessionService->store(
-            array_merge($validated, ['total_amount' => $totalAmount]),
+            array_merge($validated, ['total_amount' => max(0, $pricing['subtotal'] - $couponDiscount)]),
             $package->id,
             $package->slug
         );
@@ -109,6 +141,47 @@ class CheckoutController extends Controller
         return redirect()->route('front.checkout.show', $slug)
             ->with('show_auth', true)
             ->with('info', 'Silakan login atau daftar untuk melanjutkan pemesanan.');
+    }
+
+    /**
+     * AJAX coupon validation endpoint.
+     * Returns JSON with discount breakdown for real-time checkout price update.
+     */
+    public function applyCoupon(Request $request, string $slug): JsonResponse
+    {
+        $request->validate([
+            'code' => 'required|string|max:50',
+            'participants' => 'required|integer|min:1|max:50',
+        ]);
+
+        $package = Package::where('slug', $slug)->firstOrFail();
+
+        $pricing = $package->calculatePricing((int) $request->participants);
+
+        $result = $this->couponService->validate(
+            $request->code,
+            $pricing['subtotal'],
+            $request->user()
+        );
+
+        if (! $result['valid']) {
+            return response()->json([
+                'valid' => false,
+                'error' => $result['error'],
+            ]);
+        }
+
+        $discount = $result['discount'];
+        $totalAfter = max(0.0, $pricing['subtotal'] - $discount);
+
+        return response()->json([
+            'valid' => true,
+            'error' => null,
+            'discount' => $discount,
+            'formatted_discount' => 'Rp '.number_format($discount, 0, ',', '.'),
+            'total_after' => $totalAfter,
+            'formatted_total' => 'Rp '.number_format($totalAfter, 0, ',', '.'),
+        ]);
     }
 
     /**

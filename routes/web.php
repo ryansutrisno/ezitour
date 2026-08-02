@@ -39,6 +39,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
     Route::post('/packages/{slug}/book', [BookingController::class, 'store'])->name('front.booking.store');
     Route::post('/packages/{slug}/reviews', [ReviewController::class, 'store'])->name('front.reviews.store');
+    Route::post('/checkout/{slug}/coupon', [CheckoutController::class, 'applyCoupon'])->middleware('webhook.ratelimit')->name('front.checkout.coupon');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
     // Booking detail / E-ticket / cancel

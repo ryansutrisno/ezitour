@@ -23,6 +23,7 @@ class Booking extends Model
         'base_subtotal' => 'decimal:2',
         'discount_amount' => 'decimal:2',
         'price_per_pax' => 'decimal:2',
+        'coupon_discount_amount' => 'decimal:2',
     ];
 
     /**
@@ -94,6 +95,22 @@ class Booking extends Model
     public function hasDiscount(): bool
     {
         return (float) $this->discount_amount > 0;
+    }
+
+    /**
+     * Whether this booking received a coupon discount.
+     */
+    public function hasCouponDiscount(): bool
+    {
+        return (float) $this->coupon_discount_amount > 0;
+    }
+
+    /**
+     * The coupon applied to this booking (if any).
+     */
+    public function coupon()
+    {
+        return $this->belongsTo(Coupon::class);
     }
 
     /**

@@ -21,12 +21,17 @@ class BookingCreationService
      * Create booking from validated data.
      * Returns the created booking or throws exception on failure.
      *
+     * @param  array  $bookingData  Must contain travel_date, participants, pickup_location.
+     *                              Optional: coupon_code (validated separately upstream).
+     *
      * @throws Exception
      */
-    public function createBooking(User $user, Package $package, array $bookingData): Booking
+    public function createBooking(User $user, Package $package, array $bookingData, ?int $couponId = null, float $couponDiscountAmount = 0.0): Booking
     {
-        $booking = DB::transaction(function () use ($user, $package, $bookingData) {
+        $booking = DB::transaction(function () use ($user, $package, $bookingData, $couponId, $couponDiscountAmount) {
             $pricing = $package->calculatePricing((int) $bookingData['participants']);
+
+            $totalAfterCoupon = max(0.0, $pricing['subtotal'] - $couponDiscountAmount);
 
             $booking = Booking::create([
                 'user_id' => $user->id,
@@ -34,11 +39,14 @@ class BookingCreationService
                 'travel_date' => $bookingData['travel_date'],
                 'participants' => (int) $bookingData['participants'],
                 'pickup_location' => $bookingData['pickup_location'],
-                'total_amount' => $pricing['subtotal'],
+                'total_amount' => $totalAfterCoupon,
                 'base_subtotal' => $pricing['base_subtotal'],
                 'discount_amount' => $pricing['discount_amount'],
                 'applied_tier_label' => $pricing['tier_label'],
                 'price_per_pax' => $pricing['price_per_pax'],
+                'coupon_id' => $couponId,
+                'coupon_code' => $couponId ? ($bookingData['coupon_code'] ?? null) : null,
+                'coupon_discount_amount' => $couponDiscountAmount,
                 'status' => 'pending',
             ]);
 
