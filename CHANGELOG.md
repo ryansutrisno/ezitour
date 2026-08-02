@@ -1,3 +1,10 @@
+## [1.11.0](https://github.com/ryansutrisno/ezitour/compare/v1.10.0...v1.11.0) (2026-08-02)
+
+
+### ✨ Features
+
+* add coupon/promo codes with tier-stacking discount ([7187ae2](https://github.com/ryansutrisno/ezitour/commit/7187ae2fd209e0248d8fffd3e703c95aafa8bea3))
+
 ## [1.10.0](https://github.com/ryansutrisno/ezitour/compare/v1.9.0...v1.10.0) (2026-08-02)
 
 
