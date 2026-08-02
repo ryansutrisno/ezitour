@@ -123,6 +123,12 @@
             </div>
 
             <div class="flex flex-wrap items-center gap-2.5">
+                {{-- Detail link (always visible) --}}
+                <a href="{{ route('bookings.show', $booking) }}" class="inline-flex items-center px-4 py-2.5 bg-white border border-slate-200 hover:border-blue-300 hover:text-blue-700 text-slate-700 text-sm font-semibold rounded-button shadow-soft transition-all">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    Lihat Detail
+                </a>
+
                 {{-- Pay Now Button (POST form: state-mutating endpoint, must not be GET) --}}
                 @if($canPay && !$hasPendingPayment)
                     <form method="POST" action="{{ route('payments.create', $booking) }}" class="inline">
