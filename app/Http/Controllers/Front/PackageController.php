@@ -10,16 +10,40 @@ class PackageController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Package::query();
+        $filters = [
+            'keyword' => $request->input('keyword'),
+            'region' => $request->input('region'),
+            'category' => $request->input('category'),
+            'duration_min' => $request->input('duration_min'),
+            'duration_max' => $request->input('duration_max'),
+        ];
 
-        if ($request->filled('keyword')) {
-            $query->where('name', 'like', '%'.$request->keyword.'%')
-                ->orWhere('description', 'like', '%'.$request->keyword.'%');
-        }
+        $packages = Package::query()
+            ->filter($filters)
+            ->latest()
+            ->paginate(9);
 
-        $packages = $query->latest()->paginate(9);
+        $regions = Package::query()
+            ->whereNotNull('region')
+            ->whereNot('region', '')
+            ->distinct()
+            ->orderBy('region')
+            ->pluck('region', 'region');
 
-        return view('front.packages.index', compact('packages'));
+        $categories = Package::query()
+            ->whereNotNull('category')
+            ->whereNot('category', '')
+            ->distinct()
+            ->orderBy('category')
+            ->pluck('category', 'category');
+
+        $durationBuckets = [
+            ['min' => 1, 'max' => 3, 'label' => '1-3 hari'],
+            ['min' => 4, 'max' => 7, 'label' => '4-7 hari'],
+            ['min' => 8, 'max' => 14, 'label' => '8+ hari'],
+        ];
+
+        return view('front.packages.index', compact('packages', 'filters', 'regions', 'categories', 'durationBuckets'));
     }
 
     public function show($slug)
