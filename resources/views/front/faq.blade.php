@@ -2,6 +2,14 @@
 
 @section('title', 'FAQ - EziTour')
 
+@section('seo')
+    <x-seo
+        title="FAQ"
+        description="Pertanyaan yang sering diajukan tentang layanan EziTour."
+        type="website"
+    />
+@endsection
+
 @section('content')
     @php($contact = app(App\Settings\ContactSettings::class))
 

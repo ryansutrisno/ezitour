@@ -10,6 +10,7 @@ use App\Http\Controllers\Front\MidtransNotificationController;
 use App\Http\Controllers\Front\PackageController;
 use App\Http\Controllers\Front\PaymentController;
 use App\Http\Controllers\Front\ProfileController;
+use App\Http\Controllers\Front\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('front.home');
@@ -37,6 +38,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 // Protected Routes
 Route::middleware('auth')->group(function () {
     Route::post('/packages/{slug}/book', [BookingController::class, 'store'])->name('front.booking.store');
+    Route::post('/packages/{slug}/reviews', [ReviewController::class, 'store'])->name('front.reviews.store');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
     // Booking detail / E-ticket / cancel

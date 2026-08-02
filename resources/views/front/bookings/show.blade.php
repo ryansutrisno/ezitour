@@ -2,6 +2,10 @@
 
 @section('title', 'Detail Booking #'.($booking->code ?? $booking->id).' - EziTour')
 
+@section('seo')
+    <x-seo :title="'Detail Booking #'.($booking->code ?? $booking->id)" noindex />
+@endsection
+
 @section('content')
     @php
         $contact = app(App\Settings\ContactSettings::class);

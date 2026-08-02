@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             PackageSeeder::class,
             TestimonialSeeder::class,
             FaqSeeder::class,
+            ReviewSeeder::class,
         ]);
     }
 }

@@ -2,6 +2,14 @@
 
 @section('title', 'Tentang Kami - EziTour')
 
+@section('seo')
+    <x-seo
+        title="Tentang Kami"
+        :description="app(App\Settings\AboutSettings::class)->visionText"
+        type="website"
+    />
+@endsection
+
 @section('content')
     @php($home = app(App\Settings\HomeSettings::class))
     @php($about = app(App\Settings\AboutSettings::class))

@@ -4,6 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'EziTour - Worry-Free Traveling')</title>
+
+    {{-- Per-page SEO meta tags (description, OG, Twitter card, canonical).
+         Pages override via @section('seo'); defaults from GeneralSettings
+         are rendered when the section is absent. --}}
+    @hasSection('seo')
+        @yield('seo')
+    @else
+        <x-seo />
+    @endif
     
     <!-- Fonts: Instrument Sans (body) + Plus Jakarta Sans (display) via Bunny Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
