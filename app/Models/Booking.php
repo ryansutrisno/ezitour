@@ -20,6 +20,9 @@ class Booking extends Model
         'travel_date' => 'date',
         'total_amount' => 'decimal:2',
         'payment_date' => 'datetime',
+        'base_subtotal' => 'decimal:2',
+        'discount_amount' => 'decimal:2',
+        'price_per_pax' => 'decimal:2',
     ];
 
     /**
@@ -83,6 +86,14 @@ class Booking extends Model
     public function isPaid(): bool
     {
         return $this->status === 'paid';
+    }
+
+    /**
+     * Whether this booking received a tier discount.
+     */
+    public function hasDiscount(): bool
+    {
+        return (float) $this->discount_amount > 0;
     }
 
     /**

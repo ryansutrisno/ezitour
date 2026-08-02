@@ -26,7 +26,7 @@ class BookingCreationService
     public function createBooking(User $user, Package $package, array $bookingData): Booking
     {
         $booking = DB::transaction(function () use ($user, $package, $bookingData) {
-            $totalAmount = $this->calculateTotalPrice($package, (int) $bookingData['participants']);
+            $pricing = $package->calculatePricing((int) $bookingData['participants']);
 
             $booking = Booking::create([
                 'user_id' => $user->id,
@@ -34,7 +34,11 @@ class BookingCreationService
                 'travel_date' => $bookingData['travel_date'],
                 'participants' => (int) $bookingData['participants'],
                 'pickup_location' => $bookingData['pickup_location'],
-                'total_amount' => $totalAmount,
+                'total_amount' => $pricing['subtotal'],
+                'base_subtotal' => $pricing['base_subtotal'],
+                'discount_amount' => $pricing['discount_amount'],
+                'applied_tier_label' => $pricing['tier_label'],
+                'price_per_pax' => $pricing['price_per_pax'],
                 'status' => 'pending',
             ]);
 
@@ -99,10 +103,11 @@ class BookingCreationService
     }
 
     /**
-     * Calculate total price for booking.
+     * Calculate total price for booking (delegates to Package::calculatePricing).
+     * Returns the final subtotal after any tier discount.
      */
     public function calculateTotalPrice(Package $package, int $participants): float
     {
-        return (float) $package->total_price * $participants;
+        return $package->calculatePricing($participants)['subtotal'];
     }
 }

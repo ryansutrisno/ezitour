@@ -91,24 +91,71 @@
 @push('scripts')
 <script>
     // Price calculation variables
-    const pricePerPerson = {{ $package->total_price }};
-    
+    const basePricePerPax = {{ $package->total_price }};
+    // Active tiers sorted by sort_order (ASC). Empty array = linear pricing.
+    const tiers = {{ $package->priceTiers()->orderBy('sort_order')->get(['name','min_pax','max_pax','price_per_pax'])->toJson() }};
+
+    // Resolve the first matching tier for a participant count.
+    function resolveTier(participants) {
+        for (const tier of tiers) {
+            const minOk = tier.min_pax <= participants;
+            const maxOk = tier.max_pax === null || tier.max_pax >= participants;
+            if (minOk && maxOk) return tier;
+        }
+        return null;
+    }
+
     // Real-time price calculation
     function updateTotalPrice() {
         const participants = parseInt(document.getElementById('participants').value) || 1;
-        const totalPrice = pricePerPerson * participants;
-        
-        // Update display elements
+        const tier = resolveTier(participants);
+        const pricePerPax = tier ? parseFloat(tier.price_per_pax) : basePricePerPax;
+        const subtotal = pricePerPax * participants;
+        const baseSubtotal = basePricePerPax * participants;
+        const discountAmount = Math.max(0, baseSubtotal - subtotal);
+        const discountPercent = baseSubtotal > 0 ? Math.round((discountAmount / baseSubtotal) * 100) : 0;
+
+        // Core price displays
         document.getElementById('display-participants').textContent = participants;
-        document.getElementById('display-total-price').textContent = formatRupiah(totalPrice);
-        document.getElementById('summary-total-price').textContent = formatRupiah(totalPrice);
+        document.getElementById('display-total-price').textContent = formatRupiah(subtotal);
+        document.getElementById('summary-total-price').textContent = formatRupiah(subtotal);
+
+        // Per-pax price display (strike-through original if tier applied)
+        const paxPriceEls = document.querySelectorAll('[data-role="per-pax-price"]');
+        paxPriceEls.forEach(function(el) {
+            if (tier && discountAmount > 0) {
+                el.innerHTML = '<span class="line-through text-gray-400 mr-1.5">' + formatRupiah(basePricePerPax) + '</span><span class="text-blue-600">' + formatRupiah(pricePerPax) + '</span>';
+            } else {
+                el.textContent = formatRupiah(basePricePerPax);
+            }
+        });
+
+        // Discount badge — show/hide
+        const badge = document.getElementById('discount-badge');
+        const summaryBadge = document.getElementById('summary-discount-row');
+        if (badge) {
+            if (tier && discountAmount > 0) {
+                badge.classList.remove('hidden');
+                badge.innerHTML = 'Hemat ' + formatRupiah(discountAmount) + ' (' + discountPercent + '%) — ' + tier.name;
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+        if (summaryBadge) {
+            if (tier && discountAmount > 0) {
+                summaryBadge.classList.remove('hidden');
+                summaryBadge.querySelector('[data-role="discount-amount"]').textContent = '- ' + formatRupiah(discountAmount);
+            } else {
+                summaryBadge.classList.add('hidden');
+            }
+        }
     }
-    
+
     // Format number to Rupiah
     function formatRupiah(number) {
-        return 'Rp ' + number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        return 'Rp ' + Math.round(number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
-    
+
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', function() {
         const participantsInput = document.getElementById('participants');

@@ -120,12 +120,35 @@
             </table>
 
             {{-- Total --}}
-            <div class="total-row">
-                <table width="100%"><tr>
-                    <td><span class="label">Total Dibayar</span></td>
-                    <td align="right"><span class="amount">Rp {{ number_format((float) $booking->total_amount, 0, ',', '.') }}</span></td>
-                </tr></table>
-            </div>
+            @if($booking->hasDiscount())
+                <div style="margin-bottom: 16px;">
+                    <div class="total-row" style="margin-bottom: 6px;">
+                        <table width="100%"><tr>
+                            <td><span class="label">Subtotal Awal</span></td>
+                            <td align="right"><span style="font-size: 15px; color: #94a3b8; text-decoration: line-through;">Rp {{ number_format((float) $booking->base_subtotal, 0, ',', '.') }}</span></td>
+                        </tr></table>
+                    </div>
+                    <div class="total-row" style="background-color: #ecfdf5; margin-bottom: 6px;">
+                        <table width="100%"><tr>
+                            <td><span class="label" style="color: #16a34a;">Diskon{{ $booking->applied_tier_label ? ' — ' . $booking->applied_tier_label : '' }}</span></td>
+                            <td align="right"><span style="font-size: 15px; font-weight: bold; color: #16a34a;">- Rp {{ number_format((float) $booking->discount_amount, 0, ',', '.') }}</span></td>
+                        </tr></table>
+                    </div>
+                    <div class="total-row">
+                        <table width="100%"><tr>
+                            <td><span class="label">Total Dibayar</span></td>
+                            <td align="right"><span class="amount">Rp {{ number_format((float) $booking->total_amount, 0, ',', '.') }}</span></td>
+                        </tr></table>
+                    </div>
+                </div>
+            @else
+                <div class="total-row">
+                    <table width="100%"><tr>
+                        <td><span class="label">Total Dibayar</span></td>
+                        <td align="right"><span class="amount">Rp {{ number_format((float) $booking->total_amount, 0, ',', '.') }}</span></td>
+                    </tr></table>
+                </div>
+            @endif
         </div>
 
         {{-- Footer --}}
