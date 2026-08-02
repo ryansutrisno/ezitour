@@ -1,3 +1,10 @@
+## [1.8.0](https://github.com/ryansutrisno/ezitour/compare/v1.7.0...v1.8.0) (2026-08-02)
+
+
+### ✨ Features
+
+* add advanced package filter (region, category, duration) ([f48c1a5](https://github.com/ryansutrisno/ezitour/commit/f48c1a58ddb55d5a76811ddd073dc562965ddb63))
+
 ## [1.7.0](https://github.com/ryansutrisno/ezitour/compare/v1.6.0...v1.7.0) (2026-08-02)
 
 
