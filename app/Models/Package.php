@@ -41,6 +41,72 @@ class Package extends Model
     }
 
     /**
+     * Active price tiers, ordered ascending by sort_order.
+     */
+    public function priceTiers(): HasMany
+    {
+        return $this->hasMany(PriceTier::class)
+            ->where('is_active', true)
+            ->orderBy('sort_order');
+    }
+
+    /**
+     * Resolve the applicable price tier for a given participant count.
+     *
+     * Picks the first tier (sorted ASC by sort_order) where
+     *   min_pax <= participants AND (max_pax IS NULL OR max_pax >= participants).
+     * Returns null when no tiers exist or none match — caller falls back to linear.
+     */
+    public function resolvePriceTier(int $participants): ?PriceTier
+    {
+        return $this->priceTiers()
+            ->where('min_pax', '<=', $participants)
+            ->where(function ($query) use ($participants) {
+                $query->whereNull('max_pax')->orWhere('max_pax', '>=', $participants);
+            })
+            ->first();
+    }
+
+    /**
+     * Calculate full pricing breakdown for a participant count.
+     *
+     * @return array{
+     *     price_per_pax: float,
+     *     base_price_per_pax: float,
+     *     subtotal: float,
+     *     base_subtotal: float,
+     *     discount_amount: float,
+     *     discount_percent: float,
+     *     tier: \App\Models\PriceTier|null,
+     *     tier_label: string|null,
+     *     participants: int,
+     * }
+     */
+    public function calculatePricing(int $participants): array
+    {
+        $basePricePerPax = (float) $this->total_price;
+        $tier = $this->resolvePriceTier($participants);
+        $pricePerPax = $tier ? (float) $tier->price_per_pax : $basePricePerPax;
+
+        $baseSubtotal = $basePricePerPax * $participants;
+        $subtotal = $pricePerPax * $participants;
+        $discountAmount = max(0.0, $baseSubtotal - $subtotal);
+        $discountPercent = $baseSubtotal > 0 ? ($discountAmount / $baseSubtotal) * 100 : 0.0;
+
+        return [
+            'price_per_pax' => $pricePerPax,
+            'base_price_per_pax' => $basePricePerPax,
+            'subtotal' => $subtotal,
+            'base_subtotal' => $baseSubtotal,
+            'discount_amount' => $discountAmount,
+            'discount_percent' => round($discountPercent, 1),
+            'tier' => $tier,
+            'tier_label' => $tier?->name,
+            'participants' => $participants,
+        ];
+    }
+
+    /**
      * Apply faceted search filters to the query.
      *
      * Supported keys:

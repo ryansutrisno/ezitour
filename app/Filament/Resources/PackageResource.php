@@ -38,6 +38,47 @@ class PackageResource extends Resource
                     ->prefix('Rp')
                     ->minValue(0)
                     ->default(0),
+                Forms\Components\Section::make('Tier Harga Khusus')
+                    ->description('Kosongkan jika paket hanya punya harga tunggal. Tier akan otomatis diterapkan saat jumlah peserta melewati batas minimum.')
+                    ->schema([
+                        Forms\Components\Repeater::make('priceTiers')
+                            ->relationship()
+                            ->schema([
+                                Forms\Components\TextInput::make('name')
+                                    ->label('Nama Tier')
+                                    ->required()
+                                    ->maxLength(255)
+                                    ->placeholder('contoh: Promo Rombongan 10+ pax')
+                                    ->columnSpanFull(),
+                                Forms\Components\TextInput::make('min_pax')
+                                    ->label('Min. Peserta')
+                                    ->numeric()
+                                    ->required()
+                                    ->minValue(1),
+                                Forms\Components\TextInput::make('max_pax')
+                                    ->label('Maks. Peserta')
+                                    ->numeric()
+                                    ->nullable()
+                                    ->minValue(1)
+                                    ->helperText('Kosongkan untuk tanpa batas atas (open-ended, contoh: "20+ pax")'),
+                                Forms\Components\TextInput::make('price_per_pax')
+                                    ->label('Harga per Pax')
+                                    ->numeric()
+                                    ->required()
+                                    ->prefix('Rp')
+                                    ->minValue(0),
+                                Forms\Components\Toggle::make('is_active')
+                                    ->label('Aktif')
+                                    ->default(true),
+                            ])
+                            ->columns(2)
+                            ->orderable('sort_order')
+                            ->defaultItems(0)
+                            ->collapsible()
+                            ->itemLabel(fn (array $state): ?string => $state['name'] ?? null),
+                    ])
+                    ->collapsible()
+                    ->columnSpanFull(),
                 Forms\Components\Textarea::make('description')
                     ->rows(4)
                     ->columnSpanFull(),

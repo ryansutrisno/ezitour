@@ -176,10 +176,25 @@
                                         <span class="text-slate-500">Tanggal Perjalanan</span>
                                         <span class="font-semibold text-slate-800">{{ $booking->travel_date->format('d/m/Y') }}</span>
                                     </div>
-                                    <div class="pt-3 border-t border-slate-100 flex justify-between items-end">
-                                        <span class="text-slate-500">Total</span>
-                                        <span class="font-display text-xl font-extrabold text-blue-600">Rp {{ number_format((float) $booking->total_amount, 0, ',', '.') }}</span>
-                                    </div>
+                                    @if($booking->hasDiscount())
+                                        <div class="flex justify-between">
+                                            <span class="text-slate-500">Subtotal</span>
+                                            <span class="font-semibold text-slate-600 line-through">Rp {{ number_format((float) $booking->base_subtotal, 0, ',', '.') }}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-green-600">Diskon{{ $booking->applied_tier_label ? ' ('.$booking->applied_tier_label.')' : '' }}</span>
+                                            <span class="font-bold text-green-600">- Rp {{ number_format((float) $booking->discount_amount, 0, ',', '.') }}</span>
+                                        </div>
+                                        <div class="pt-3 border-t border-slate-100 flex justify-between items-end">
+                                            <span class="font-bold text-slate-900">Total</span>
+                                            <span class="font-display text-xl font-extrabold text-blue-600">Rp {{ number_format((float) $booking->total_amount, 0, ',', '.') }}</span>
+                                        </div>
+                                    @else
+                                        <div class="pt-3 border-t border-slate-100 flex justify-between items-end">
+                                            <span class="text-slate-500">Total</span>
+                                            <span class="font-display text-xl font-extrabold text-blue-600">Rp {{ number_format((float) $booking->total_amount, 0, ',', '.') }}</span>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

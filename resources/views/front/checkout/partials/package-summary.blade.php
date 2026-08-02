@@ -66,12 +66,18 @@
             <div class="space-y-3">
                 <div class="flex justify-between items-center text-sm">
                     <span class="text-gray-600">Harga per orang</span>
-                    <span class="text-gray-900 font-semibold">Rp {{ number_format($package->total_price, 0, ',', '.') }}</span>
+                    <span class="text-gray-900 font-semibold" data-role="per-pax-price">Rp {{ number_format($package->total_price, 0, ',', '.') }}</span>
                 </div>
-                
+
                 <div class="flex justify-between items-center text-sm">
                     <span class="text-gray-600">Jumlah peserta</span>
                     <span class="text-gray-900 font-semibold" id="summary-participants">{{ old('participants', $pendingBooking['participants'] ?? 1) }}</span>
+                </div>
+
+                {{-- Discount row (hidden by default, shown via JS when tier applies) --}}
+                <div id="summary-discount-row" class="hidden flex justify-between items-center text-sm">
+                    <span class="text-green-700 font-medium">Diskon</span>
+                    <span class="text-green-700 font-bold" data-role="discount-amount">- Rp 0</span>
                 </div>
 
                 <div class="border-t border-gray-200 pt-3 mt-3">

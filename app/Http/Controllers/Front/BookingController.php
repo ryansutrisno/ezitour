@@ -28,15 +28,19 @@ class BookingController extends Controller
             'pickup_location' => 'required|string|max:500',
         ]);
 
-        // Calculate total amount (Price * Participants)
-        // Assumption: total_price in Package is per pax.
-        $totalAmount = $package->total_price * $validated['participants'];
+        // Pricing breakdown — tier-aware (falls back to linear if no tiers match).
+        $pricing = $package->calculatePricing((int) $validated['participants']);
 
         $booking = Booking::create([
             'user_id' => Auth::id(),
             'package_id' => $package->id,
             'travel_date' => $validated['travel_date'],
-            'total_amount' => $totalAmount,
+            'participants' => (int) $validated['participants'],
+            'total_amount' => $pricing['subtotal'],
+            'base_subtotal' => $pricing['base_subtotal'],
+            'discount_amount' => $pricing['discount_amount'],
+            'applied_tier_label' => $pricing['tier_label'],
+            'price_per_pax' => $pricing['price_per_pax'],
             'pickup_location' => $validated['pickup_location'],
             'status' => 'pending',
         ]);
