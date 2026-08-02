@@ -120,7 +120,7 @@
             </table>
 
             {{-- Total --}}
-            @if($booking->hasDiscount())
+            @if($booking->hasDiscount() || $booking->hasCouponDiscount())
                 <div style="margin-bottom: 16px;">
                     <div class="total-row" style="margin-bottom: 6px;">
                         <table width="100%"><tr>
@@ -128,12 +128,22 @@
                             <td align="right"><span style="font-size: 15px; color: #94a3b8; text-decoration: line-through;">Rp {{ number_format((float) $booking->base_subtotal, 0, ',', '.') }}</span></td>
                         </tr></table>
                     </div>
-                    <div class="total-row" style="background-color: #ecfdf5; margin-bottom: 6px;">
-                        <table width="100%"><tr>
-                            <td><span class="label" style="color: #16a34a;">Diskon{{ $booking->applied_tier_label ? ' — ' . $booking->applied_tier_label : '' }}</span></td>
-                            <td align="right"><span style="font-size: 15px; font-weight: bold; color: #16a34a;">- Rp {{ number_format((float) $booking->discount_amount, 0, ',', '.') }}</span></td>
-                        </tr></table>
-                    </div>
+                    @if($booking->hasDiscount())
+                        <div class="total-row" style="background-color: #ecfdf5; margin-bottom: 6px;">
+                            <table width="100%"><tr>
+                                <td><span class="label" style="color: #16a34a;">Diskon Rombongan{{ $booking->applied_tier_label ? ' — ' . $booking->applied_tier_label : '' }}</span></td>
+                                <td align="right"><span style="font-size: 15px; font-weight: bold; color: #16a34a;">- Rp {{ number_format((float) $booking->discount_amount, 0, ',', '.') }}</span></td>
+                            </tr></table>
+                        </div>
+                    @endif
+                    @if($booking->hasCouponDiscount())
+                        <div class="total-row" style="background-color: #ecfdf5; margin-bottom: 6px;">
+                            <table width="100%"><tr>
+                                <td><span class="label" style="color: #16a34a;">Diskon Promo{{ $booking->coupon_code ? ' — ' . $booking->coupon_code : '' }}</span></td>
+                                <td align="right"><span style="font-size: 15px; font-weight: bold; color: #16a34a;">- Rp {{ number_format((float) $booking->coupon_discount_amount, 0, ',', '.') }}</span></td>
+                            </tr></table>
+                        </div>
+                    @endif
                     <div class="total-row">
                         <table width="100%"><tr>
                             <td><span class="label">Total Dibayar</span></td>

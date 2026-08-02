@@ -85,11 +85,18 @@
             <div>
                 <span class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">Total</span>
                 <p class="font-display font-bold text-slate-900">Rp {{ number_format($booking->total_amount, 0, ',', '.') }}</p>
-                @if($booking->hasDiscount())
-                    <span class="inline-flex items-center mt-0.5 px-1.5 py-0.5 rounded-pill text-[10px] font-bold bg-green-100 text-green-700">
-                        Hemat {{ $booking->base_subtotal ? round(($booking->discount_amount / $booking->base_subtotal) * 100) : 0 }}%
-                    </span>
-                @endif
+                <div class="mt-0.5 flex flex-wrap gap-1">
+                    @if($booking->hasDiscount())
+                        <span class="inline-flex items-center px-1.5 py-0.5 rounded-pill text-[10px] font-bold bg-green-100 text-green-700">
+                            Hemat {{ $booking->base_subtotal ? round(($booking->discount_amount / $booking->base_subtotal) * 100) : 0 }}%
+                        </span>
+                    @endif
+                    @if($booking->hasCouponDiscount())
+                        <span class="inline-flex items-center px-1.5 py-0.5 rounded-pill text-[10px] font-bold bg-blue-100 text-blue-700">
+                            Promo
+                        </span>
+                    @endif
+                </div>
             </div>
             <div>
                 <span class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">Driver</span>

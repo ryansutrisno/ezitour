@@ -61,6 +61,17 @@
             </div>
         @endif
 
+        <!-- Coupon Input -->
+        <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-5">
+            <label class="text-sm font-medium text-gray-700">Kode Promo</label>
+            <div class="mt-2 flex gap-2">
+                <input type="text" id="coupon-input" name="coupon_code" value="{{ old('coupon_code') }}" class="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none uppercase placeholder:normal-case" placeholder="Contoh: LIBURAN50" autocomplete="off">
+                <button type="button" id="apply-coupon-btn" class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors">Pakai</button>
+                <button type="button" id="remove-coupon-btn" class="hidden rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 transition-colors">Hapus</button>
+            </div>
+            <div id="coupon-message" class="mt-2 text-sm hidden"></div>
+        </div>
+
         <!-- Price Summary - Card Style -->
         <div class="bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl p-4 mb-5">
             <div class="space-y-3">
@@ -74,10 +85,16 @@
                     <span class="text-gray-900 font-semibold" id="summary-participants">{{ old('participants', $pendingBooking['participants'] ?? 1) }}</span>
                 </div>
 
-                {{-- Discount row (hidden by default, shown via JS when tier applies) --}}
+                {{-- Tier discount row (hidden by default, shown via JS when tier applies) --}}
                 <div id="summary-discount-row" class="hidden flex justify-between items-center text-sm">
-                    <span class="text-green-700 font-medium">Diskon</span>
+                    <span class="text-green-700 font-medium">Diskon Rombongan</span>
                     <span class="text-green-700 font-bold" data-role="discount-amount">- Rp 0</span>
+                </div>
+
+                {{-- Coupon discount row (hidden by default, shown via JS when coupon applied) --}}
+                <div id="coupon-discount-row" class="hidden flex justify-between items-center text-sm">
+                    <span class="text-green-700 font-medium">Diskon Promo</span>
+                    <span class="text-green-700 font-bold" data-role="coupon-discount-display">- Rp 0</span>
                 </div>
 
                 <div class="border-t border-gray-200 pt-3 mt-3">

@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             DestinationSeeder::class,
             PackageSeeder::class,
             PriceTierSeeder::class,
+            CouponSeeder::class,
             TestimonialSeeder::class,
             FaqSeeder::class,
             ReviewSeeder::class,
