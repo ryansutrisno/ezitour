@@ -2,6 +2,10 @@
 
 @section('title', 'Profil Saya - EziTour')
 
+@section('seo')
+    <x-seo title="Profil Saya" noindex />
+@endsection
+
 @section('content')
     @php($user = auth()->user())
 

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Package extends Model
 {
@@ -23,6 +24,20 @@ class Package extends Model
         return $this->belongsToMany(Destination::class, 'package_items')
             ->withPivot('sequence_order')
             ->orderByPivot('sequence_order');
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    /**
+     * Only approved (publicly visible) reviews for this package,
+     * newest first.
+     */
+    public function approvedReviews(): HasMany
+    {
+        return $this->reviews()->approved()->latest();
     }
 
     /**

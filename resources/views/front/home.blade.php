@@ -2,6 +2,14 @@
 
 @section('title', 'EziTour - Liburan Impian Tanpa Ribet')
 
+@section('seo')
+    <x-seo
+        title="EziTour - Liburan Impian Tanpa Ribet"
+        :description="app(App\Settings\HomeSettings::class)->heroSubheadline"
+        type="website"
+    />
+@endsection
+
 @section('content')
     @php($home = app(App\Settings\HomeSettings::class))
 

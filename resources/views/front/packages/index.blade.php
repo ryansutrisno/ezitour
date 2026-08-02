@@ -2,6 +2,14 @@
 
 @section('title', 'Cari Paket Wisata - EziTour')
 
+@section('seo')
+    <x-seo
+        title="Paket Wisata"
+        description="Jelajahi paket wisata terbaik di Indonesia bersama EziTour. Temukan liburan impianmu sekarang."
+        type="website"
+    />
+@endsection
+
 @section('content')
     {{-- Header band --}}
     <div class="bg-white border-b border-slate-100">

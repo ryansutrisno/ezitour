@@ -2,7 +2,35 @@
 
 @section('title', $package->name . ' - EziTour')
 
+@section('seo')
+    <x-seo
+        :title="$package->name"
+        :description="$package->description"
+        :image="$package->thumbnail_url"
+        type="article"
+        :canonical="route('front.packages.show', $package->slug)"
+    />
+@endsection
+
 @section('content')
+    @php
+        $approvedReviews = $package->approvedReviews()->with('user')->get();
+        $avgRating = $approvedReviews->isNotEmpty() ? round($approvedReviews->avg('rating'), 1) : null;
+
+        // Determine the user's relationship to this package for the review form.
+        $canReview = false;
+        $alreadyReviewed = false;
+        $hasPaidBooking = false;
+        if (auth()->check()) {
+            $alreadyReviewed = $package->reviews()->where('user_id', auth()->id())->exists();
+            $hasPaidBooking = App\Models\Booking::query()
+                ->where('user_id', auth()->id())
+                ->where('package_id', $package->id)
+                ->where('status', 'paid')
+                ->exists();
+            $canReview = $hasPaidBooking && ! $alreadyReviewed;
+        }
+    @endphp
     <div class="bg-white">
         {{-- Hero header --}}
         <div class="relative h-80 sm:h-96">
@@ -127,6 +155,123 @@
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                         </a>
                         <p class="mt-4 text-xs text-center text-slate-400">Pembayaran aman &amp; terpercaya via Midtrans</p>
+                    </div>
+                </div>
+            </div>
+
+            {{-- ============ REVIEWS SECTION ============ --}}
+            <div id="reviews" class="mt-14 scroll-mt-24">
+                <div class="bg-white rounded-card border border-slate-100 shadow-card overflow-hidden">
+                    {{-- Gradient header Ocean blue --}}
+                    <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-5 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center justify-center w-9 h-9 rounded-button bg-white/15">
+                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.964a1 1 0 00.95.69h4.165c.969 0 1.371 1.24.588 1.81l-3.37 2.45a1 1 0 00-.364 1.118l1.287 3.964c.3.922-.755 1.688-1.539 1.118l-3.37-2.45a1 1 0 00-1.176 0l-3.37 2.45c-.784.57-1.838-.196-1.539-1.118l1.287-3.964a1 1 0 00-.364-1.118l-3.37-2.45c-.783-.57-.38-1.81.588-1.81h4.166a1 1 0 00.95-.69l1.286-3.964z"/></svg>
+                            </span>
+                            <div>
+                                <h2 class="font-display text-xl font-bold text-white">Ulasan Pelanggan</h2>
+                                @if($avgRating !== null)
+                                    <div class="flex items-center gap-1.5 mt-0.5">
+                                        <span class="text-sand-300 text-sm">{{ str_repeat('★', (int) round($avgRating)) }}</span>
+                                        <span class="text-blue-100 text-xs">{{ $avgRating }} dari 5 ({{ $approvedReviews->count() }} ulasan)</span>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 sm:p-7">
+                        {{-- Review list --}}
+                        @if($approvedReviews->isNotEmpty())
+                            <div class="space-y-6">
+                                @foreach($approvedReviews as $review)
+                                    <div class="flex gap-4 {{ ! $loop->last ? 'pb-6 border-b border-slate-100' : '' }}">
+                                        <div class="shrink-0 flex items-center justify-center w-11 h-11 rounded-pill bg-gradient-to-br from-blue-500 to-blue-700 text-white font-display font-bold text-sm shadow-soft">
+                                            {{ $review->user->initials }}
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex flex-wrap items-center gap-2">
+                                                <h3 class="font-display font-bold text-slate-900">{{ $review->user->name }}</h3>
+                                                <span class="text-sand-500 text-sm tracking-tight">{{ str_repeat('★', $review->rating) }}<span class="text-slate-300">{{ str_repeat('★', 5 - $review->rating) }}</span></span>
+                                                <span class="text-xs text-slate-400">• {{ $review->created_at->translatedFormat('d M Y') }}</span>
+                                            </div>
+                                            @if($review->comment)
+                                                <p class="mt-1.5 text-sm text-slate-600 leading-relaxed">{{ $review->comment }}</p>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="text-center py-8">
+                                <div class="mx-auto flex items-center justify-center w-14 h-14 rounded-pill bg-slate-100 text-slate-400">
+                                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                                </div>
+                                <p class="mt-3 text-sm text-slate-500">Belum ada ulasan untuk paket ini.</p>
+                            </div>
+                        @endif
+
+                        {{-- Review form / conditional info cards --}}
+                        <div class="mt-8 pt-6 border-t border-slate-100">
+                            @if(session('success'))
+                                <div class="mb-5 rounded-button bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700 font-medium flex items-center gap-2">
+                                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+
+                            @guest
+                                {{-- Guest: prompt to login --}}
+                                <div class="rounded-button bg-blue-50 border border-blue-100 px-5 py-4 flex items-center gap-3">
+                                    <svg class="w-6 h-6 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                                    <div class="text-sm text-blue-800">
+                                        <a href="{{ route('login') }}" class="font-semibold underline hover:text-blue-900">Masuk</a> untuk meninggalkan ulasan.
+                                    </div>
+                                </div>
+                            @elseif($alreadyReviewed)
+                                {{-- Already reviewed --}}
+                                <div class="rounded-button bg-green-50 border border-green-100 px-5 py-4 flex items-center gap-3">
+                                    <svg class="w-6 h-6 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                    <div class="text-sm text-green-700">Terima kasih, Anda sudah memberikan ulasan untuk paket ini.</div>
+                                </div>
+                            @elseif(! $hasPaidBooking)
+                                {{-- Authed but no paid booking --}}
+                                <div class="rounded-button bg-sand-50 border border-sand-200 px-5 py-4 flex items-center gap-3">
+                                    <svg class="w-6 h-6 text-sand-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    <div class="text-sm text-sand-700">Pesan dan selesaikan perjalanan ini untuk memberikan ulasan.</div>
+                                </div>
+                            @else
+                                {{-- Can review: show form --}}
+                                @if($errors->any())
+                                    <div class="mb-4 rounded-button bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+                                        {{ $errors->first() }}
+                                    </div>
+                                @endif
+                                <form action="{{ route('front.reviews.store', $package->slug) }}" method="POST">
+                                    @csrf
+                                    <h3 class="font-display text-lg font-bold text-slate-900 mb-3">Tulis Ulasan Anda</h3>
+                                    <div class="mb-4">
+                                        <label class="block text-sm font-semibold text-slate-700 mb-2">Rating</label>
+                                        <div class="flex items-center gap-1.5">
+                                            @for($i = 5; $i >= 1; $i--)
+                                                <input type="radio" name="rating" value="{{ $i }}" id="rating-{{ $i }}" class="peer hidden" @if(old('rating') == $i) checked @endif>
+                                                <label for="rating-{{ $i }}" class="cursor-pointer text-3xl text-slate-300 transition-colors hover:text-sand-400 peer-checked:text-sand-500" title="{{ $i }} bintang">★</label>
+                                            @endfor
+                                        </div>
+                                        @error('rating')<p class="mt-1 text-xs text-red-500">{{ $message }}</p>@enderror
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="comment" class="block text-sm font-semibold text-slate-700 mb-2">Komentar <span class="text-slate-400 font-normal">(opsional)</span></label>
+                                        <textarea name="comment" id="comment" rows="4" maxlength="1000" class="block w-full rounded-input border border-slate-200 px-3.5 py-3 text-sm text-slate-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none resize-y" placeholder="Bagikan pengalaman Anda...">{{ old('comment') }}</textarea>
+                                        @error('comment')<p class="mt-1 text-xs text-red-500">{{ $message }}</p>@enderror
+                                    </div>
+                                    <button type="submit" class="inline-flex items-center gap-2 px-6 py-3 rounded-button text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-soft transition-all">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                        Kirim Ulasan
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
