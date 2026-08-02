@@ -1,3 +1,10 @@
+## [1.7.0](https://github.com/ryansutrisno/ezitour/compare/v1.6.0...v1.7.0) (2026-08-02)
+
+
+### ✨ Features
+
+* add booking detail page, e-ticket PDF, and cancel booking flow ([3b6dd12](https://github.com/ryansutrisno/ezitour/commit/3b6dd12a956763d85aff15cfe78ec02202e60ab6))
+
 ## [1.6.0](https://github.com/ryansutrisno/ezitour/compare/v1.5.0...v1.6.0) (2026-07-26)
 
 
