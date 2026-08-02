@@ -410,6 +410,74 @@ class PaymentService
     }
 
     /**
+     * Cancel a pending booking, best-effort cancelling its open Midtrans
+     * transaction first.
+     *
+     * Business rules:
+     * - Only `pending` bookings can be cancelled (paid bookings need a refund
+     *   flow which is out of scope).
+     * - Any related pending transaction is asked to be cancelled on Midtrans
+     *   via {@see MidtransClient::cancelOrder()}. A Midtrans rejection (e.g.
+     *   already-settled transaction, network error) does NOT block the local
+     *   cancellation — it is only logged so the booking is still marked
+     *   cancelled locally.
+     * - Pending transactions are then marked `failed` locally. The
+     *   `transaction_status` enum has no `cancelled` value, so `failed` is the
+     *   schema-compatible way to say "this transaction is no longer active".
+     *
+     * @return array{success: bool, midtrans_cancelled: bool, message: string}
+     */
+    public function cancelBooking(Booking $booking): array
+    {
+        if ($booking->status !== 'pending') {
+            return [
+                'success' => false,
+                'midtrans_cancelled' => false,
+                'message' => 'Hanya booking berstatus pending yang dapat dibatalkan.',
+            ];
+        }
+
+        $midtransCancelled = false;
+
+        // Try to cancel the latest open transaction on Midtrans (if any).
+        $transaction = $booking->transactions()
+            ->where('transaction_status', Transaction::STATUS_PENDING)
+            ->latest()
+            ->first();
+
+        if ($transaction && $transaction->order_id) {
+            $result = $this->midtransClient->cancelOrder($transaction->order_id);
+            $midtransCancelled = $result['success'];
+
+            if (! $midtransCancelled) {
+                Log::warning('Midtrans cancel failed, proceeding with local cancellation', [
+                    'booking_id' => $booking->id,
+                    'order_id' => $transaction->order_id,
+                    'error' => $result['error'],
+                ]);
+            }
+        }
+
+        return DB::transaction(function () use ($booking, $midtransCancelled): array {
+            $oldStatus = $booking->status;
+
+            $booking->update(['status' => 'cancelled']);
+            PaymentLogger::logBookingStatusChange($booking->fresh(), $oldStatus, 'cancelled', null);
+
+            // Mark pending transactions as failed (enum has no 'cancelled').
+            $booking->transactions()
+                ->where('transaction_status', Transaction::STATUS_PENDING)
+                ->update(['transaction_status' => Transaction::STATUS_FAILED]);
+
+            return [
+                'success' => true,
+                'midtrans_cancelled' => $midtransCancelled,
+                'message' => 'Booking berhasil dibatalkan.',
+            ];
+        });
+    }
+
+    /**
      * Update booking status based on transaction status
      *
      * This method implements the status synchronization logic:

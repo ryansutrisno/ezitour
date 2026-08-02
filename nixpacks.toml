@@ -1,0 +1,20 @@
+# nixpacks.toml
+# This file configures Nixpacks (the default builder in Dokploy) to deploy this Laravel 12 project.
+
+[variables]
+# Set the Nginx document root to Laravel's public directory
+NIXPACKS_PHP_ROOT_DIR = "/app/public"
+NIXPACKS_PHP_FALLBACK_PATH = "/index.php"
+
+[phases.setup]
+# Extend default PHP Packages to include common extensions required by Laravel & Filament
+nixPkgs = ["...", "php84Extensions.pdo_mysql", "php84Extensions.intl", "php84Extensions.gd", "php84Extensions.zip", "php84Extensions.bcmath"]
+
+[phases.postbuild]
+# Optimize Laravel for production and run database migrations
+cmds = [
+    "php artisan config:cache",
+    "php artisan route:cache",
+    "php artisan view:cache",
+    "php artisan migrate --force"
+]

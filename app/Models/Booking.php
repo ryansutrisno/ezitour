@@ -22,6 +22,25 @@ class Booking extends Model
         'payment_date' => 'datetime',
     ];
 
+    /**
+     * Auto-generate a human-readable booking code on creation.
+     *
+     * Format: EZT-{year}-{zero-padded id}, e.g. EZT-2026-0007. Generated in
+     * the `created` hook (after insert) so the real id is available, keeping
+     * new bookings aligned with the backfilled rows from the migration.
+     */
+    protected static function booted(): void
+    {
+        static::created(function (self $booking): void {
+            if (! empty($booking->code)) {
+                return;
+            }
+
+            $booking->code = 'EZT-'.$booking->created_at->format('Y').'-'.str_pad((string) $booking->id, 4, '0', STR_PAD_LEFT);
+            $booking->saveQuietly();
+        });
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

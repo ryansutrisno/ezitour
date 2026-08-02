@@ -39,6 +39,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/packages/{slug}/book', [BookingController::class, 'store'])->name('front.booking.store');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
+    // Booking detail / E-ticket / cancel
+    Route::get('/bookings/{booking}', [BookingController::class, 'show'])->name('bookings.show');
+    Route::get('/bookings/{booking}/ticket', [BookingController::class, 'ticket'])->name('bookings.ticket');
+    Route::post('/bookings/{booking}/cancel', [BookingController::class, 'cancel'])->name('bookings.cancel');
+
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('front.profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('front.profile.update');

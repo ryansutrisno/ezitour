@@ -221,6 +221,49 @@ class MidtransClient
     }
 
     /**
+     * Cancel a transaction on Midtrans before it settles.
+     *
+     * Wraps {@see Transaction::cancel()} so callers don't have to deal with the
+     * raw SDK exceptions. Returns a structured result instead of throwing — the
+     * cancel flow wants to proceed with the local cancellation even when the
+     * Midtrans side rejects it (e.g. the transaction already settled).
+     *
+     * @return array{success: bool, status_code: ?string, error: ?string}
+     */
+    public function cancelOrder(string $orderId): array
+    {
+        $environment = $this->isProduction ? 'production' : 'sandbox';
+
+        try {
+            PaymentLogger::logMidtransApiCall('v2/transactions/cancel', ['order_id' => $orderId], $environment);
+
+            $statusCode = Transaction::cancel($orderId);
+
+            PaymentLogger::logMidtransApiSuccess('v2/transactions/cancel', $orderId, $environment);
+
+            return [
+                'success' => true,
+                'status_code' => is_string($statusCode) ? $statusCode : (string) $statusCode,
+                'error' => null,
+            ];
+        } catch (\Throwable $e) {
+            PaymentLogger::logMidtransApiFailure(
+                'v2/transactions/cancel',
+                $orderId,
+                $e,
+                $environment,
+                $this->extractHttpStatusCode($e),
+            );
+
+            return [
+                'success' => false,
+                'status_code' => $this->extractHttpStatusCode($e),
+                'error' => $e->getMessage(),
+            ];
+        }
+    }
+
+    /**
      * Verify notification signature dari Midtrans
      *
      * Signature dihitung dengan formula:
