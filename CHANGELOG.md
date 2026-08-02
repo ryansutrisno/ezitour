@@ -1,3 +1,10 @@
+## [1.9.0](https://github.com/ryansutrisno/ezitour/compare/v1.8.0...v1.9.0) (2026-08-02)
+
+
+### ✨ Features
+
+* add reviews, SEO meta tags, and admin analytics widgets ([ead94e8](https://github.com/ryansutrisno/ezitour/commit/ead94e8b391fdd38611c2aa9c520801b2f6b19ce))
+
 ## [1.8.0](https://github.com/ryansutrisno/ezitour/compare/v1.7.0...v1.8.0) (2026-08-02)
 
 
