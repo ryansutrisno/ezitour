@@ -1,3 +1,10 @@
+## [1.10.0](https://github.com/ryansutrisno/ezitour/compare/v1.9.0...v1.10.0) (2026-08-02)
+
+
+### ✨ Features
+
+* add tiered group pricing with booking breakdown ([53173c7](https://github.com/ryansutrisno/ezitour/commit/53173c74008b2d8b49c5dcbbfee58e86853c2192))
+
 ## [1.9.0](https://github.com/ryansutrisno/ezitour/compare/v1.8.0...v1.9.0) (2026-08-02)
 
 
