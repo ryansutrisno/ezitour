@@ -224,6 +224,26 @@ EziTour is a standard Laravel 12 application and can be deployed anywhere Larave
 Remember to set production Midtrans keys and `MIDTRANS_IS_PRODUCTION=true`, then register the
 webhook URL `{APP_URL}/midtrans/notification` in your Midtrans Dashboard.
 
+### ⏰ Scheduled Tasks
+
+EziTour registers two hourly reminder jobs via Laravel Task Scheduling:
+
+- **`reminders:trip`** — kirim pengingat H-1 ke booking berstatus *paid* yang
+  travel_date-nya jatuh besok (closed-loop post-booking engagement).
+- **`reminders:payment-expiry`** — kirim pengingat ke booking *pending* yang
+  mendekati jendela kedaluwarsa pembayaran (±4 jam sebelum `created_at + expiry_duration`).
+
+Both jobs are idempotent (gated by `trip_reminder_sent_at` / `payment_reminder_sent_at`
+columns on `bookings`) so overlapping scheduler ticks never double-send.
+
+Add the standard Laravel cron entry on your production server so the scheduler runs every minute:
+
+```bash
+* * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
+```
+
+On Laravel Cloud the scheduler is configured automatically — no cron entry required.
+
 ## 📝 Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for release history. This project follows

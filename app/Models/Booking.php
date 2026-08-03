@@ -24,6 +24,9 @@ class Booking extends Model
         'discount_amount' => 'decimal:2',
         'price_per_pax' => 'decimal:2',
         'coupon_discount_amount' => 'decimal:2',
+        // Idempotency timestamps for the scheduled reminder jobs (Sprint 8).
+        'trip_reminder_sent_at' => 'datetime',
+        'payment_reminder_sent_at' => 'datetime',
     ];
 
     /**
