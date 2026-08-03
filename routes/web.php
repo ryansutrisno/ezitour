@@ -11,6 +11,7 @@ use App\Http\Controllers\Front\PackageController;
 use App\Http\Controllers\Front\PaymentController;
 use App\Http\Controllers\Front\ProfileController;
 use App\Http\Controllers\Front\ReviewController;
+use App\Http\Controllers\Front\WishlistController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('front.home');
@@ -58,7 +59,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/payments/finish', [PaymentController::class, 'finish'])->name('payments.finish');
     Route::get('/payments/unfinish', [PaymentController::class, 'unfinish'])->name('payments.unfinish');
     Route::get('/payments/error', [PaymentController::class, 'error'])->name('payments.error');
+
+    // Wishlist (heart toggle + remove)
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('front.wishlist.index');
+    Route::delete('/wishlist/{slug}', [WishlistController::class, 'destroy'])->name('front.wishlist.destroy');
 });
+
+// Wishlist AJAX toggle — separate from the auth group so it carries its own
+// webhook.ratelimit middleware (matches the coupon endpoint pattern).
+Route::post('/packages/{slug}/wishlist', [WishlistController::class, 'toggle'])
+    ->middleware(['auth', 'webhook.ratelimit'])
+    ->name('front.wishlist.toggle');
 
 // Midtrans Webhook Route (no auth, CSRF exempted via bootstrap/app.php)
 // Rate limited to prevent abuse (Requirements: 4.2)

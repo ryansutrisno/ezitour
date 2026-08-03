@@ -6,6 +6,7 @@ namespace App\Models;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -100,5 +101,17 @@ class User extends Authenticatable implements FilamentUser
     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
+    }
+
+    /**
+     * Packages saved by the user as favorites (wishlist).
+     *
+     * Pivot table `favorite_package_user` carries timestamps so we can
+     * order by "most recently saved" on the wishlist page.
+     */
+    public function favorites(): BelongsToMany
+    {
+        return $this->belongsToMany(Package::class, 'favorite_package_user')
+            ->withTimestamps();
     }
 }
