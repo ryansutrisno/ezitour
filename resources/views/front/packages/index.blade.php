@@ -176,56 +176,78 @@
                 @if($packages->count() > 0)
                     <div class="grid grid-cols-1 gap-7 sm:grid-cols-2 xl:grid-cols-3">
                         @foreach($packages as $package)
-                            <a href="{{ route('front.packages.show', $package->slug) }}" class="group flex flex-col rounded-card bg-white border border-slate-100 shadow-card hover:shadow-hover overflow-hidden transition-all duration-200 hover:-translate-y-1">
-                                <div class="relative h-48 overflow-hidden">
-                                    @if($package->thumbnail_url)
-                                        <img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src="{{ $package->thumbnail_url }}" alt="{{ $package->name }}">
+                            <div class="group relative">
+                                {{-- Heart toggle button (outside the <a> so HTML stays valid).
+                                     Initial favorited state resolved via Package::is_favorited accessor. --}}
+                                <button type="button"
+                                    data-wishlist-toggle
+                                    data-package-slug="{{ $package->slug }}"
+                                    @class([
+                                        'absolute top-3 right-3 z-20 inline-flex items-center justify-center w-9 h-9 rounded-full shadow-soft transition-all hover:scale-110',
+                                        'bg-white text-red-500 hover:bg-white' => $package->is_favorited,
+                                        'bg-white/80 backdrop-blur text-slate-600 hover:text-red-500 hover:bg-white' => ! $package->is_favorited,
+                                    ])
+                                    title="{{ $package->is_favorited ? 'Hapus dari Wishlist' : 'Simpan ke Wishlist' }}"
+                                    aria-label="{{ $package->is_favorited ? 'Hapus dari Wishlist' : 'Simpan ke Wishlist' }}"
+                                    aria-pressed="{{ $package->is_favorited ? 'true' : 'false' }}">
+                                    @if($package->is_favorited)
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z"/></svg>
                                     @else
-                                        <div class="h-full w-full bg-gradient-to-br from-blue-500 via-blue-600 to-blue-800 flex items-center justify-center">
-                                            <svg class="w-16 h-16 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                        </div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z"/></svg>
                                     @endif
-                                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent"></div>
-                                    <span class="absolute top-3 left-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-pill bg-white/95 backdrop-blur text-[11px] font-bold text-slate-700 shadow-soft">
-                                        <svg class="w-3.5 h-3.5 text-sand-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.964a1 1 0 00.95.69h4.165c.969 0 1.371 1.24.588 1.81l-3.37 2.45a1 1 0 00-.364 1.118l1.287 3.964c.3.922-.755 1.688-1.539 1.118l-3.37-2.45a1 1 0 00-1.176 0l-3.37 2.45c-.784.57-1.838-.196-1.539-1.118l1.287-3.964a1 1 0 00-.364-1.118l-3.37-2.45c-.783-.57-.38-1.81.588-1.81h4.166a1 1 0 00.95-.69l1.286-3.964z"/></svg>
-                                        4.9
-                                    </span>
-                                    @if(filled($package->duration_days))
-                                        <span class="absolute top-3 right-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-pill bg-blue-600/90 backdrop-blur text-[11px] font-bold text-white shadow-soft">
-                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                            {{ $package->duration_days }} hari
-                                        </span>
-                                    @endif
-                                </div>
-                                <div class="flex flex-1 flex-col p-6">
-                                    <div class="flex-1">
-                                        <h3 class="font-display text-lg font-bold text-slate-900 group-hover:text-blue-700 transition-colors">{{ $package->name }}</h3>
-                                        @if(filled($package->region) || filled($package->category))
-                                            <div class="mt-1.5 flex flex-wrap items-center gap-1.5">
-                                                @if(filled($package->region))
-                                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-pill bg-blue-50 text-blue-700 text-[11px] font-semibold">
-                                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                                        {{ $package->region }}
-                                                    </span>
-                                                @endif
-                                                @if(filled($package->category))
-                                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-pill bg-sand-100 text-sand-700 text-[11px] font-semibold">
-                                                        {{ $package->category }}
-                                                    </span>
-                                                @endif
+                                </button>
+
+                                <a href="{{ route('front.packages.show', $package->slug) }}" class="flex flex-col rounded-card bg-white border border-slate-100 shadow-card hover:shadow-hover overflow-hidden transition-all duration-200 hover:-translate-y-1">
+                                    <div class="relative h-48 overflow-hidden">
+                                        @if($package->thumbnail_url)
+                                            <img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src="{{ $package->thumbnail_url }}" alt="{{ $package->name }}">
+                                        @else
+                                            <div class="h-full w-full bg-gradient-to-br from-blue-500 via-blue-600 to-blue-800 flex items-center justify-center">
+                                                <svg class="w-16 h-16 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                                             </div>
                                         @endif
-                                        <p class="mt-2 text-sm text-slate-600 line-clamp-3 leading-relaxed">{{ $package->description }}</p>
+                                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent"></div>
+                                        <span class="absolute top-3 left-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-pill bg-white/95 backdrop-blur text-[11px] font-bold text-slate-700 shadow-soft">
+                                            <svg class="w-3.5 h-3.5 text-sand-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.964a1 1 0 00.95.69h4.165c.969 0 1.371 1.24.588 1.81l-3.37 2.45a1 1 0 00-.364 1.118l1.287 3.964c.3.922-.755 1.688-1.539 1.118l-3.37-2.45a1 1 0 00-1.176 0l-3.37 2.45c-.784.57-1.838-.196-1.539-1.118l1.287-3.964a1 1 0 00-.364-1.118l-3.37-2.45c-.783-.57-.38-1.81.588-1.81h4.166a1 1 0 00.95-.69l1.286-3.964z"/></svg>
+                                            4.9
+                                        </span>
+                                        @if(filled($package->duration_days))
+                                            <span class="absolute bottom-3 right-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-pill bg-blue-600/90 backdrop-blur text-[11px] font-bold text-white shadow-soft">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                {{ $package->duration_days }} hari
+                                            </span>
+                                        @endif
                                     </div>
-                                    <div class="mt-5 pt-5 border-t border-slate-100 flex items-end justify-between gap-3">
-                                        <div>
-                                            <p class="text-[11px] text-slate-400 font-medium">Mulai dari</p>
-                                            <p class="font-display text-xl font-extrabold text-blue-600">Rp {{ number_format($package->total_price, 0, ',', '.') }}</p>
+                                    <div class="flex flex-1 flex-col p-6">
+                                        <div class="flex-1">
+                                            <h3 class="font-display text-lg font-bold text-slate-900 group-hover:text-blue-700 transition-colors">{{ $package->name }}</h3>
+                                            @if(filled($package->region) || filled($package->category))
+                                                <div class="mt-1.5 flex flex-wrap items-center gap-1.5">
+                                                    @if(filled($package->region))
+                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-pill bg-blue-50 text-blue-700 text-[11px] font-semibold">
+                                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                                            {{ $package->region }}
+                                                        </span>
+                                                    @endif
+                                                    @if(filled($package->category))
+                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-pill bg-sand-100 text-sand-700 text-[11px] font-semibold">
+                                                            {{ $package->category }}
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            @endif
+                                            <p class="mt-2 text-sm text-slate-600 line-clamp-3 leading-relaxed">{{ $package->description }}</p>
                                         </div>
-                                        <span class="inline-flex items-center gap-1 text-sm font-semibold text-white bg-blue-600 group-hover:bg-blue-700 px-3.5 py-2 rounded-button shadow-soft transition-colors">Detail</span>
+                                        <div class="mt-5 pt-5 border-t border-slate-100 flex items-end justify-between gap-3">
+                                            <div>
+                                                <p class="text-[11px] text-slate-400 font-medium">Mulai dari</p>
+                                                <p class="font-display text-xl font-extrabold text-blue-600">Rp {{ number_format($package->total_price, 0, ',', '.') }}</p>
+                                            </div>
+                                            <span class="inline-flex items-center gap-1 text-sm font-semibold text-white bg-blue-600 group-hover:bg-blue-700 px-3.5 py-2 rounded-button shadow-soft transition-colors">Detail</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
+                                </a>
+                            </div>
                         @endforeach
                     </div>
 
@@ -314,5 +336,9 @@
                 }
             })();
         </script>
+    @endpush
+
+    @push('scripts')
+        @include('front.wishlist.partials._toggle-script')
     @endpush
 @endsection

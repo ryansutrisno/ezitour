@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Package extends Model
@@ -29,6 +30,37 @@ class Package extends Model
     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
+    }
+
+    /**
+     * Users who have saved this package as a favorite (wishlist).
+     * Inverse of {@link User::favorites()}.
+     */
+    public function favoritedBy(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'favorite_package_user')
+            ->withTimestamps();
+    }
+
+    /**
+     * Whether the currently authenticated user has favorited this package.
+     *
+     * Uses the loaded auth user's cached favorites collection when present,
+     * falling back to a single exists() check otherwise. Safe to call on
+     * paginated card lists — `auth()->user()->favorites` is cached on the
+     * User instance after the first access within a request.
+     */
+    public function getIsFavoritedAttribute(): bool
+    {
+        $user = auth()->user();
+
+        if (! $user) {
+            return false;
+        }
+
+        return $user->relationLoaded('favorites')
+            ? $user->favorites->contains($this->getKey())
+            : $this->favoritedBy()->where('user_id', $user->getKey())->exists();
     }
 
     /**

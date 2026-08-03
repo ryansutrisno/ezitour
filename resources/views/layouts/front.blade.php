@@ -65,6 +65,20 @@
                        ])">
                         Paket Wisata
                     </a>
+                    <a href="{{ route('front.wishlist.index') }}"
+                       @class([
+                           'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors',
+                           'text-slate-900 border-blue-500' => request()->routeIs('front.wishlist.*'),
+                           'text-slate-500 hover:text-slate-900 border-transparent hover:border-blue-400' => !request()->routeIs('front.wishlist.*'),
+                       ])>
+                        Wishlist
+                        @auth
+                            @php($favCount = auth()->user()->favorites()->count())
+                            @if($favCount > 0)
+                                <span class="ml-1.5 inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold rounded-pill bg-red-500 text-white">{{ $favCount }}</span>
+                            @endif
+                        @endauth
+                    </a>
                     <a href="{{ route('front.about') }}"
                        @class([
                           'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors',
