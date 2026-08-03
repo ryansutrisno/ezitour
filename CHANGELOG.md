@@ -1,3 +1,10 @@
+## [1.13.0](https://github.com/ryansutrisno/ezitour/compare/v1.12.0...v1.13.0) (2026-08-03)
+
+
+### ✨ Features
+
+* **serena:** add initial project configuration files ([4e8b599](https://github.com/ryansutrisno/ezitour/commit/4e8b5991802a27e1de5a79393f869294c096dfe5))
+
 ## [1.12.0](https://github.com/ryansutrisno/ezitour/compare/v1.11.0...v1.12.0) (2026-08-03)
 
 
