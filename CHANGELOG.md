@@ -1,3 +1,10 @@
+## [1.12.0](https://github.com/ryansutrisno/ezitour/compare/v1.11.0...v1.12.0) (2026-08-03)
+
+
+### ✨ Features
+
+* add wishlist feature with heart toggle and dedicated page ([d21d843](https://github.com/ryansutrisno/ezitour/commit/d21d84303e83f2d9fc385519afbe1d92959b0761))
+
 ## [1.11.0](https://github.com/ryansutrisno/ezitour/compare/v1.10.0...v1.11.0) (2026-08-02)
 
 
