@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\WebhookRateLimiter;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -11,6 +12,19 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
+    ->withSchedule(function (Schedule $schedule): void {
+        // Reminder jobs (Sprint 8) — both gated by idempotency columns on
+        // bookings, so an hourly tick (or overlap) never double-sends.
+        $schedule->command('reminders:trip')
+            ->hourly()
+            ->withoutOverlapping()
+            ->onOneServer();
+
+        $schedule->command('reminders:payment-expiry')
+            ->hourly()
+            ->withoutOverlapping()
+            ->onOneServer();
+    })
     ->withMiddleware(function (Middleware $middleware): void {
         // Exempt Midtrans webhook from CSRF verification
         // This is required because Midtrans sends POST requests without CSRF token
