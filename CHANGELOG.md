@@ -1,3 +1,10 @@
+## [1.14.0](https://github.com/ryansutrisno/ezitour/compare/v1.13.0...v1.14.0) (2026-08-03)
+
+
+### ✨ Features
+
+* add scheduled reminder jobs for trip and payment expiry ([e18993e](https://github.com/ryansutrisno/ezitour/commit/e18993e47054ee549bd5019981e5d5cf76c87b62))
+
 ## [1.13.0](https://github.com/ryansutrisno/ezitour/compare/v1.12.0...v1.13.0) (2026-08-03)
 
 
