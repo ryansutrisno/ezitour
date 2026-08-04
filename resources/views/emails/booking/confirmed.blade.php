@@ -1,25 +1,24 @@
 @component('mail::message')
-# Halo {{ $booking->user->name }}!
+# {{ __('emails.confirmed_title') }}
 
-Terima kasih telah memesan paket wisata di EziTour. Pesananmu telah kami terima dan sedang menunggu pembayaran.
+{{ __('emails.confirmed_greeting', ['name' => $booking->user->name]) }}
 
 @component('mail::panel')
-**Detail Pesanan**
-- Kode Booking: **{{ $bookingCode }}**
-- Paket: {{ $booking->package->name }}
-- Tanggal Perjalanan: {{ $booking->travel_date->format('d/m/Y') }}
-- Total Pembayaran: Rp {{ number_format($totalAmount, 0, ',', '.') }}
-- Status: Menunggu Pembayaran
+**{{ __('emails.confirmed_panel_title') }}**
+- {{ __('emails.label_booking_code') }}: **{{ $bookingCode }}**
+- {{ __('emails.label_package') }}: {{ $booking->package->name }}
+- {{ __('emails.label_travel_date') }}: {{ $booking->travel_date->format('d/m/Y') }}
+- {{ __('emails.label_total') }}: Rp {{ number_format($totalAmount, 0, ',', '.') }}
+- {{ __('emails.label_status') }}: {{ __('emails.status_pending_payment') }}
 @endcomponent
 
-Selesaikan pembayaran dalam 24 jam untuk menghindari pembatalan otomatis.
+{{ __('emails.confirmed_cta_note') }}
 
 @component('mail::button', ['url' => route('dashboard.index')])
-Lihat Pesanan Saya
+{{ __('emails.confirmed_cta_button') }}
 @endcomponent
 
-Terima kasih telah mempercayakan liburanmu kepada kami.
+{{ __('emails.confirmed_thank_you') }}
 
-Salam hangat,
-Tim EziTour
+{{ __('emails.signoff') }}
 @endcomponent

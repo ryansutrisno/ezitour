@@ -2,16 +2,59 @@
 
 /*
 |--------------------------------------------------------------------------
-| Email strings — Phase 1 minimal (Indonesian — default locale)
+| Email strings — Indonesian — default locale
 |--------------------------------------------------------------------------
-| Phase 1 of the i18n rollout only translates the signoff and any generic
-| static phrases that appear across notifications. FULL email body
-| translation (booking confirmations, payment receipts, reminder jobs from
-| Sprint 8) is deferred to Phase 3 per the project plan.
+| Shared and full email body translations for the notification mailables.
 */
 
 return [
     'signoff' => 'Salam hangat, Tim EziTour',
     'greeting' => 'Halo, :name',
     'help_footer' => 'Butuh bantuan? Hubungi tim support kami kapan saja.',
+    'confirmed_title' => 'Terima kasih telah memesan!',
+    'confirmed_greeting' => 'Halo :name, pesananmu untuk paket wisata di EziTour telah kami terima dan sedang menunggu pembayaran.',
+    'confirmed_panel_title' => 'Detail Pesanan',
+    'label_booking_code' => 'Kode Booking',
+    'label_package' => 'Paket',
+    'label_travel_date' => 'Tanggal Perjalanan',
+    'label_pickup' => 'Titik Antar-Jemput',
+    'label_total' => 'Total Pembayaran',
+    'label_total_paid' => 'Total Dibayar',
+    'label_payment_method' => 'Metode Pembayaran',
+    'label_status' => 'Status',
+    'status_pending_payment' => 'Menunggu Pembayaran',
+    'status_paid' => 'LUNAS',
+    'status_failed' => 'Gagal',
+    'confirmed_cta_note' => 'Selesaikan pembayaran dalam 24 jam untuk menghindari pembatalan otomatis.',
+    'confirmed_cta_button' => 'Lihat Pesanan Saya',
+    'confirmed_thank_you' => 'Terima kasih telah mempercayakan liburanmu kepada kami.',
+    'success_title' => 'Pembayaran Berhasil!',
+    'success_greeting' => 'Halo :name, pembayaranmu telah kami terima dan dikonfirmasi. Paket wisatamu siap dinikmati!',
+    'success_panel_title' => 'E-Ticket',
+    'payment_method_midtrans' => 'Midtrans',
+    'success_note' => 'Simpan email ini sebagai bukti pemesanan. Tim kami akan menghubungi kamu sebelum tanggal keberangkatan untuk detail antar-jemput.',
+    'success_cta_button' => 'Lihat Detail Pesanan',
+    'success_closing' => 'Sampai jumpa di perjalanan!',
+    'failed_title' => 'Pembayaran Tidak Berhasil',
+    'failed_greeting' => 'Halo :name, sepertinya pembayaranmu tidak dapat kami proses.',
+    'failed_panel_title' => 'Detail Pesanan',
+    'failed_note' => 'Jangan khawatir — pesananmu masih aktif. Kamu bisa mencoba pembayaran kembali kapan saja dari dashboard.',
+    'failed_cta_button' => 'Lihat & Coba Bayar Lagi',
+    'failed_help' => 'Butuh bantuan? Balas email ini atau hubungi tim support kami.',
+    'reminder_title' => 'Perjalanan Anda Besok!',
+    'reminder_greeting' => 'Halo :name, bersiaplah — petualangan Anda di paket **:package** akan dimulai besok!',
+    'reminder_panel_title' => 'Detail Perjalanan',
+    'reminder_tips_title' => 'Beberapa hal yang perlu Anda siapkan:',
+    'reminder_tip_documents' => 'Dokumen identitas (KTP/SIM/Paspor) sesuai kebutuhan perjalanan.',
+    'reminder_tip_clothing' => 'Pakaian nyaman dan sesuai cuaca destinasi.',
+    'reminder_tip_medicine' => 'Obat pribadi jika diperlukan.',
+    'reminder_contact_note' => 'Tim kami akan menghubungi Anda untuk konfirmasi jam antar-jemput. Pastikan nomor WhatsApp Anda aktif.',
+    'reminder_cta_button' => 'Lihat Detail Booking',
+    'reminder_closing' => 'Sampai jumpa di perjalanan!',
+    'expiry_title' => 'Pembayaran Anda Segera Kedaluwarsa',
+    'expiry_greeting' => 'Halo :name, pesananmu di EziTour akan segera **kedaluwarsa** jika pembayaran tidak diselesaikan segera. Jangan sampai kehilangan paket liburan impianmu!',
+    'expiry_panel_title' => 'Detail Pesanan',
+    'expiry_note' => 'Segera selesaikan pembayaran sebelum pesananmu dibatalkan secara otomatis dan kuota perjalananmu dilepaskan ke peserta lain.',
+    'expiry_cta_button' => 'Selesaikan Pembayaran',
+    'expiry_help' => 'Butuh bantuan? Balas email ini atau hubungi tim support kami.',
 ];

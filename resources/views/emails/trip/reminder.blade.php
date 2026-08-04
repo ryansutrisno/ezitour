@@ -1,31 +1,30 @@
 @component('mail::message')
-# Perjalanan Anda Besok! 🎒
+# {{ __('emails.reminder_title') }} 🎒
 
-Halo {{ $booking->user->name }}, bersiaplah — petualangan Anda di paket **{{ $booking->package->name }}** akan dimulai besok! 🌊
+{{ __('emails.reminder_greeting', ['name' => $booking->user->name, 'package' => $booking->package->name]) }} 🌊
 
 @component('mail::panel')
-**Detail Perjalanan**
-- Kode Booking: **{{ $bookingCode }}**
-- Paket: {{ $booking->package->name }}
-- Tanggal Perjalanan: {{ $booking->travel_date->format('d F Y') }}
-- Titik Antar-Jemput: {{ $booking->pickup_location }}
-- Total Pembayaran: Rp {{ number_format($totalAmount, 0, ',', '.') }}
-- Status: **LUNAS** ✅
+**{{ __('emails.reminder_panel_title') }}**
+- {{ __('emails.label_booking_code') }}: **{{ $bookingCode }}**
+- {{ __('emails.label_package') }}: {{ $booking->package->name }}
+- {{ __('emails.label_travel_date') }}: {{ $booking->travel_date->format('d F Y') }}
+- {{ __('emails.label_pickup') }}: {{ $booking->pickup_location }}
+- {{ __('emails.label_total') }}: Rp {{ number_format($totalAmount, 0, ',', '.') }}
+- {{ __('emails.label_status') }}: **{{ __('emails.status_paid') }}** ✅
 @endcomponent
 
-Beberapa hal yang perlu Anda siapkan:
-- Dokumen identitas (KTP/SIM/Paspor) sesuai kebutuhan perjalanan.
-- Pakaian nyaman dan sesuai cuaca destinasi.
-- Obat pribadi jika diperlukan.
+{{ __('emails.reminder_tips_title') }}
+- {{ __('emails.reminder_tip_documents') }}
+- {{ __('emails.reminder_tip_clothing') }}
+- {{ __('emails.reminder_tip_medicine') }}
 
-Tim kami akan menghubungi Anda untuk konfirmasi jam antar-jemput. Pastikan nomor WhatsApp Anda aktif.
+{{ __('emails.reminder_contact_note') }}
 
 @component('mail::button', ['url' => route('bookings.show', $booking)])
-Lihat Detail Booking
+{{ __('emails.reminder_cta_button') }}
 @endcomponent
 
-Sampai jumpa di perjalanan!
+{{ __('emails.reminder_closing') }}
 
-Salam hangat,
-Tim EziTour
+{{ __('emails.signoff') }}
 @endcomponent

@@ -1,26 +1,25 @@
 @component('mail::message')
-# Pembayaran Berhasil! 🎉
+# {{ __('emails.success_title') }} 🎉
 
-Halo {{ $booking->user->name }}, pembayaranmu telah kami terima dan dikonfirmasi. Paket wisatamu siap dinikmati!
+{{ __('emails.success_greeting', ['name' => $booking->user->name]) }}
 
 @component('mail::panel')
-**E-Ticket**
-- Kode Booking: **{{ $bookingCode }}**
-- Paket: {{ $booking->package->name }}
-- Tanggal Perjalanan: {{ $booking->travel_date->format('d/m/Y') }}
-- Metode Pembayaran: {{ $transaction->payment_type ?? 'Midtrans' }}
-- Total Dibayar: Rp {{ number_format($totalAmount, 0, ',', '.') }}
-- Status: **LUNAS** ✅
+**{{ __('emails.success_panel_title') }}**
+- {{ __('emails.label_booking_code') }}: **{{ $bookingCode }}**
+- {{ __('emails.label_package') }}: {{ $booking->package->name }}
+- {{ __('emails.label_travel_date') }}: {{ $booking->travel_date->format('d/m/Y') }}
+- {{ __('emails.label_payment_method') }}: {{ $transaction->payment_type ?? __('emails.payment_method_midtrans') }}
+- {{ __('emails.label_total_paid') }}: Rp {{ number_format($totalAmount, 0, ',', '.') }}
+- {{ __('emails.label_status') }}: **{{ __('emails.status_paid') }}** ✅
 @endcomponent
 
-Simpan email ini sebagai bukti pemesanan. Tim kami akan menghubungi kamu sebelum tanggal keberangkatan untuk detail antar-jemput.
+{{ __('emails.success_note') }}
 
 @component('mail::button', ['url' => route('dashboard.index')])
-Lihat Detail Pesanan
+{{ __('emails.success_cta_button') }}
 @endcomponent
 
-Sampai jumpa di perjalanan!
+{{ __('emails.success_closing') }}
 
-Salam hangat,
-Tim EziTour
+{{ __('emails.signoff') }}
 @endcomponent

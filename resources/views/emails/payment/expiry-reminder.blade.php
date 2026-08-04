@@ -1,25 +1,24 @@
 @component('mail::message')
-# Pembayaran Anda Segera Kedaluwarsa ⏰
+# {{ __('emails.expiry_title') }} ⏰
 
-Halo {{ $booking->user->name }}, pesananmu di EziTour akan segera **kedaluwarsa** jika pembayaran tidak diselesaikan segera. Jangan sampai kehilangan paket liburan impianmu!
+{{ __('emails.expiry_greeting', ['name' => $booking->user->name]) }}
 
 @component('mail::panel')
-**Detail Pesanan**
-- Kode Booking: **{{ $bookingCode }}**
-- Paket: {{ $booking->package->name }}
-- Tanggal Perjalanan: {{ $booking->travel_date->format('d F Y') }}
-- Total Pembayaran: Rp {{ number_format($totalAmount, 0, ',', '.') }}
-- Status: Menunggu Pembayaran
+**{{ __('emails.expiry_panel_title') }}**
+- {{ __('emails.label_booking_code') }}: **{{ $bookingCode }}**
+- {{ __('emails.label_package') }}: {{ $booking->package->name }}
+- {{ __('emails.label_travel_date') }}: {{ $booking->travel_date->format('d F Y') }}
+- {{ __('emails.label_total') }}: Rp {{ number_format($totalAmount, 0, ',', '.') }}
+- {{ __('emails.label_status') }}: {{ __('emails.status_pending_payment') }}
 @endcomponent
 
-Segera selesaikan pembayaran sebelum pesananmu dibatalkan secara otomatis dan kuota perjalananmu dilepaskan ke peserta lain.
+{{ __('emails.expiry_note') }}
 
 @component('mail::button', ['url' => route('dashboard.index')])
-Selesaikan Pembayaran
+{{ __('emails.expiry_cta_button') }}
 @endcomponent
 
-Butuh bantuan? Balas email ini atau hubungi tim support kami.
+{{ __('emails.expiry_help') }}
 
-Salam hangat,
-Tim EziTour
+{{ __('emails.signoff') }}
 @endcomponent
