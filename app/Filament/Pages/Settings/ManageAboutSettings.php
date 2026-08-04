@@ -64,6 +64,21 @@ class ManageAboutSettings extends SettingsPage
                         ->defaultItems(3)
                         ->columnSpanFull()
                         ->helperText('Setiap poin akan tampil sebagai item daftar dengan ikon centang.'),
+                    Forms\Components\Textarea::make('visionText_en')
+                        ->label('Teks Visi (English)')
+                        ->rows(4)
+                        ->columnSpanFull(),
+                    Forms\Components\Repeater::make('missionPoints_en')
+                        ->label('Poin Misi (English)')
+                        ->schema([
+                            Forms\Components\Textarea::make('point')
+                                ->label('Point')
+                                ->required()
+                                ->rows(2),
+                        ])
+                        ->addable()
+                        ->reorderable()
+                        ->columnSpanFull(),
                 ]),
         ];
     }

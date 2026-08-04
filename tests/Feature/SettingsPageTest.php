@@ -27,6 +27,7 @@ class SettingsPageTest extends TestCase
 
         $this->assertSame('EziTour', $settings->siteName);
         $this->assertNotEmpty($settings->footerTagline);
+        $this->assertNull($settings->footerTagline_en);
     }
 
     public function test_seeded_home_settings_hydrate(): void
@@ -36,6 +37,10 @@ class SettingsPageTest extends TestCase
         $this->assertSame('500+', $settings->statDestinations);
         $this->assertSame('Liburan Impian,', $settings->heroHeadline);
         $this->assertSame('Tanpa Ribet.', $settings->heroHeadlineAccent);
+        $this->assertNull($settings->heroBadge_en);
+        $this->assertNull($settings->heroHeadline_en);
+        $this->assertNull($settings->heroHeadlineAccent_en);
+        $this->assertNull($settings->heroSubheadline_en);
     }
 
     public function test_seeded_contact_settings_hydrate(): void
@@ -54,6 +59,8 @@ class SettingsPageTest extends TestCase
         $this->assertIsArray($settings->missionPoints);
         $this->assertCount(3, $settings->missionPoints);
         $this->assertArrayHasKey('point', $settings->missionPoints[0]);
+        $this->assertNull($settings->visionText_en);
+        $this->assertSame([], $settings->missionPoints_en);
     }
 
     public function test_settings_pages_require_authentication(): void

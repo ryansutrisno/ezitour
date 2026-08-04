@@ -46,6 +46,19 @@ class ManageHomeSettings extends SettingsPage
                         ->required()
                         ->rows(3)
                         ->columnSpanFull(),
+                    Forms\Components\TextInput::make('heroBadge_en')
+                        ->label('Teks Lencana Hero (English)')
+                        ->maxLength(255),
+                    Forms\Components\TextInput::make('heroHeadline_en')
+                        ->label('Judul Utama (English)')
+                        ->maxLength(255),
+                    Forms\Components\TextInput::make('heroHeadlineAccent_en')
+                        ->label('Aksen Judul (English)')
+                        ->maxLength(255),
+                    Forms\Components\Textarea::make('heroSubheadline_en')
+                        ->label('Sub Judul (English)')
+                        ->rows(3)
+                        ->columnSpanFull(),
                 ])
                 ->columns(2),
             Forms\Components\Section::make('Statistik')

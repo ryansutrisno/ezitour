@@ -14,6 +14,8 @@ class AboutSettings extends Settings
 
     public string $visionText;
 
+    public ?string $visionText_en = null;
+
     // List of mission points (each an array with a "point" key) produced by the
     // Filament Repeater. No `@var` docblock on purpose: spatie's
     // SettingsCastFactory parses docblock types and would try to apply a global
@@ -21,6 +23,8 @@ class AboutSettings extends Settings
     // the native `array` type means no cast is resolved and the value simply
     // round-trips through the default JSON encoder.
     public array $missionPoints;
+
+    public array $missionPoints_en = [];
 
     public static function group(): string
     {

@@ -41,7 +41,7 @@
                     {{ __('front.about_hero_cta_primary') }}
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </a>
-                <a href="#cerita-kami" class="inline-flex justify-center items-center gap-2 px-7 py-3.5 rounded-button text-sm font-semibold text-slate-700 bg-white border-2 border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-all">
+                <a href="#{{ app()->getLocale() === 'en' ? 'our-story' : 'cerita-kami' }}" class="inline-flex justify-center items-center gap-2 px-7 py-3.5 rounded-button text-sm font-semibold text-slate-700 bg-white border-2 border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-all">
                     {{ __('front.about_hero_cta_secondary') }}
                 </a>
             </div>
@@ -81,7 +81,7 @@
     {{-- ============================================================
     (3) CERITA KAMI — narasi + decorative visual card
     ============================================================ --}}
-    <section id="cerita-kami" class="py-20 bg-white scroll-mt-20">
+    <section id="{{ app()->getLocale() === 'en' ? 'our-story' : 'cerita-kami' }}" class="py-20 bg-white scroll-mt-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                 {{-- Narrative --}}
@@ -174,7 +174,7 @@
                     </div>
                     <h3 class="mt-5 font-display text-xl font-bold text-slate-900">{{ __('front.about_vision_title') }}</h3>
                     <p class="mt-3 text-slate-600 leading-relaxed">
-                        {{ $about->visionText }}
+                        {{ app()->getLocale() === 'en' && $about->visionText_en ? $about->visionText_en : $about->visionText }}
                     </p>
                 </div>
 
@@ -185,7 +185,7 @@
                     </div>
                     <h3 class="mt-5 font-display text-xl font-bold text-slate-900">{{ __('front.about_mission_title') }}</h3>
                     <ul class="mt-3 space-y-2.5 text-slate-600 leading-relaxed">
-                        @foreach($about->missionPoints as $missionPoint)
+                        @foreach((app()->getLocale() === 'en' && !empty($about->missionPoints_en) ? $about->missionPoints_en : $about->missionPoints) as $missionPoint)
                             <li class="flex items-start"><svg class="w-5 h-5 mr-2.5 text-blue-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>{{ $missionPoint['point'] }}</li>
                         @endforeach
                     </ul>

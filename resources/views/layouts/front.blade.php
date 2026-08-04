@@ -158,7 +158,7 @@
                         <span class="text-xl font-bold font-display text-white tracking-tight">Ezi<span class="text-blue-400">Tour</span></span>
                     </div>
                     <p class="text-slate-400 text-sm max-w-md leading-relaxed">
-                        {{ $general->footerTagline }}
+                        {{ app()->getLocale() === 'en' && $general->footerTagline_en ? $general->footerTagline_en : $general->footerTagline }}
                     </p>
                     <div class="flex gap-3 mt-5">
                         @if($contact->instagramUrl)

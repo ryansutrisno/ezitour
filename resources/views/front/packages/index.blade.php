@@ -148,7 +148,7 @@
                             if (filled($filters['category'] ?? null)) { $activeFilters['category'] = $filters['category']; }
                             if (filled($filters['duration_min'] ?? null) || filled($filters['duration_max'] ?? null)) {
                                 $activeFilters['duration'] = collect($durationBuckets)->firstWhere('min', (int) ($filters['duration_min'] ?? 0))['label']
-                                    ?? (($filters['duration_min'] ?? '?').' - '.($filters['duration_max'] ?? '?').' hari');
+                                    ?? (($filters['duration_min'] ?? '?').' - '.($filters['duration_max'] ?? '?').' '.__('front.duration_days_suffix'));
                             }
                         @endphp
                         @if(! empty($activeFilters))

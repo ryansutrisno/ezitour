@@ -38,9 +38,9 @@ class PackageController extends Controller
             ->pluck('category', 'category');
 
         $durationBuckets = [
-            ['min' => 1, 'max' => 3, 'label' => '1-3 hari'],
-            ['min' => 4, 'max' => 7, 'label' => '4-7 hari'],
-            ['min' => 8, 'max' => 14, 'label' => '8+ hari'],
+            ['min' => 1, 'max' => 3, 'label' => '1-3 '.__('front.duration_days_suffix')],
+            ['min' => 4, 'max' => 7, 'label' => '4-7 '.__('front.duration_days_suffix')],
+            ['min' => 8, 'max' => 14, 'label' => '8+ '.__('front.duration_days_suffix')],
         ];
 
         return view('front.packages.index', compact('packages', 'filters', 'regions', 'categories', 'durationBuckets'));
