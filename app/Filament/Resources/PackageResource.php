@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PackageResource\Pages;
 use App\Models\Package;
 use Filament\Forms;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -21,12 +22,36 @@ class PackageResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255)
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', \Illuminate\Support\Str::slug($state)) : null
-                    ),
+                Forms\Components\Tabs::make('Terjemahan Paket')
+                    ->tabs([
+                        Tab::make('Indonesia')
+                            ->schema([
+                                Forms\Components\TextInput::make('name.id')
+                                    ->label('Nama Paket (ID)')
+                                    ->required()
+                                    ->maxLength(255)
+                                    ->live(onBlur: true)
+                                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', \Illuminate\Support\Str::slug($state)) : null
+                                    ),
+                                Forms\Components\Textarea::make('description.id')
+                                    ->label('Deskripsi (ID)')
+                                    ->rows(4)
+                                    ->columnSpanFull(),
+                            ])
+                            ->columns(2),
+                        Tab::make('English')
+                            ->schema([
+                                Forms\Components\TextInput::make('name.en')
+                                    ->label('Package Name (EN)')
+                                    ->maxLength(255),
+                                Forms\Components\Textarea::make('description.en')
+                                    ->label('Description (EN)')
+                                    ->rows(4)
+                                    ->columnSpanFull(),
+                            ])
+                            ->columns(2),
+                    ])
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('slug')
                     ->required()
                     ->maxLength(255)
@@ -78,9 +103,6 @@ class PackageResource extends Resource
                             ->itemLabel(fn (array $state): ?string => $state['name'] ?? null),
                     ])
                     ->collapsible()
-                    ->columnSpanFull(),
-                Forms\Components\Textarea::make('description')
-                    ->rows(4)
                     ->columnSpanFull(),
                 Forms\Components\Section::make('Klasifikasi Paket')
                     ->description('Digunakan untuk filter faceted search di halaman publik paket wisata.')

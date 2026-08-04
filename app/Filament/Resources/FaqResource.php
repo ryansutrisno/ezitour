@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\FaqResource\Pages;
 use App\Models\Faq;
 use Filament\Forms;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -28,15 +29,33 @@ class FaqResource extends Resource
             ->schema([
                 Forms\Components\Section::make('Detail FAQ')
                     ->schema([
-                        Forms\Components\TextInput::make('question')
-                            ->label('Pertanyaan')
-                            ->required()
-                            ->maxLength(255)
-                            ->columnSpanFull(),
-                        Forms\Components\Textarea::make('answer')
-                            ->label('Jawaban')
-                            ->required()
-                            ->rows(5)
+                        Forms\Components\Tabs::make('Terjemahan FAQ')
+                            ->tabs([
+                                Tab::make('Indonesia')
+                                    ->schema([
+                                        Forms\Components\TextInput::make('question.id')
+                                            ->label('Pertanyaan (ID)')
+                                            ->required()
+                                            ->maxLength(255),
+                                        Forms\Components\Textarea::make('answer.id')
+                                            ->label('Jawaban (ID)')
+                                            ->required()
+                                            ->rows(5)
+                                            ->columnSpanFull(),
+                                    ])
+                                    ->columns(2),
+                                Tab::make('English')
+                                    ->schema([
+                                        Forms\Components\TextInput::make('question.en')
+                                            ->label('Question (EN)')
+                                            ->maxLength(255),
+                                        Forms\Components\Textarea::make('answer.en')
+                                            ->label('Answer (EN)')
+                                            ->rows(5)
+                                            ->columnSpanFull(),
+                                    ])
+                                    ->columns(2),
+                            ])
                             ->columnSpanFull(),
                         Forms\Components\Select::make('category')
                             ->label('Kategori')

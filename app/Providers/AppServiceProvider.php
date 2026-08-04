@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Routing\UrlGenerator as AppUrlGenerator;
 use Illuminate\Routing\UrlGenerator as BaseUrlGenerator;
 use Illuminate\Support\ServiceProvider;
+use Spatie\Translatable\Facades\Translatable;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -45,6 +46,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Translatable::fallback(config('app.fallback_locale'), true);
     }
 }

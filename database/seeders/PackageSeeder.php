@@ -39,22 +39,22 @@ class PackageSeeder extends Seeder
         // Create Packages
         $packages = [
             [
-                'name' => 'Jogja Heritage Tour',
-                'description' => 'Menjelajahi keajaiban sejarah Candi Borobudur dan Prambanan dalam satu hari.',
+                'name' => ['id' => 'Jogja Heritage Tour', 'en' => 'Jogja Heritage Tour'],
+                'description' => ['id' => 'Menjelajahi keajaiban sejarah Candi Borobudur dan Prambanan dalam satu hari.', 'en' => 'Explore the historic wonders of Borobudur and Prambanan Temples in one day.'],
                 'total_price' => 750000, // Estimasi harga
                 'thumbnail_url' => 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?q=80&w=2070&auto=format&fit=crop',
                 'items' => ['Candi Borobudur', 'Gereja Ayam (Bukit Rhema)', 'Candi Prambanan'],
             ],
             [
-                'name' => 'Jogja Instagramable Spot',
-                'description' => 'Kunjungi tempat-tempat hits dan instagramable di Jogja. Cocok untuk anak muda!',
+                'name' => ['id' => 'Jogja Instagramable Spot', 'en' => 'Jogja Instagrammable Spots'],
+                'description' => ['id' => 'Kunjungi tempat-tempat hits dan instagramable di Jogja. Cocok untuk anak muda!', 'en' => 'Visit Jogja’s trendiest and most Instagrammable spots. Perfect for young travelers!'],
                 'total_price' => 600000,
                 'thumbnail_url' => 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2070&auto=format&fit=crop',
                 'items' => ['HeHa Sky View', 'Tebing Breksi', 'Malioboro'],
             ],
             [
-                'name' => 'Jogja Beach & Sunset',
-                'description' => 'Menikmati angin laut selatan dan sunset romantis di Parangtritis.',
+                'name' => ['id' => 'Jogja Beach & Sunset', 'en' => 'Jogja Beach & Sunset'],
+                'description' => ['id' => 'Menikmati angin laut selatan dan sunset romantis di Parangtritis.', 'en' => 'Enjoy the southern sea breeze and a romantic sunset at Parangtritis.'],
                 'total_price' => 550000,
                 'thumbnail_url' => 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2070&auto=format&fit=crop',
                 'items' => ['Pantai Parangtritis', 'Malioboro'],
@@ -64,7 +64,7 @@ class PackageSeeder extends Seeder
         foreach ($packages as $pkgData) {
             $package = Package::create([
                 'name' => $pkgData['name'],
-                'slug' => Str::slug($pkgData['name']),
+                'slug' => Str::slug($pkgData['name']['id']),
                 'description' => $pkgData['description'],
                 'total_price' => $pkgData['total_price'],
                 'thumbnail_url' => $pkgData['thumbnail_url'],

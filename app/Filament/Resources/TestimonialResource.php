@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\TestimonialResource\Pages;
 use App\Models\Testimonial;
 use Filament\Forms;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -37,10 +38,22 @@ class TestimonialResource extends Resource
                             ->required()
                             ->maxLength(255)
                             ->helperText('Asal atau tujuan trip traveler (contoh: Yogyakarta).'),
-                        Forms\Components\Textarea::make('quote')
-                            ->label('Kutipan')
-                            ->required()
-                            ->rows(4)
+                        Forms\Components\Tabs::make('Terjemahan Testimoni')
+                            ->tabs([
+                                Tab::make('Indonesia')
+                                    ->schema([
+                                        Forms\Components\Textarea::make('quote.id')
+                                            ->label('Kutipan (ID)')
+                                            ->required()
+                                            ->rows(4),
+                                    ]),
+                                Tab::make('English')
+                                    ->schema([
+                                        Forms\Components\Textarea::make('quote.en')
+                                            ->label('Quote (EN)')
+                                            ->rows(4),
+                                    ]),
+                            ])
                             ->columnSpanFull(),
                         Forms\Components\Select::make('rating')
                             ->label('Rating')
