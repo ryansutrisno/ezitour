@@ -9,7 +9,7 @@ class Faq extends Model
 {
     use HasTranslations;
 
-    public array $translatable = ['question', 'answer'];
+    public array $translatable = ['question', 'answer', 'category'];
 
     /**
      * The attributes that are mass assignable.

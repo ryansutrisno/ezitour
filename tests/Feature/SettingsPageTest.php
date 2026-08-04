@@ -27,6 +27,7 @@ class SettingsPageTest extends TestCase
 
         $this->assertSame('EziTour', $settings->siteName);
         $this->assertNotEmpty($settings->footerTagline);
+        $this->assertStringContainsString('Hassle-free', (string) $settings->footerTagline_en);
     }
 
     public function test_seeded_home_settings_hydrate(): void
@@ -36,6 +37,10 @@ class SettingsPageTest extends TestCase
         $this->assertSame('500+', $settings->statDestinations);
         $this->assertSame('Liburan Impian,', $settings->heroHeadline);
         $this->assertSame('Tanpa Ribet.', $settings->heroHeadlineAccent);
+        $this->assertSame('Trusted travel partner since 2019', $settings->heroBadge_en);
+        $this->assertSame('Dream Holidays,', $settings->heroHeadline_en);
+        $this->assertSame('Zero Hassle.', $settings->heroHeadlineAccent_en);
+        $this->assertStringContainsString('Choose your favorite', (string) $settings->heroSubheadline_en);
     }
 
     public function test_seeded_contact_settings_hydrate(): void
@@ -54,6 +59,9 @@ class SettingsPageTest extends TestCase
         $this->assertIsArray($settings->missionPoints);
         $this->assertCount(3, $settings->missionPoints);
         $this->assertArrayHasKey('point', $settings->missionPoints[0]);
+        $this->assertStringContainsString("Indonesia's most trusted", (string) $settings->visionText_en);
+        $this->assertCount(3, $settings->missionPoints_en);
+        $this->assertArrayHasKey('point', $settings->missionPoints_en[0]);
     }
 
     public function test_settings_pages_require_authentication(): void

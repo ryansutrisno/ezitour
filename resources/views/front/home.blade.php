@@ -1,10 +1,10 @@
 @extends('layouts.front')
 
-@section('title', 'EziTour - Liburan Impian Tanpa Ribet')
+@section('title', __('front.site_title'))
 
 @section('seo')
     <x-seo
-        title="EziTour - Liburan Impian Tanpa Ribet"
+        :title="__('front.site_title')"
         :description="app(App\Settings\HomeSettings::class)->heroSubheadline"
         type="website"
     />
@@ -30,16 +30,16 @@
                 <div class="text-center lg:text-left">
                     <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-pill bg-white shadow-soft text-blue-700 text-xs font-semibold border border-blue-100">
                         <span class="flex h-2 w-2 rounded-full bg-sand-500"></span>
-                        {{ $home->heroBadge }}
+                        {{ app()->getLocale() === 'en' && $home->heroBadge_en ? $home->heroBadge_en : $home->heroBadge }}
                     </span>
 
                     <h1 class="mt-5 font-display font-extrabold tracking-tight text-slate-900 text-4xl sm:text-5xl lg:text-6xl leading-[1.05]">
-                        {{ $home->heroHeadline }}
-                        <span class="block bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">{{ $home->heroHeadlineAccent }}</span>
+                        {{ app()->getLocale() === 'en' && $home->heroHeadline_en ? $home->heroHeadline_en : $home->heroHeadline }}
+                        <span class="block bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">{{ app()->getLocale() === 'en' && $home->heroHeadlineAccent_en ? $home->heroHeadlineAccent_en : $home->heroHeadlineAccent }}</span>
                     </h1>
 
                     <p class="mt-5 text-base sm:text-lg text-slate-600 sm:max-w-xl lg:max-w-lg mx-auto lg:mx-0 leading-relaxed">
-                        {{ $home->heroSubheadline }}
+                        {{ app()->getLocale() === 'en' && $home->heroSubheadline_en ? $home->heroSubheadline_en : $home->heroSubheadline }}
                     </p>
 
                     {{-- Search box --}}

@@ -14,6 +14,14 @@ class HomeSettings extends Settings
 
     public string $heroSubheadline;
 
+    public ?string $heroBadge_en = null;
+
+    public ?string $heroHeadline_en = null;
+
+    public ?string $heroHeadlineAccent_en = null;
+
+    public ?string $heroSubheadline_en = null;
+
     public string $statDestinations;
 
     public string $statTravelers;

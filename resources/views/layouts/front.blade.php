@@ -52,24 +52,24 @@
                     <a href="{{ route('front.home') }}"
                        @class([
                            'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors',
-                           'text-slate-900 border-blue-500' => request()->routeIs('front.home'),
-                           'text-slate-500 hover:text-slate-900 border-transparent hover:border-blue-400' => !request()->routeIs('front.home'),
+                           'text-slate-900 border-blue-500' => request()->routeIs('*.front.home'),
+                           'text-slate-500 hover:text-slate-900 border-transparent hover:border-blue-400' => !request()->routeIs('*.front.home'),
                        ])">
                         {{ __('front.nav_home') }}
                     </a>
                     <a href="{{ route('front.packages.index') }}"
                        @class([
                            'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors',
-                           'text-slate-900 border-blue-500' => request()->routeIs('front.packages.*'),
-                           'text-slate-500 hover:text-slate-900 border-transparent hover:border-blue-400' => !request()->routeIs('front.packages.*'),
+                           'text-slate-900 border-blue-500' => request()->routeIs('*.front.packages.*'),
+                           'text-slate-500 hover:text-slate-900 border-transparent hover:border-blue-400' => !request()->routeIs('*.front.packages.*'),
                        ])">
                         {{ __('front.nav_packages') }}
                     </a>
                     <a href="{{ route('front.wishlist.index') }}"
                        @class([
                            'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors',
-                           'text-slate-900 border-blue-500' => request()->routeIs('front.wishlist.*'),
-                           'text-slate-500 hover:text-slate-900 border-transparent hover:border-blue-400' => !request()->routeIs('front.wishlist.*'),
+                           'text-slate-900 border-blue-500' => request()->routeIs('*.front.wishlist.*'),
+                           'text-slate-500 hover:text-slate-900 border-transparent hover:border-blue-400' => !request()->routeIs('*.front.wishlist.*'),
                        ])>
                         {{ __('front.nav_wishlist') }}
                         @auth
@@ -82,16 +82,16 @@
                     <a href="{{ route('front.about') }}"
                        @class([
                           'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors',
-                          'text-slate-900 border-blue-500' => request()->routeIs('front.about'),
-                          'text-slate-500 hover:text-slate-900 border-transparent hover:border-blue-400' => !request()->routeIs('front.about'),
+                          'text-slate-900 border-blue-500' => request()->routeIs('*.front.about'),
+                          'text-slate-500 hover:text-slate-900 border-transparent hover:border-blue-400' => !request()->routeIs('*.front.about'),
                        ])">
                         {{ __('front.nav_about') }}
                     </a>
                     <a href="{{ route('front.faq') }}"
                        @class([
                           'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors',
-                          'text-slate-900 border-blue-500' => request()->routeIs('front.faq'),
-                          'text-slate-500 hover:text-slate-900 border-transparent hover:border-blue-400' => !request()->routeIs('front.faq'),
+                          'text-slate-900 border-blue-500' => request()->routeIs('*.front.faq'),
+                          'text-slate-500 hover:text-slate-900 border-transparent hover:border-blue-400' => !request()->routeIs('*.front.faq'),
                        ])">
                         {{ __('front.nav_faq') }}
                     </a>
@@ -158,7 +158,7 @@
                         <span class="text-xl font-bold font-display text-white tracking-tight">Ezi<span class="text-blue-400">Tour</span></span>
                     </div>
                     <p class="text-slate-400 text-sm max-w-md leading-relaxed">
-                        {{ $general->footerTagline }}
+                        {{ app()->getLocale() === 'en' && $general->footerTagline_en ? $general->footerTagline_en : $general->footerTagline }}
                     </p>
                     <div class="flex gap-3 mt-5">
                         @if($contact->instagramUrl)

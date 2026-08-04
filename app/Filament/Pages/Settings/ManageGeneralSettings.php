@@ -42,6 +42,10 @@ class ManageGeneralSettings extends SettingsPage
                         ->rows(3)
                         ->columnSpanFull()
                         ->helperText('Paragraf singkat di bagian footer.'),
+                    Forms\Components\Textarea::make('footerTagline_en')
+                        ->label('Tagline Footer (English)')
+                        ->rows(3)
+                        ->columnSpanFull(),
                 ])
                 ->columns(2),
         ];
