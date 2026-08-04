@@ -1,3 +1,10 @@
+## [1.16.0](https://github.com/ryansutrisno/ezitour/compare/v1.15.0...v1.16.0) (2026-08-04)
+
+
+### ✨ Features
+
+* add i18n phase 2 (bilingual database content via spatie/laravel-translatable) ([0464ce6](https://github.com/ryansutrisno/ezitour/commit/0464ce66a45bf1d07d36b38e65996ffc5e5953e0))
+
 ## [1.15.0](https://github.com/ryansutrisno/ezitour/compare/v1.14.0...v1.15.0) (2026-08-04)
 
 
