@@ -1,3 +1,10 @@
+## [1.15.0](https://github.com/ryansutrisno/ezitour/compare/v1.14.0...v1.15.0) (2026-08-04)
+
+
+### ✨ Features
+
+* add i18n phase 1 (id+en UI strings + locale preference + URL prefix) ([896578c](https://github.com/ryansutrisno/ezitour/commit/896578cae5fcac60f17f12f71d639265c1efb8e3))
+
 ## [1.14.0](https://github.com/ryansutrisno/ezitour/compare/v1.13.0...v1.14.0) (2026-08-03)
 
 
