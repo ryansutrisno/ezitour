@@ -49,10 +49,10 @@
                                 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                                     <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                                 </div>
-                                <input type="text" name="keyword" class="block w-full pl-11 pr-3 py-3 rounded-input border-0 bg-transparent focus:outline-none focus:ring-0 sm:text-sm text-slate-800 placeholder-slate-400" placeholder="Cari destinasi (misal: Jogja, Borobudur)">
+                                <input type="text" name="keyword" class="block w-full pl-11 pr-3 py-3 rounded-input border-0 bg-transparent focus:outline-none focus:ring-0 sm:text-sm text-slate-800 placeholder-slate-400" placeholder="{{ __('front.hero_search_placeholder') }}">
                             </div>
                             <button type="submit" class="inline-flex justify-center items-center gap-2 px-6 py-3 rounded-button text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-soft transition-all">
-                                Cari Paket
+                                {{ __('front.hero_search_button') }}
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                             </button>
                         </div>
@@ -60,9 +60,9 @@
 
                     {{-- Trust row --}}
                     <div class="mt-7 flex items-center justify-center lg:justify-start gap-5 text-xs text-slate-500">
-                        <span class="inline-flex items-center gap-1.5"><svg class="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg> Pembayaran aman</span>
-                        <span class="hidden sm:inline-flex items-center gap-1.5"><svg class="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg> Mitra tervalidasi</span>
-                        <span class="inline-flex items-center gap-1.5"><svg class="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg> Konfirmasi instan</span>
+                        <span class="inline-flex items-center gap-1.5"><svg class="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg> {{ __('front.hero_trust_secure_payment') }}</span>
+                        <span class="hidden sm:inline-flex items-center gap-1.5"><svg class="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg> {{ __('front.hero_trust_verified_partners') }}</span>
+                        <span class="inline-flex items-center gap-1.5"><svg class="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg> {{ __('front.hero_trust_instant_confirmation') }}</span>
                     </div>
                 </div>
 
@@ -121,7 +121,7 @@
                                 <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.964a1 1 0 00.95.69h4.165c.969 0 1.371 1.24.588 1.81l-3.37 2.45a1 1 0 00-.364 1.118l1.287 3.964c.3.922-.755 1.688-1.539 1.118l-3.37-2.45a1 1 0 00-1.176 0l-3.37 2.45c-.784.57-1.838-.196-1.539-1.118l1.287-3.964a1 1 0 00-.364-1.118l-3.37-2.45c-.783-.57-.38-1.81.588-1.81h4.166a1 1 0 00.95-.69l1.286-3.964z"/></svg>
                                 <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.964a1 1 0 00.95.69h4.165c.969 0 1.371 1.24.588 1.81l-3.37 2.45a1 1 0 00-.364 1.118l1.287 3.964c.3.922-.755 1.688-1.539 1.118l-3.37-2.45a1 1 0 00-1.176 0l-3.37 2.45c-.784.57-1.838-.196-1.539-1.118l1.287-3.964a1 1 0 00-.364-1.118l-3.37-2.45c-.783-.57-.38-1.81.588-1.81h4.166a1 1 0 00.95-.69l1.286-3.964z"/></svg>
                             </div>
-                            <p class="text-[11px] font-semibold text-slate-900">10.000+ traveler</p>
+                            <p class="text-[11px] font-semibold text-slate-900">{{ __('front.hero_travelers_count') }}</p>
                         </div>
                     </div>
                 </div>
@@ -136,24 +136,24 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
             <dl class="grid grid-cols-2 lg:grid-cols-4 gap-8">
                 <div class="text-center">
-                    <dt class="sr-only">Destinasi</dt>
+                    <dt class="sr-only">{{ __('front.hero_stat_destinations') }}</dt>
                     <dd class="font-display text-3xl sm:text-4xl font-extrabold text-white">{{ $home->statDestinations }}</dd>
-                    <p class="mt-1 text-sm text-blue-200">Destinasi wisata</p>
+                    <p class="mt-1 text-sm text-blue-200">{{ __('front.hero_stat_destinations') }}</p>
                 </div>
                 <div class="text-center">
-                    <dt class="sr-only">Traveler</dt>
+                    <dt class="sr-only">{{ __('front.hero_stat_travelers') }}</dt>
                     <dd class="font-display text-3xl sm:text-4xl font-extrabold text-white">{{ $home->statTravelers }}</dd>
-                    <p class="mt-1 text-sm text-blue-200">Traveler puas</p>
+                    <p class="mt-1 text-sm text-blue-200">{{ __('front.hero_stat_travelers') }}</p>
                 </div>
                 <div class="text-center">
-                    <dt class="sr-only">Rating</dt>
+                    <dt class="sr-only">{{ __('front.hero_stat_rating') }}</dt>
                     <dd class="font-display text-3xl sm:text-4xl font-extrabold text-sand-300">{{ $home->statRating }}</dd>
-                    <p class="mt-1 text-sm text-blue-200">Rating rata-rata</p>
+                    <p class="mt-1 text-sm text-blue-200">{{ __('front.hero_stat_rating') }}</p>
                 </div>
                 <div class="text-center">
-                    <dt class="sr-only">Support</dt>
+                    <dt class="sr-only">{{ __('front.hero_stat_support') }}</dt>
                     <dd class="font-display text-3xl sm:text-4xl font-extrabold text-white">{{ $home->statSupport }}</dd>
-                    <p class="mt-1 text-sm text-blue-200">Dukungan pelanggan</p>
+                    <p class="mt-1 text-sm text-blue-200">{{ __('front.hero_stat_support') }}</p>
                 </div>
             </dl>
         </div>
@@ -165,9 +165,9 @@
     <section id="why-ezitour" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-2xl mx-auto text-center">
-                <span class="text-blue-600 font-semibold text-sm tracking-wide uppercase">Kenapa EziTour</span>
-                <h2 class="mt-2 font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">Liburan mudah, tenang, dan berkesan</h2>
-                <p class="mt-4 text-slate-600 leading-relaxed">Kami mengurus semua detail rumit soal perjalanan, supaya kamu bisa fokus menikmati setiap momen.</p>
+                <span class="text-blue-600 font-semibold text-sm tracking-wide uppercase">{{ __('front.hero_usp_eyebrow') }}</span>
+                <h2 class="mt-2 font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">{{ __('front.hero_usp_title') }}</h2>
+                <p class="mt-4 text-slate-600 leading-relaxed">{{ __('front.hero_usp_intro') }}</p>
             </div>
 
             <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -176,32 +176,32 @@
                     <div class="flex items-center justify-center w-12 h-12 rounded-button bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h12M3 12h6"/></svg>
                     </div>
-                    <h3 class="mt-5 font-display text-lg font-bold text-slate-900">Booking Mudah</h3>
-                    <p class="mt-2 text-sm text-slate-600 leading-relaxed">Pesan dalam beberapa klik. Pilih tanggal, jumlah peserta, dan langsung dapat konfirmasi instan.</p>
+                    <h3 class="mt-5 font-display text-lg font-bold text-slate-900">{{ __('front.hero_usp_easy_booking_title') }}</h3>
+                    <p class="mt-2 text-sm text-slate-600 leading-relaxed">{{ __('front.hero_usp_easy_booking_body') }}</p>
                 </div>
                 {{-- Feature 2 --}}
                 <div class="group rounded-card border border-slate-100 bg-white p-6 shadow-soft hover:shadow-hover hover:-translate-y-1 transition-all duration-200">
                     <div class="flex items-center justify-center w-12 h-12 rounded-button bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                     </div>
-                    <h3 class="mt-5 font-display text-lg font-bold text-slate-900">Mitra Tervalidasi</h3>
-                    <p class="mt-2 text-sm text-slate-600 leading-relaxed">Supir berpengalaman dan vendor terverifikasi. Setiap perjalanan diawasi dengan standar keselamatan kami.</p>
+                    <h3 class="mt-5 font-display text-lg font-bold text-slate-900">{{ __('front.hero_usp_verified_title') }}</h3>
+                    <p class="mt-2 text-sm text-slate-600 leading-relaxed">{{ __('front.hero_usp_verified_body') }}</p>
                 </div>
                 {{-- Feature 3 --}}
                 <div class="group rounded-card border border-slate-100 bg-white p-6 shadow-soft hover:shadow-hover hover:-translate-y-1 transition-all duration-200">
                     <div class="flex items-center justify-center w-12 h-12 rounded-button bg-sand-100 text-sand-600 group-hover:bg-sand-500 group-hover:text-white transition-colors">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
-                    <h3 class="mt-5 font-display text-lg font-bold text-slate-900">Harga Terbaik</h3>
-                    <p class="mt-2 text-sm text-slate-600 leading-relaxed">Harga transparan tanpa biaya tersembunyi. Bundling transport, supir, dan tiket jadi lebih hemat.</p>
+                    <h3 class="mt-5 font-display text-lg font-bold text-slate-900">{{ __('front.hero_usp_best_price_title') }}</h3>
+                    <p class="mt-2 text-sm text-slate-600 leading-relaxed">{{ __('front.hero_usp_best_price_body') }}</p>
                 </div>
                 {{-- Feature 4 --}}
                 <div class="group rounded-card border border-slate-100 bg-white p-6 shadow-soft hover:shadow-hover hover:-translate-y-1 transition-all duration-200">
                     <div class="flex items-center justify-center w-12 h-12 rounded-button bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                     </div>
-                    <h3 class="mt-5 font-display text-lg font-bold text-slate-900">Dukungan 24/7</h3>
-                    <p class="mt-2 text-sm text-slate-600 leading-relaxed">Tim support siap membantu kapan pun lewat chat dan telepon. Darurat di perjalanan? Kami sigap.</p>
+                    <h3 class="mt-5 font-display text-lg font-bold text-slate-900">{{ __('front.hero_usp_support_title') }}</h3>
+                    <p class="mt-2 text-sm text-slate-600 leading-relaxed">{{ __('front.hero_usp_support_body') }}</p>
                 </div>
             </div>
         </div>
@@ -214,12 +214,12 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                 <div>
-                    <span class="text-blue-600 font-semibold text-sm tracking-wide uppercase">Paket Terpopuler</span>
-                    <h2 class="mt-2 font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">Pilihan Liburan Terbaik</h2>
-                    <p class="mt-3 text-slate-600 max-w-2xl">Hemat waktu dan biaya dengan paket bundling eksklusif kami.</p>
+                    <span class="text-blue-600 font-semibold text-sm tracking-wide uppercase">{{ __('front.hero_popular_eyebrow') }}</span>
+                    <h2 class="mt-2 font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">{{ __('front.hero_popular_title') }}</h2>
+                    <p class="mt-3 text-slate-600 max-w-2xl">{{ __('front.hero_popular_intro') }}</p>
                 </div>
                 <a href="{{ route('front.packages.index') }}" class="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-700 group">
-                    Lihat semua paket
+                    {{ __('front.hero_popular_view_all') }}
                     <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </a>
             </div>
@@ -240,18 +240,18 @@
                                 <svg class="w-3.5 h-3.5 text-sand-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.964a1 1 0 00.95.69h4.165c.969 0 1.371 1.24.588 1.81l-3.37 2.45a1 1 0 00-.364 1.118l1.287 3.964c.3.922-.755 1.688-1.539 1.118l-3.37-2.45a1 1 0 00-1.176 0l-3.37 2.45c-.784.57-1.838-.196-1.539-1.118l1.287-3.964a1 1 0 00-.364-1.118l-3.37-2.45c-.783-.57-.38-1.81.588-1.81h4.166a1 1 0 00.95-.69l1.286-3.964z"/></svg>
                                 4.9
                             </span>
-                            <span class="absolute top-3 right-3 inline-flex items-center px-2.5 py-1 rounded-pill bg-blue-600/95 backdrop-blur text-[11px] font-semibold text-white shadow-soft">Populer</span>
+                            <span class="absolute top-3 right-3 inline-flex items-center px-2.5 py-1 rounded-pill bg-blue-600/95 backdrop-blur text-[11px] font-semibold text-white shadow-soft">{{ __('front.hero_popular_badge') }}</span>
                         </div>
                         <div class="flex flex-1 flex-col p-6">
                             <h3 class="font-display text-lg font-bold text-slate-900 group-hover:text-blue-700 transition-colors">{{ $package->name }}</h3>
                             <p class="mt-2 text-sm text-slate-600 line-clamp-3 leading-relaxed">{{ $package->description }}</p>
                             <div class="mt-5 pt-5 border-t border-slate-100 flex items-end justify-between gap-3">
                                 <div>
-                                    <p class="text-[11px] text-slate-400 font-medium">Mulai dari</p>
+                                    <p class="text-[11px] text-slate-400 font-medium">{{ __('front.hero_price_from') }}</p>
                                     <p class="font-display text-xl font-extrabold text-blue-600">Rp {{ number_format($package->total_price, 0, ',', '.') }}</p>
                                 </div>
                                 <span class="inline-flex items-center gap-1 text-sm font-semibold text-white bg-blue-600 group-hover:bg-blue-700 px-3.5 py-2 rounded-button shadow-soft transition-colors">
-                                    Detail
+                                    {{ __('front.hero_price_detail') }}
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                                 </span>
                             </div>
@@ -261,7 +261,7 @@
             </div>
 
             <div class="mt-10 text-center sm:hidden">
-                <a href="{{ route('front.packages.index') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-button text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 shadow-soft">Lihat Semua Paket</a>
+                <a href="{{ route('front.packages.index') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-button text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 shadow-soft">{{ __('front.hero_popular_mobile_cta') }}</a>
             </div>
         </div>
     </section>
@@ -272,9 +272,9 @@
     <section class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-2xl mx-auto text-center">
-                <span class="text-blue-600 font-semibold text-sm tracking-wide uppercase">Cara Kerja</span>
-                <h2 class="mt-2 font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">Berangkat dalam 3 langkah</h2>
-                <p class="mt-4 text-slate-600 leading-relaxed">Simpel, transparan, dan cepat. Tidak perlu antri atau ribet urus ini-itu.</p>
+                <span class="text-blue-600 font-semibold text-sm tracking-wide uppercase">{{ __('front.hero_how_eyebrow') }}</span>
+                <h2 class="mt-2 font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">{{ __('front.hero_how_title') }}</h2>
+                <p class="mt-4 text-slate-600 leading-relaxed">{{ __('front.hero_how_intro') }}</p>
             </div>
 
             <div class="mt-14 grid grid-cols-1 md:grid-cols-3 gap-8 relative">
@@ -285,22 +285,22 @@
                     <div class="relative mx-auto flex items-center justify-center w-14 h-14 rounded-pill bg-white border-2 border-blue-200 shadow-card">
                         <span class="font-display text-xl font-extrabold text-blue-600">1</span>
                     </div>
-                    <h3 class="mt-5 font-display text-lg font-bold text-slate-900">Pilih Paket</h3>
-                    <p class="mt-2 text-sm text-slate-600 leading-relaxed max-w-xs mx-auto">Jelajahi ratusan destinasi dan temukan paket yang paling sesuai dengan rencana liburanmu.</p>
+                    <h3 class="mt-5 font-display text-lg font-bold text-slate-900">{{ __('front.hero_how_step1_title') }}</h3>
+                    <p class="mt-2 text-sm text-slate-600 leading-relaxed max-w-xs mx-auto">{{ __('front.hero_how_step1_body') }}</p>
                 </div>
                 <div class="relative text-center">
                     <div class="relative mx-auto flex items-center justify-center w-14 h-14 rounded-pill bg-white border-2 border-blue-200 shadow-card">
                         <span class="font-display text-xl font-extrabold text-blue-600">2</span>
                     </div>
-                    <h3 class="mt-5 font-display text-lg font-bold text-slate-900">Pesan &amp; Bayar</h3>
-                    <p class="mt-2 text-sm text-slate-600 leading-relaxed max-w-xs mx-auto">Isi data, pilih tanggal, dan bayar aman lewat Midtrans. Banyak metode: kartu, transfer, e-wallet.</p>
+                    <h3 class="mt-5 font-display text-lg font-bold text-slate-900">{{ __('front.hero_how_step2_title') }}</h3>
+                    <p class="mt-2 text-sm text-slate-600 leading-relaxed max-w-xs mx-auto">{{ __('front.hero_how_step2_body') }}</p>
                 </div>
                 <div class="relative text-center">
                     <div class="relative mx-auto flex items-center justify-center w-14 h-14 rounded-pill bg-blue-600 border-2 border-blue-600 shadow-card">
                         <span class="font-display text-xl font-extrabold text-white">3</span>
                     </div>
-                    <h3 class="mt-5 font-display text-lg font-bold text-slate-900">Nikmati Trip</h3>
-                    <p class="mt-2 text-sm text-slate-600 leading-relaxed max-w-xs mx-auto">Supir dan mobil sudah standby menjemput. Kamu tinggal duduk manis dan nikmati liburan!</p>
+                    <h3 class="mt-5 font-display text-lg font-bold text-slate-900">{{ __('front.hero_how_step3_title') }}</h3>
+                    <p class="mt-2 text-sm text-slate-600 leading-relaxed max-w-xs mx-auto">{{ __('front.hero_how_step3_body') }}</p>
                 </div>
             </div>
         </div>
@@ -312,9 +312,9 @@
     <section class="py-20 bg-slate-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-2xl mx-auto text-center">
-                <span class="text-blue-600 font-semibold text-sm tracking-wide uppercase">Kata Mereka</span>
-                <h2 class="mt-2 font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">Cerita seru para traveler</h2>
-                <p class="mt-4 text-slate-600 leading-relaxed">Ribuan traveler sudah mempercayakan liburan mereka pada EziTour.</p>
+                <span class="text-blue-600 font-semibold text-sm tracking-wide uppercase">{{ __('front.hero_testimonials_eyebrow') }}</span>
+                <h2 class="mt-2 font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">{{ __('front.hero_testimonials_title') }}</h2>
+                <p class="mt-4 text-slate-600 leading-relaxed">{{ __('front.hero_testimonials_intro') }}</p>
             </div>
 
             @php($avatarStyles = ['bg-blue-100 text-blue-700', 'bg-sand-200 text-sand-700', 'bg-blue-700 text-white'])
@@ -354,17 +354,17 @@
                     <div class="absolute -bottom-20 -left-10 w-72 h-72 rounded-full bg-sand-400/20 blur-3xl"></div>
                 </div>
                 <div class="relative max-w-2xl">
-                    <h2 class="font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-white">Siap untuk petualangan berikutnya?</h2>
-                    <p class="mt-4 text-blue-100 text-lg leading-relaxed">Ribuan destinasi menanti. Temukan paket yang pas untuk liburan impianmu hari ini juga.</p>
+                    <h2 class="font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-white">{{ __('front.hero_cta_title') }}</h2>
+                    <p class="mt-4 text-blue-100 text-lg leading-relaxed">{{ __('front.hero_cta_body') }}</p>
                     <div class="mt-8 flex flex-col sm:flex-row gap-3">
                         <a href="{{ route('front.packages.index') }}" class="inline-flex justify-center items-center gap-2 px-7 py-3.5 rounded-button text-sm font-bold text-blue-700 bg-white hover:bg-sand-50 shadow-soft transition-colors">
-                            Jelajahi Paket
+                            {{ __('front.hero_cta_explore') }}
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                         </a>
                         @auth
-                            <a href="{{ route('dashboard.index') }}" class="inline-flex justify-center items-center px-7 py-3.5 rounded-button text-sm font-semibold text-white border-2 border-white/30 hover:bg-white/10 transition-colors">Lihat Pesanan Saya</a>
+                            <a href="{{ route('dashboard.index') }}" class="inline-flex justify-center items-center px-7 py-3.5 rounded-button text-sm font-semibold text-white border-2 border-white/30 hover:bg-white/10 transition-colors">{{ __('front.hero_cta_my_orders') }}</a>
                         @else
-                            <a href="{{ route('register') }}" class="inline-flex justify-center items-center px-7 py-3.5 rounded-button text-sm font-semibold text-white border-2 border-white/30 hover:bg-white/10 transition-colors">Daftar Sekarang</a>
+                            <a href="{{ route('register') }}" class="inline-flex justify-center items-center px-7 py-3.5 rounded-button text-sm font-semibold text-white border-2 border-white/30 hover:bg-white/10 transition-colors">{{ __('front.hero_cta_register') }}</a>
                         @endauth
                     </div>
                 </div>

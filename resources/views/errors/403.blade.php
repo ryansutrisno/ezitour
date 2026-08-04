@@ -1,5 +1,5 @@
 @extends('errors.ocean', [
     'code' => '403',
-    'headline' => 'Akses ditolak',
-    'description' => 'Kamu tidak punya izin untuk mengakses halaman ini.',
+    'headline' => __('errors.403_headline'),
+    'description' => __('errors.403_description'),
 ])

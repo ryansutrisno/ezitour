@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'EziTour - Worry-Free Traveling')</title>
+    <title>@yield('title', __('front.site_title'))</title>
 
     {{-- Per-page SEO meta tags (description, OG, Twitter card, canonical).
          Pages override via @section('seo'); defaults from GeneralSettings
@@ -55,7 +55,7 @@
                            'text-slate-900 border-blue-500' => request()->routeIs('front.home'),
                            'text-slate-500 hover:text-slate-900 border-transparent hover:border-blue-400' => !request()->routeIs('front.home'),
                        ])">
-                        Beranda
+                        {{ __('front.nav_home') }}
                     </a>
                     <a href="{{ route('front.packages.index') }}"
                        @class([
@@ -63,7 +63,7 @@
                            'text-slate-900 border-blue-500' => request()->routeIs('front.packages.*'),
                            'text-slate-500 hover:text-slate-900 border-transparent hover:border-blue-400' => !request()->routeIs('front.packages.*'),
                        ])">
-                        Paket Wisata
+                        {{ __('front.nav_packages') }}
                     </a>
                     <a href="{{ route('front.wishlist.index') }}"
                        @class([
@@ -71,7 +71,7 @@
                            'text-slate-900 border-blue-500' => request()->routeIs('front.wishlist.*'),
                            'text-slate-500 hover:text-slate-900 border-transparent hover:border-blue-400' => !request()->routeIs('front.wishlist.*'),
                        ])>
-                        Wishlist
+                        {{ __('front.nav_wishlist') }}
                         @auth
                             @php($favCount = auth()->user()->favorites()->count())
                             @if($favCount > 0)
@@ -85,7 +85,7 @@
                           'text-slate-900 border-blue-500' => request()->routeIs('front.about'),
                           'text-slate-500 hover:text-slate-900 border-transparent hover:border-blue-400' => !request()->routeIs('front.about'),
                        ])">
-                        Tentang Kami
+                        {{ __('front.nav_about') }}
                     </a>
                     <a href="{{ route('front.faq') }}"
                        @class([
@@ -93,20 +93,43 @@
                           'text-slate-900 border-blue-500' => request()->routeIs('front.faq'),
                           'text-slate-500 hover:text-slate-900 border-transparent hover:border-blue-400' => !request()->routeIs('front.faq'),
                        ])">
-                        FAQ
+                        {{ __('front.nav_faq') }}
                     </a>
                 </div>
                 <div class="flex items-center gap-3">
+                    {{-- Locale toggle (ID | EN pill switcher). Persists to session
+                         for guests and to users.locale for authenticated users. --}}
+                    @php($currentLocale = app()->getLocale())
+                    <div class="flex items-center gap-0.5 p-0.5 rounded-pill bg-slate-100 border border-slate-200" role="group" aria-label="{{ __('front.locale_label') }}">
+                        <a href="{{ route('front.locale.switch', ['locale' => 'id']) }}"
+                           @class([
+                               'inline-flex items-center justify-center min-w-[28px] h-6 px-2 rounded-pill text-[11px] font-bold tracking-wide transition-colors',
+                               'bg-blue-600 text-white shadow-soft' => $currentLocale === 'id',
+                               'text-slate-500 hover:text-slate-800' => $currentLocale !== 'id',
+                           ])
+                           aria-pressed="{{ $currentLocale === 'id' ? 'true' : 'false' }}">
+                            ID
+                        </a>
+                        <a href="{{ route('front.locale.switch', ['locale' => 'en']) }}"
+                           @class([
+                               'inline-flex items-center justify-center min-w-[28px] h-6 px-2 rounded-pill text-[11px] font-bold tracking-wide transition-colors',
+                               'bg-blue-600 text-white shadow-soft' => $currentLocale === 'en',
+                               'text-slate-500 hover:text-slate-800' => $currentLocale !== 'en',
+                           ])
+                           aria-pressed="{{ $currentLocale === 'en' ? 'true' : 'false' }}">
+                            EN
+                        </a>
+                    </div>
                     @auth
-                        <a href="{{ route('dashboard.index') }}" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">Dashboard</a>
-                        <a href="{{ route('front.profile.edit') }}" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">Profil</a>
+                        <a href="{{ route('dashboard.index') }}" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">{{ __('front.nav_dashboard') }}</a>
+                        <a href="{{ route('front.profile.edit') }}" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">{{ __('front.nav_profile') }}</a>
                         <form action="{{ route('logout') }}" method="POST" class="inline">
                             @csrf
-                            <button type="submit" class="inline-flex items-center text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-button shadow-soft transition-colors">Logout</button>
+                            <button type="submit" class="inline-flex items-center text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-button shadow-soft transition-colors">{{ __('front.nav_logout') }}</button>
                         </form>
                     @else
-                        <a href="{{ route('login') }}" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">Login</a>
-                        <a href="{{ route('register') }}" class="inline-flex items-center text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 px-4 py-2 rounded-button shadow-soft transition-all">Daftar</a>
+                        <a href="{{ route('login') }}" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">{{ __('front.nav_login') }}</a>
+                        <a href="{{ route('register') }}" class="inline-flex items-center text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 px-4 py-2 rounded-button shadow-soft transition-all">{{ __('front.nav_register') }}</a>
                     @endauth
                 </div>
             </div>
@@ -156,17 +179,17 @@
                     </div>
                 </div>
                 <div>
-                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Layanan</h3>
+                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">{{ __('front.footer_services') }}</h3>
                     <ul class="space-y-3">
-                        <li><a href="{{ route('front.packages.index') }}" class="text-slate-400 hover:text-blue-400 text-sm transition-colors">Paket Wisata</a></li>
-                        <li><a href="{{ route('front.about') }}" class="text-slate-400 hover:text-blue-400 text-sm transition-colors">Tentang Kami</a></li>
-                        <li><a href="{{ route('front.faq') }}" class="text-slate-400 hover:text-blue-400 text-sm transition-colors">FAQ</a></li>
-                        <li><a href="#" class="text-slate-400 hover:text-blue-400 text-sm transition-colors">Sewa Mobil</a></li>
-                        <li><a href="#" class="text-slate-400 hover:text-blue-400 text-sm transition-colors">Custom Trip</a></li>
+                        <li><a href="{{ route('front.packages.index') }}" class="text-slate-400 hover:text-blue-400 text-sm transition-colors">{{ __('front.nav_packages') }}</a></li>
+                        <li><a href="{{ route('front.about') }}" class="text-slate-400 hover:text-blue-400 text-sm transition-colors">{{ __('front.nav_about') }}</a></li>
+                        <li><a href="{{ route('front.faq') }}" class="text-slate-400 hover:text-blue-400 text-sm transition-colors">{{ __('front.nav_faq') }}</a></li>
+                        <li><a href="#" class="text-slate-400 hover:text-blue-400 text-sm transition-colors">{{ __('front.footer_car_rental') }}</a></li>
+                        <li><a href="#" class="text-slate-400 hover:text-blue-400 text-sm transition-colors">{{ __('front.footer_custom_trip') }}</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Hubungi Kami</h3>
+                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">{{ __('front.footer_contact') }}</h3>
                     <ul class="space-y-3">
                         <li class="flex items-center text-slate-400 text-sm">
                             <svg class="w-4 h-4 mr-2.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg> {{ $contact->email }}
@@ -178,8 +201,8 @@
                 </div>
             </div>
             <div class="mt-12 border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <p class="text-slate-500 text-sm">&copy; {{ date('Y') }} EziTour. All rights reserved.</p>
-                <p class="text-slate-500 text-sm">Powered by Trazmedia Segoro Digital.</p>
+                <p class="text-slate-500 text-sm">&copy; {{ date('Y') }} {{ __('front.footer_copyright') }}</p>
+                <p class="text-slate-500 text-sm">{{ __('front.footer_tagline_brand') }}</p>
             </div>
         </div>
     </footer>

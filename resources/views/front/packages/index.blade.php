@@ -1,11 +1,11 @@
 @extends('layouts.front')
 
-@section('title', 'Cari Paket Wisata - EziTour')
+@section('title', __('packages.index_title') . ' - EziTour')
 
 @section('seo')
     <x-seo
-        title="Paket Wisata"
-        description="Jelajahi paket wisata terbaik di Indonesia bersama EziTour. Temukan liburan impianmu sekarang."
+        :title="__('packages.index_seo_title')"
+        :description="__('packages.index_seo_description')"
         type="website"
     />
 @endsection
@@ -15,9 +15,9 @@
     <div class="bg-white border-b border-slate-100">
         <div class="max-w-7xl mx-auto py-14 sm:py-20 px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <span class="text-blue-600 font-semibold text-sm tracking-wide uppercase">Jelajahi</span>
-                <h1 class="mt-2 font-display text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900">Temukan Petualanganmu</h1>
-                <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-500 leading-relaxed">Pilih dari beragam paket wisata menarik yang kami siapkan untuk pengalaman tak terlupakan.</p>
+                <span class="text-blue-600 font-semibold text-sm tracking-wide uppercase">{{ __('packages.index_eyebrow') }}</span>
+                <h1 class="mt-2 font-display text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900">{{ __('packages.index_title_main') }}</h1>
+                <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-500 leading-relaxed">{{ __('packages.index_intro') }}</p>
             </div>
 
             {{-- Search bar (preserves keyword param) --}}
@@ -33,10 +33,10 @@
                             <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                                 <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                             </div>
-                            <input type="text" name="keyword" value="{{ $filters['keyword'] ?? request('keyword') }}" class="block w-full pl-11 pr-3 py-3 rounded-input border-0 bg-transparent focus:outline-none focus:ring-0 sm:text-sm text-slate-800 placeholder-slate-400" placeholder="Cari paket atau destinasi...">
+                            <input type="text" name="keyword" value="{{ $filters['keyword'] ?? request('keyword') }}" class="block w-full pl-11 pr-3 py-3 rounded-input border-0 bg-transparent focus:outline-none focus:ring-0 sm:text-sm text-slate-800 placeholder-slate-400" placeholder="{{ __('packages.search_placeholder') }}">
                         </div>
                         <button type="submit" class="inline-flex justify-center items-center gap-2 px-6 py-3 rounded-button text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-soft transition-all">
-                            Cari
+                            {{ __('front.button_search') }}
                         </button>
                     </div>
                 </form>
@@ -55,7 +55,7 @@
                     <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-5 py-4 flex items-center justify-between">
                         <div class="flex items-center gap-2">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
-                            <h2 class="font-display text-base font-bold text-white">Filter Paket</h2>
+                            <h2 class="font-display text-base font-bold text-white">{{ __('packages.filter_title') }}</h2>
                         </div>
                     </div>
 
@@ -63,16 +63,16 @@
                         {{-- Region facet --}}
                         <div>
                             <div class="flex items-center justify-between mb-2.5">
-                                <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wide">Wilayah</h3>
+                                <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wide">{{ __('packages.filter_region') }}</h3>
                                 @if(filled($filters['region'] ?? null))
-                                    <button type="button" data-clear-facet="region" class="text-[11px] font-semibold text-blue-600 hover:text-blue-700">Bersihkan</button>
+                                    <button type="button" data-clear-facet="region" class="text-[11px] font-semibold text-blue-600 hover:text-blue-700">{{ __('packages.filter_clear') }}</button>
                                 @endif
                             </div>
                             @if($regions->isNotEmpty())
                                 <div class="space-y-1.5">
                                     <label class="flex items-center gap-2.5 cursor-pointer group">
                                         <input type="radio" name="region" value="" class="region-radio text-blue-600 focus:ring-blue-500 border-slate-300" @if(blank($filters['region'] ?? null)) checked @endif>
-                                        <span class="text-sm text-slate-600 group-hover:text-slate-900">Semua</span>
+                                        <span class="text-sm text-slate-600 group-hover:text-slate-900">{{ __('packages.filter_all') }}</span>
                                     </label>
                                     @foreach($regions as $value => $label)
                                         <label class="flex items-center gap-2.5 cursor-pointer group">
@@ -82,7 +82,7 @@
                                     @endforeach
                                 </div>
                             @else
-                                <p class="text-xs text-slate-400 italic">Belum ada wilayah terdaftar.</p>
+                                <p class="text-xs text-slate-400 italic">{{ __('packages.filter_no_regions') }}</p>
                             @endif
                         </div>
 
@@ -91,16 +91,16 @@
                         {{-- Category facet --}}
                         <div>
                             <div class="flex items-center justify-between mb-2.5">
-                                <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wide">Kategori</h3>
+                                <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wide">{{ __('packages.filter_category') }}</h3>
                                 @if(filled($filters['category'] ?? null))
-                                    <button type="button" data-clear-facet="category" class="text-[11px] font-semibold text-blue-600 hover:text-blue-700">Bersihkan</button>
+                                    <button type="button" data-clear-facet="category" class="text-[11px] font-semibold text-blue-600 hover:text-blue-700">{{ __('packages.filter_clear') }}</button>
                                 @endif
                             </div>
                             @if($categories->isNotEmpty())
                                 <div class="space-y-1.5">
                                     <label class="flex items-center gap-2.5 cursor-pointer group">
                                         <input type="radio" name="category" value="" class="category-radio text-blue-600 focus:ring-blue-500 border-slate-300" @if(blank($filters['category'] ?? null)) checked @endif>
-                                        <span class="text-sm text-slate-600 group-hover:text-slate-900">Semua</span>
+                                        <span class="text-sm text-slate-600 group-hover:text-slate-900">{{ __('packages.filter_all') }}</span>
                                     </label>
                                     @foreach($categories as $value => $label)
                                         <label class="flex items-center gap-2.5 cursor-pointer group">
@@ -110,7 +110,7 @@
                                     @endforeach
                                 </div>
                             @else
-                                <p class="text-xs text-slate-400 italic">Belum ada kategori terdaftar.</p>
+                                <p class="text-xs text-slate-400 italic">{{ __('packages.filter_no_categories') }}</p>
                             @endif
                         </div>
 
@@ -119,15 +119,15 @@
                         {{-- Duration facet --}}
                         <div>
                             <div class="flex items-center justify-between mb-2.5">
-                                <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wide">Durasi</h3>
+                                <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wide">{{ __('packages.filter_duration') }}</h3>
                                 @if(filled($filters['duration_min'] ?? null) || filled($filters['duration_max'] ?? null))
-                                    <button type="button" data-clear-duration class="text-[11px] font-semibold text-blue-600 hover:text-blue-700">Bersihkan</button>
+                                    <button type="button" data-clear-duration class="text-[11px] font-semibold text-blue-600 hover:text-blue-700">{{ __('packages.filter_clear') }}</button>
                                 @endif
                             </div>
                             <div class="space-y-1.5">
                                 <label class="flex items-center gap-2.5 cursor-pointer group">
                                     <input type="radio" name="duration_bucket" value="" class="duration-radio text-blue-600 focus:ring-blue-500 border-slate-300" @if(blank($filters['duration_min'] ?? null) && blank($filters['duration_max'] ?? null)) checked @endif>
-                                    <span class="text-sm text-slate-600 group-hover:text-slate-900">Semua</span>
+                                    <span class="text-sm text-slate-600 group-hover:text-slate-900">{{ __('packages.filter_all') }}</span>
                                 </label>
                                 @foreach($durationBuckets as $bucket)
                                     @php
@@ -153,7 +153,7 @@
                         @endphp
                         @if(! empty($activeFilters))
                             <div class="border-t border-slate-100 pt-4">
-                                <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wide mb-2.5">Filter Aktif</h3>
+                                <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wide mb-2.5">{{ __('packages.filter_active') }}</h3>
                                 <div class="flex flex-wrap gap-1.5">
                                     @foreach($activeFilters as $key => $label)
                                         <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-pill bg-blue-50 text-blue-700 text-xs font-semibold">
@@ -163,7 +163,7 @@
                                 </div>
                                 <a href="{{ route('front.packages.index', filled($filters['keyword'] ?? null) ? ['keyword' => $filters['keyword']] : []) }}" class="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-red-600 transition-colors">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                                    Hapus Filter
+                                    {{ __('packages.filter_clear_all') }}
                                 </a>
                             </div>
                         @endif
@@ -187,8 +187,8 @@
                                         'bg-white text-red-500 hover:bg-white' => $package->is_favorited,
                                         'bg-white/80 backdrop-blur text-slate-600 hover:text-red-500 hover:bg-white' => ! $package->is_favorited,
                                     ])
-                                    title="{{ $package->is_favorited ? 'Hapus dari Wishlist' : 'Simpan ke Wishlist' }}"
-                                    aria-label="{{ $package->is_favorited ? 'Hapus dari Wishlist' : 'Simpan ke Wishlist' }}"
+                                    title="{{ $package->is_favorited ? __('front.button_remove_wishlist') : __('front.button_save_wishlist') }}"
+                                    aria-label="{{ $package->is_favorited ? __('front.button_remove_wishlist') : __('front.button_save_wishlist') }}"
                                     aria-pressed="{{ $package->is_favorited ? 'true' : 'false' }}">
                                     @if($package->is_favorited)
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z"/></svg>
@@ -214,7 +214,7 @@
                                         @if(filled($package->duration_days))
                                             <span class="absolute bottom-3 right-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-pill bg-blue-600/90 backdrop-blur text-[11px] font-bold text-white shadow-soft">
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                                {{ $package->duration_days }} hari
+                                                {{ $package->duration_days }} {{ __('front.days_unit') }}
                                             </span>
                                         @endif
                                     </div>
@@ -240,10 +240,10 @@
                                         </div>
                                         <div class="mt-5 pt-5 border-t border-slate-100 flex items-end justify-between gap-3">
                                             <div>
-                                                <p class="text-[11px] text-slate-400 font-medium">Mulai dari</p>
+                                                <p class="text-[11px] text-slate-400 font-medium">{{ __('packages.price_from') }}</p>
                                                 <p class="font-display text-xl font-extrabold text-blue-600">Rp {{ number_format($package->total_price, 0, ',', '.') }}</p>
                                             </div>
-                                            <span class="inline-flex items-center gap-1 text-sm font-semibold text-white bg-blue-600 group-hover:bg-blue-700 px-3.5 py-2 rounded-button shadow-soft transition-colors">Detail</span>
+                                            <span class="inline-flex items-center gap-1 text-sm font-semibold text-white bg-blue-600 group-hover:bg-blue-700 px-3.5 py-2 rounded-button shadow-soft transition-colors">{{ __('packages.result_detail') }}</span>
                                         </div>
                                     </div>
                                 </a>
@@ -259,11 +259,11 @@
                         <div class="mx-auto flex items-center justify-center w-16 h-16 rounded-pill bg-slate-100 text-slate-400">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                         </div>
-                        <h3 class="mt-5 font-display text-lg font-bold text-slate-900">Tidak ada paket yang cocok</h3>
-                        <p class="mt-1.5 text-sm text-slate-500">Maaf, tidak ada paket yang cocok dengan pencarianmu. Coba ubah atau hapus filter.</p>
+                        <h3 class="mt-5 font-display text-lg font-bold text-slate-900">{{ __('packages.no_results_title') }}</h3>
+                        <p class="mt-1.5 text-sm text-slate-500">{{ __('packages.no_results_body') }}</p>
                         <div class="mt-6">
                             <a href="{{ route('front.packages.index', filled($filters['keyword'] ?? null) ? ['keyword' => $filters['keyword']] : []) }}" class="inline-flex items-center gap-2 px-5 py-3 rounded-button text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-soft transition-all">
-                                Lihat semua paket
+                                {{ __('packages.no_results_cta') }}
                             </a>
                         </div>
                     </div>

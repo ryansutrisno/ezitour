@@ -12,7 +12,7 @@
 
     // Get time remaining for pending payments
     $timeRemaining = $pendingTransaction?->getTimeRemainingFormatted();
-    $packageName = $booking->package->name ?? 'Paket Wisata';
+    $packageName = $booking->package->name ?? __('front.nav_packages');
     $thumbnail = $booking->package->thumbnail_url ?? null;
 @endphp
 
@@ -35,7 +35,7 @@
                 <div class="flex flex-wrap items-start justify-between gap-2">
                     <div class="min-w-0">
                         <h4 class="font-display text-base sm:text-lg font-bold text-slate-900 truncate">{{ $packageName }}</h4>
-                        <p class="mt-0.5 text-xs text-slate-400 font-mono">ID Booking: #{{ $booking->id }}</p>
+                        <p class="mt-0.5 text-xs text-slate-400 font-mono">{{ __('dashboard.booking_id', ['id' => $booking->id]) }}</p>
                     </div>
 
                     {{-- Payment Status Badge --}}
@@ -43,31 +43,31 @@
                         @if($isPaid)
                             <span class="inline-flex items-center px-2.5 py-1 rounded-pill text-xs font-semibold bg-green-100 text-green-800">
                                 <svg class="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                                Lunas
+                                {{ __('dashboard.status_paid') }}
                             </span>
                             @if($booking->payment_date)
-                                <p class="mt-1 text-[11px] text-slate-400">Dibayar {{ $booking->payment_date->format('d M Y, H:i') }}</p>
+                                <p class="mt-1 text-[11px] text-slate-400">{{ __('dashboard.paid_at', ['date' => $booking->payment_date->format('d M Y, H:i')]) }}</p>
                             @endif
                         @elseif($hasPendingPayment)
                             <span class="inline-flex items-center px-2.5 py-1 rounded-pill text-xs font-semibold bg-yellow-100 text-yellow-800">
                                 <svg class="w-3.5 h-3.5 mr-1 animate-pulse" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
-                                Menunggu Bayar
+                                {{ __('dashboard.status_pending_payment') }}
                             </span>
                             @if($timeRemaining)
                                 <p class="mt-1 text-[11px] text-yellow-600 font-medium">
                                     <svg class="inline-block w-3 h-3 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                    Sisa {{ $timeRemaining }}
+                                    {{ __('dashboard.time_remaining', ['time' => $timeRemaining]) }}
                                 </p>
                             @endif
                         @elseif($hasFailedPayment)
                             <span class="inline-flex items-center px-2.5 py-1 rounded-pill text-xs font-semibold bg-red-100 text-red-800">
                                 <svg class="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
-                                Gagal
+                                {{ __('dashboard.status_failed') }}
                             </span>
                         @else
                             <span class="inline-flex items-center px-2.5 py-1 rounded-pill text-xs font-semibold bg-slate-100 text-slate-700">
                                 <svg class="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
-                                Belum Dibayar
+                                {{ __('dashboard.status_unpaid') }}
                             </span>
                         @endif
                     </div>
@@ -83,31 +83,31 @@
         {{-- Booking Details grid --}}
         <div class="mt-5 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm bg-slate-50 rounded-button p-4 border border-slate-100">
             <div>
-                <span class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">Total</span>
+                <span class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">{{ __('dashboard.total_label') }}</span>
                 <p class="font-display font-bold text-slate-900">Rp {{ number_format($booking->total_amount, 0, ',', '.') }}</p>
                 <div class="mt-0.5 flex flex-wrap gap-1">
                     @if($booking->hasDiscount())
                         <span class="inline-flex items-center px-1.5 py-0.5 rounded-pill text-[10px] font-bold bg-green-100 text-green-700">
-                            Hemat {{ $booking->base_subtotal ? round(($booking->discount_amount / $booking->base_subtotal) * 100) : 0 }}%
+                            {{ __('dashboard.discount_percent', ['percent' => $booking->base_subtotal ? round(($booking->discount_amount / $booking->base_subtotal) * 100) : 0]) }}
                         </span>
                     @endif
                     @if($booking->hasCouponDiscount())
                         <span class="inline-flex items-center px-1.5 py-0.5 rounded-pill text-[10px] font-bold bg-blue-100 text-blue-700">
-                            Promo
+                            {{ __('dashboard.promo_badge') }}
                         </span>
                     @endif
                 </div>
             </div>
             <div>
-                <span class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">Driver</span>
+                <span class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">{{ __('dashboard.driver_label') }}</span>
                 <p class="font-semibold text-slate-800">{{ $booking->driver->name ?? '-' }}</p>
             </div>
             <div>
-                <span class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">Mobil</span>
+                <span class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">{{ __('dashboard.car_label') }}</span>
                 <p class="font-semibold text-slate-800">{{ $booking->car->name ?? '-' }}</p>
             </div>
             <div>
-                <span class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">Metode</span>
+                <span class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">{{ __('dashboard.payment_method_label') }}</span>
                 <p class="font-semibold text-slate-800">
                     @if($latestTransaction && $latestTransaction->payment_type)
                         {{ ucwords(str_replace('_', ' ', $latestTransaction->payment_type)) }}
@@ -129,7 +129,7 @@
                 @else
                     <span class="inline-flex items-center text-xs text-slate-400">
                         <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        Butuh bantuan? Hubungi 24/7
+                        {{ __('dashboard.need_help') }}
                     </span>
                 @endif
             </div>
@@ -138,7 +138,7 @@
                 {{-- Detail link (always visible) --}}
                 <a href="{{ route('bookings.show', $booking) }}" class="inline-flex items-center px-4 py-2.5 bg-white border border-slate-200 hover:border-blue-300 hover:text-blue-700 text-slate-700 text-sm font-semibold rounded-button shadow-soft transition-all">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                    Lihat Detail
+                    {{ __('dashboard.view_details') }}
                 </a>
 
                 {{-- Pay Now Button (POST form: state-mutating endpoint, must not be GET) --}}
@@ -147,7 +147,7 @@
                         @csrf
                         <button type="submit" class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-sm font-semibold rounded-button shadow-soft transition-all">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-                            Bayar Sekarang
+                            {{ __('dashboard.pay_now') }}
                         </button>
                     </form>
                 @endif
@@ -158,7 +158,7 @@
                             onclick="continuePayment('{{ $pendingTransaction->snap_token }}', '{{ $pendingTransaction->order_id }}')"
                             class="inline-flex items-center px-4 py-2.5 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-semibold rounded-button shadow-soft transition-all">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        Lanjutkan Pembayaran
+                        {{ __('dashboard.continue_payment') }}
                     </button>
                 @endif
 
@@ -168,7 +168,7 @@
                         @csrf
                         <button type="submit" class="inline-flex items-center px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-button shadow-soft transition-all">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                            Coba Lagi
+                            {{ __('dashboard.retry_button') }}
                         </button>
                     </form>
                 @endif
@@ -177,7 +177,7 @@
                 @if($isPaid)
                     <span class="inline-flex items-center px-4 py-2.5 bg-green-50 text-green-700 text-sm font-semibold rounded-button border border-green-100">
                         <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                        Selesai
+                        {{ __('dashboard.status_completed') }}
                     </span>
                 @endif
             </div>

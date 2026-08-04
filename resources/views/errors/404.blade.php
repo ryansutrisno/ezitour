@@ -1,5 +1,5 @@
 @extends('errors.ocean', [
     'code' => '404',
-    'headline' => 'Halaman tidak ditemukan',
-    'description' => 'Sepertinya kamu tersesat. Halaman yang kamu cari tidak ada atau sudah dipindahkan.',
+    'headline' => __('errors.404_headline'),
+    'description' => __('errors.404_description'),
 ])
