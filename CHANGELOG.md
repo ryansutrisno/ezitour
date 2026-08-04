@@ -1,3 +1,10 @@
+## [1.18.0](https://github.com/ryansutrisno/ezitour/compare/v1.17.1...v1.18.0) (2026-08-04)
+
+
+### ✨ Features
+
+* add demo customer account seeder (customer@ezitour.com / password) ([4a206fd](https://github.com/ryansutrisno/ezitour/commit/4a206fdc093830c245e10b22312f593b21a98877))
+
 ## [1.17.1](https://github.com/ryansutrisno/ezitour/compare/v1.17.0...v1.17.1) (2026-08-04)
 
 
