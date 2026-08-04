@@ -23,6 +23,18 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
         ]);
 
+        // Demo customer account for testing
+        User::firstOrCreate(
+            ['email' => 'customer@ezitour.com'],
+            [
+                'name' => 'Budi Santoso',
+                'password' => Hash::make('password'),
+                'phone' => '0812 3456 7890',
+                'role' => 'user',
+                'locale' => 'id',
+            ],
+        );
+
         $this->call([
             DestinationSeeder::class,
             PackageSeeder::class,
