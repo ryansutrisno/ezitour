@@ -107,15 +107,27 @@
                         </a>
                     </div>
                     @auth
-                        <a href="{{ route('front.wishlist.index') }}" class="inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">
+                        <a href="{{ route('front.wishlist.index') }}" @class([
+                            'inline-flex items-center gap-1 text-sm font-medium transition-colors',
+                            'text-blue-600' => request()->routeIs('*.front.wishlist.*'),
+                            'text-slate-500 hover:text-slate-900' => !request()->routeIs('*.front.wishlist.*'),
+                        ])>
                             {{ __('front.nav_wishlist') }}
                             @php($favCount = auth()->user()->favorites()->count())
                             @if($favCount > 0)
                                 <span class="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold rounded-pill bg-red-500 text-white">{{ $favCount }}</span>
                             @endif
                         </a>
-                        <a href="{{ route('dashboard.index') }}" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">{{ __('front.nav_dashboard') }}</a>
-                        <a href="{{ route('front.profile.edit') }}" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">{{ __('front.nav_profile') }}</a>
+                        <a href="{{ route('dashboard.index') }}" @class([
+                            'text-sm font-medium transition-colors',
+                            'text-blue-600' => request()->routeIs('*.dashboard.index'),
+                            'text-slate-500 hover:text-slate-900' => !request()->routeIs('*.dashboard.index'),
+                        ])>{{ __('front.nav_dashboard') }}</a>
+                        <a href="{{ route('front.profile.edit') }}" @class([
+                            'text-sm font-medium transition-colors',
+                            'text-blue-600' => request()->routeIs('*.front.profile.*'),
+                            'text-slate-500 hover:text-slate-900' => !request()->routeIs('*.front.profile.*'),
+                        ])>{{ __('front.nav_profile') }}</a>
                         <form action="{{ route('logout') }}" method="POST" class="inline">
                             @csrf
                             <button type="submit" class="inline-flex items-center text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-button shadow-soft transition-colors">{{ __('front.nav_logout') }}</button>
