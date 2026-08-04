@@ -1,3 +1,11 @@
+## [1.17.1](https://github.com/ryansutrisno/ezitour/compare/v1.17.0...v1.17.1) (2026-08-04)
+
+
+### 🐛 Bug Fixes
+
+* add EN seed values to settings + enable navbar active state on /en/ routes ([bd857f1](https://github.com/ryansutrisno/ezitour/commit/bd857f1add2d96f447dbbc56c75911c3e23791ad))
+* resolve i18n Phase 3 bugs (hero, footer, filter, about, FAQ, settings EN fields) ([40b1fe7](https://github.com/ryansutrisno/ezitour/commit/40b1fe7feb2d0a1b66b0bd8f2c0a97f1f61dc652))
+
 ## [1.17.0](https://github.com/ryansutrisno/ezitour/compare/v1.16.0...v1.17.0) (2026-08-04)
 
 
