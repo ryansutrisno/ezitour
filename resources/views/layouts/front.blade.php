@@ -65,20 +65,6 @@
                        ])">
                         {{ __('front.nav_packages') }}
                     </a>
-                    <a href="{{ route('front.wishlist.index') }}"
-                       @class([
-                           'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors',
-                           'text-slate-900 border-blue-500' => request()->routeIs('*.front.wishlist.*'),
-                           'text-slate-500 hover:text-slate-900 border-transparent hover:border-blue-400' => !request()->routeIs('*.front.wishlist.*'),
-                       ])>
-                        {{ __('front.nav_wishlist') }}
-                        @auth
-                            @php($favCount = auth()->user()->favorites()->count())
-                            @if($favCount > 0)
-                                <span class="ml-1.5 inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold rounded-pill bg-red-500 text-white">{{ $favCount }}</span>
-                            @endif
-                        @endauth
-                    </a>
                     <a href="{{ route('front.about') }}"
                        @class([
                           'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors',
@@ -121,6 +107,13 @@
                         </a>
                     </div>
                     @auth
+                        <a href="{{ route('front.wishlist.index') }}" class="inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">
+                            {{ __('front.nav_wishlist') }}
+                            @php($favCount = auth()->user()->favorites()->count())
+                            @if($favCount > 0)
+                                <span class="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold rounded-pill bg-red-500 text-white">{{ $favCount }}</span>
+                            @endif
+                        </a>
                         <a href="{{ route('dashboard.index') }}" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">{{ __('front.nav_dashboard') }}</a>
                         <a href="{{ route('front.profile.edit') }}" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">{{ __('front.nav_profile') }}</a>
                         <form action="{{ route('logout') }}" method="POST" class="inline">
