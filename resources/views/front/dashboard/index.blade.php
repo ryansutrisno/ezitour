@@ -1,9 +1,9 @@
 @extends('layouts.front')
 
-@section('title', 'Dashboard Saya - EziTour')
+@section('title', __('dashboard.title') . ' - EziTour')
 
 @section('seo')
-    <x-seo title="Dashboard Saya" noindex />
+    <x-seo :title="__('dashboard.seo_title')" noindex />
 @endsection
 
 @section('content')
@@ -14,15 +14,15 @@
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
                 <h1 class="font-display text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
-                    Halo, {{ Auth::user()->name }}! 👋
+                    {{ __('dashboard.greeting', ['name' => Auth::user()->name]) }}
                 </h1>
-                <p class="mt-1 text-sm text-slate-500">Selamat datang di dashboard perjalananmu.</p>
+                <p class="mt-1 text-sm text-slate-500">{{ __('dashboard.welcome') }}</p>
             </div>
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
                 <button type="submit" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-button border-2 border-slate-200 bg-white text-sm font-semibold text-slate-700 hover:border-slate-300 hover:bg-slate-50 shadow-soft transition-colors">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-                    Keluar
+                    {{ __('dashboard.logout_button') }}
                 </button>
             </form>
         </div>
@@ -31,14 +31,14 @@
         <div class="mt-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <h2 class="font-display text-lg font-bold text-slate-900 flex items-center gap-2">
                 <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-                Riwayat Pesanan
+                {{ __('dashboard.orders_section_title') }}
             </h2>
 
             {{-- Payment Status Filter --}}
             <div class="flex flex-wrap gap-2">
                 <a href="{{ route('dashboard.index') }}"
                    class="inline-flex items-center px-3.5 py-2 rounded-pill text-sm font-semibold border transition-all duration-150 {{ ($paymentFilter ?? 'all') === 'all' ? 'bg-blue-600 text-white border-blue-600 shadow-soft' : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300' }}">
-                    Semua
+                    {{ __('dashboard.filter_all') }}
                     <span class="ml-1.5 inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-pill text-xs {{ ($paymentFilter ?? 'all') === 'all' ? 'bg-white/25 text-white' : 'bg-slate-100 text-slate-600' }}">
                         {{ $allCount ?? 0 }}
                     </span>
@@ -46,7 +46,7 @@
                 <a href="{{ route('dashboard.index', ['payment_status' => 'paid']) }}"
                    class="inline-flex items-center px-3.5 py-2 rounded-pill text-sm font-semibold border transition-all duration-150 {{ ($paymentFilter ?? 'all') === 'paid' ? 'bg-green-600 text-white border-green-600 shadow-soft' : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300' }}">
                     <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                    Lunas
+                    {{ __('dashboard.filter_paid') }}
                     <span class="ml-1.5 inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-pill text-xs {{ ($paymentFilter ?? 'all') === 'paid' ? 'bg-white/25 text-white' : 'bg-green-100 text-green-700' }}">
                         {{ $paidCount ?? 0 }}
                     </span>
@@ -54,7 +54,7 @@
                 <a href="{{ route('dashboard.index', ['payment_status' => 'unpaid']) }}"
                    class="inline-flex items-center px-3.5 py-2 rounded-pill text-sm font-semibold border transition-all duration-150 {{ ($paymentFilter ?? 'all') === 'unpaid' ? 'bg-yellow-500 text-white border-yellow-500 shadow-soft' : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300' }}">
                     <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
-                    Belum Lunas
+                    {{ __('dashboard.filter_unpaid') }}
                     <span class="ml-1.5 inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-pill text-xs {{ ($paymentFilter ?? 'all') === 'unpaid' ? 'bg-white/25 text-white' : 'bg-yellow-100 text-yellow-700' }}">
                         {{ $unpaidCount ?? 0 }}
                     </span>
@@ -92,7 +92,7 @@
                         <div class="mt-3">
                             <button onclick="window.location.reload()" class="inline-flex items-center px-3 py-1.5 border-2 border-red-200 text-sm font-semibold rounded-button text-red-700 bg-white hover:bg-red-50 transition-colors">
                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                                Coba Lagi
+                                {{ __('dashboard.retry_button') }}
                             </button>
                         </div>
                     @endif
@@ -110,19 +110,19 @@
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                     </div>
                     @if(($paymentFilter ?? 'all') === 'paid')
-                        <h3 class="mt-5 font-display text-lg font-bold text-slate-900">Belum ada pesanan yang lunas</h3>
-                        <p class="mt-1.5 text-sm text-slate-500 max-w-sm mx-auto">Pesanan yang sudah dibayar penuh akan muncul di sini.</p>
+                        <h3 class="mt-5 font-display text-lg font-bold text-slate-900">{{ __('dashboard.empty_paid_title') }}</h3>
+                        <p class="mt-1.5 text-sm text-slate-500 max-w-sm mx-auto">{{ __('dashboard.empty_paid_body') }}</p>
                     @elseif(($paymentFilter ?? 'all') === 'unpaid')
-                        <h3 class="mt-5 font-display text-lg font-bold text-slate-900">Tidak ada pesanan yang belum lunas</h3>
-                        <p class="mt-1.5 text-sm text-slate-500 max-w-sm mx-auto">Semua pesananmu sudah dibayar. Mantap! 🎉</p>
+                        <h3 class="mt-5 font-display text-lg font-bold text-slate-900">{{ __('dashboard.empty_unpaid_title') }}</h3>
+                        <p class="mt-1.5 text-sm text-slate-500 max-w-sm mx-auto">{{ __('dashboard.empty_unpaid_body') }}</p>
                     @else
-                        <h3 class="mt-5 font-display text-lg font-bold text-slate-900">Belum ada pesanan</h3>
-                        <p class="mt-1.5 text-sm text-slate-500 max-w-sm mx-auto">Mulai petualanganmu dengan memesan paket wisata pertama.</p>
+                        <h3 class="mt-5 font-display text-lg font-bold text-slate-900">{{ __('dashboard.empty_all_title') }}</h3>
+                        <p class="mt-1.5 text-sm text-slate-500 max-w-sm mx-auto">{{ __('dashboard.empty_all_body') }}</p>
                     @endif
                     <div class="mt-6">
                         <a href="{{ route('front.packages.index') }}" class="inline-flex items-center gap-2 px-5 py-3 rounded-button text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-soft transition-all">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-                            Cari Paket Wisata
+                            {{ __('dashboard.empty_cta') }}
                         </a>
                     </div>
                 </div>

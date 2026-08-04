@@ -31,7 +31,7 @@ class ProfileTest extends TestCase
         $this->actingAs($user)
             ->get(route('front.profile.edit'))
             ->assertOk()
-            ->assertSee('Profil Saya');
+            ->assertSee('Profil');
     }
 
     public function test_user_can_update_profile_info(): void

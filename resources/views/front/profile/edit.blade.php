@@ -1,9 +1,9 @@
 @extends('layouts.front')
 
-@section('title', 'Profil Saya - EziTour')
+@section('title', __('front.nav_profile') . ' - EziTour')
 
 @section('seo')
-    <x-seo title="Profil Saya" noindex />
+    <x-seo :title="__('front.nav_profile')" noindex />
 @endsection
 
 @section('content')
@@ -14,20 +14,20 @@
 
             {{-- Page header --}}
             <div class="mb-8">
-                <h1 class="font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">Profil Saya</h1>
-                <p class="mt-2 text-slate-600">Kelola informasi akun, foto profil, dan keamanan passwordmu.</p>
+                <h1 class="font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">{{ __('front.nav_profile') }}</h1>
+                <p class="mt-2 text-slate-600">{{ __('front.profile_subtitle') }}</p>
             </div>
 
             {{-- Flash success --}}
             @if (session('status') === 'profile-updated')
                 <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-input flex items-start gap-2.5 text-sm">
                     <svg class="w-5 h-5 text-green-500 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                    <span>Profil berhasil diperbarui.</span>
+                    <span>{{ __('front.profile_updated_success') }}</span>
                 </div>
             @elseif (session('status') === 'password-updated')
                 <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-input flex items-start gap-2.5 text-sm">
                     <svg class="w-5 h-5 text-green-500 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                    <span>Password berhasil diperbarui.</span>
+                    <span>{{ __('front.profile_password_updated_success') }}</span>
                 </div>
             @endif
 
@@ -39,7 +39,7 @@
                 <div class="lg:col-span-1">
                     <div class="bg-white rounded-card border border-slate-100 shadow-card overflow-hidden">
                         <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-5">
-                            <h2 class="font-display text-lg font-bold text-white">Akun</h2>
+                            <h2 class="font-display text-lg font-bold text-white">{{ __('front.profile_account_title') }}</h2>
                         </div>
 
                         <div class="p-6 text-center">
@@ -54,10 +54,10 @@
                             <p class="mt-0.5 text-sm text-slate-500 break-all">{{ $user->email }}</p>
 
                             <span class="mt-3 inline-flex items-center px-2.5 py-1 rounded-pill text-xs font-semibold {{ $user->isAdmin() ? 'bg-blue-100 text-blue-800' : 'bg-slate-100 text-slate-700' }}">
-                                {{ $user->isAdmin() ? 'Administrator' : 'Traveler' }}
+                                {{ $user->isAdmin() ? __('front.profile_role_admin') : __('front.profile_role_traveler') }}
                             </span>
 
-                            <p class="mt-4 text-xs text-slate-400">Bergabung sejak {{ $user->created_at->format('d/m/Y') }}</p>
+                            <p class="mt-4 text-xs text-slate-400">{{ __('front.profile_joined', ['date' => $user->created_at->format('d/m/Y')]) }}</p>
                         </div>
 
                         {{-- Avatar upload form --}}
@@ -65,15 +65,15 @@
                             <form method="POST" action="{{ route('front.profile.update') }}" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
-                                <label for="avatar" class="block text-xs font-semibold text-slate-600 mb-2">Foto Profil</label>
+                                <label for="avatar" class="block text-xs font-semibold text-slate-600 mb-2">{{ __('front.profile_avatar_label') }}</label>
                                 <input id="avatar" name="avatar" type="file" accept="image/jpeg,image/png,image/webp" class="block w-full text-sm text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-button file:border-0 file:text-sm file:font-semibold file:text-white file:bg-blue-600 hover:file:bg-blue-700 file:cursor-pointer cursor-pointer border-2 border-slate-200 bg-slate-50 rounded-input @error('avatar') border-red-400 @enderror">
-                                <p class="mt-1.5 text-[11px] text-slate-400">JPG, PNG, atau WEBP. Maks 2MB.</p>
+                                <p class="mt-1.5 text-[11px] text-slate-400">{{ __('front.profile_avatar_hint') }}</p>
                                 @error('avatar')
                                     <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                                 <button type="submit" class="mt-3 w-full inline-flex justify-center items-center gap-2 py-2.5 px-4 rounded-button text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-soft transition-all">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-                                    Unggah Foto
+                                    {{ __('front.button_upload') }}
                                 </button>
                             </form>
                         </div>
@@ -88,8 +88,8 @@
                     {{-- Form 1: Profile data --}}
                     <div class="bg-white rounded-card border border-slate-100 shadow-card overflow-hidden">
                         <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-5">
-                            <h2 class="font-display text-lg font-bold text-white">Data Profil</h2>
-                            <p class="mt-0.5 text-sm text-blue-100">Perbarui nama, email, dan nomor teleponmu.</p>
+                            <h2 class="font-display text-lg font-bold text-white">{{ __('front.profile_data_title') }}</h2>
+                            <p class="mt-0.5 text-sm text-blue-100">{{ __('front.profile_data_subtitle') }}</p>
                         </div>
 
                         <div class="p-6 sm:p-7">
@@ -99,7 +99,7 @@
 
                                 {{-- Name --}}
                                 <div class="mb-5">
-                                    <label for="name" class="block text-sm font-semibold text-slate-700 mb-2">Nama Lengkap</label>
+                                    <label for="name" class="block text-sm font-semibold text-slate-700 mb-2">{{ __('front.label_name') }}</label>
                                     <div class="relative">
                                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                                             <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
@@ -113,7 +113,7 @@
 
                                 {{-- Email --}}
                                 <div class="mb-5">
-                                    <label for="email" class="block text-sm font-semibold text-slate-700 mb-2">Email</label>
+                                    <label for="email" class="block text-sm font-semibold text-slate-700 mb-2">{{ __('front.label_email') }}</label>
                                     <div class="relative">
                                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                                             <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
@@ -127,7 +127,7 @@
 
                                 {{-- Phone --}}
                                 <div class="mb-6">
-                                    <label for="phone" class="block text-sm font-semibold text-slate-700 mb-2">Nomor Telepon</label>
+                                    <label for="phone" class="block text-sm font-semibold text-slate-700 mb-2">{{ __('front.label_phone') }}</label>
                                     <div class="relative">
                                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                                             <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
@@ -141,7 +141,7 @@
 
                                 <button type="submit" class="w-full flex justify-center items-center gap-2 py-3.5 px-4 rounded-button text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-soft focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                                    Simpan Perubahan
+                                    {{ __('front.button_save_changes') }}
                                 </button>
                             </form>
                         </div>
@@ -150,8 +150,8 @@
                     {{-- Form 2: Change password --}}
                     <div class="bg-white rounded-card border border-slate-100 shadow-card overflow-hidden">
                         <div class="bg-gradient-to-r from-sand-500 to-sand-600 px-6 py-5">
-                            <h2 class="font-display text-lg font-bold text-white">Ubah Password</h2>
-                            <p class="mt-0.5 text-sm text-sand-50">Pastikan akunmu tetap aman dengan password kuat.</p>
+                            <h2 class="font-display text-lg font-bold text-white">{{ __('front.profile_password_title') }}</h2>
+                            <p class="mt-0.5 text-sm text-sand-50">{{ __('front.profile_password_subtitle') }}</p>
                         </div>
 
                         <div class="p-6 sm:p-7">
@@ -161,7 +161,7 @@
 
                                 {{-- Current password --}}
                                 <div class="mb-5">
-                                    <label for="current_password" class="block text-sm font-semibold text-slate-700 mb-2">Password Saat Ini</label>
+                                    <label for="current_password" class="block text-sm font-semibold text-slate-700 mb-2">{{ __('front.profile_current_password_label') }}</label>
                                     <div class="relative">
                                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                                             <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
@@ -179,7 +179,7 @@
 
                                 {{-- New password --}}
                                 <div class="mb-5">
-                                    <label for="password" class="block text-sm font-semibold text-slate-700 mb-2">Password Baru</label>
+                                    <label for="password" class="block text-sm font-semibold text-slate-700 mb-2">{{ __('front.profile_new_password_label') }}</label>
                                     <div class="relative">
                                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                                             <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
@@ -197,7 +197,7 @@
 
                                 {{-- Confirm password --}}
                                 <div class="mb-6">
-                                    <label for="password_confirmation" class="block text-sm font-semibold text-slate-700 mb-2">Konfirmasi Password Baru</label>
+                                    <label for="password_confirmation" class="block text-sm font-semibold text-slate-700 mb-2">{{ __('front.profile_confirm_password_label') }}</label>
                                     <div class="relative">
                                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                                             <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
@@ -212,7 +212,7 @@
 
                                 <button type="submit" class="w-full flex justify-center items-center gap-2 py-3.5 px-4 rounded-button text-sm font-bold text-white bg-gradient-to-r from-sand-500 to-sand-600 hover:from-sand-600 hover:to-sand-700 shadow-soft focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sand-500 transition-all">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
-                                    Perbarui Password
+                                    {{ __('front.profile_password_update_button') }}
                                 </button>
                             </form>
                         </div>

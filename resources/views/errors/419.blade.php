@@ -1,5 +1,5 @@
 @extends('errors.ocean', [
     'code' => '419',
-    'headline' => 'Sesi berakhir',
-    'description' => 'Halaman ini sudah kedaluwarsa. Silakan muat ulang dan coba lagi.',
+    'headline' => __('errors.419_headline'),
+    'description' => __('errors.419_description'),
 ])
