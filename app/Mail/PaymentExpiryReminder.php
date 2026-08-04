@@ -45,6 +45,13 @@ class PaymentExpiryReminder extends Mailable implements ShouldQueue
         );
     }
 
+    public function build(): static
+    {
+        app()->setLocale($this->booking->user->locale ?? config('app.locale', 'id'));
+
+        return $this;
+    }
+
     /**
      * @return array<int, mixed>
      */

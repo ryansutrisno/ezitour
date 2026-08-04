@@ -2,14 +2,59 @@
 
 /*
 |--------------------------------------------------------------------------
-| Email strings — Phase 1 minimal (English)
+| Email strings — English
 |--------------------------------------------------------------------------
-| Phase 1 of the i18n rollout only translates the signoff and any generic
-| static phrases. FULL email body translation is deferred to Phase 3.
+| Shared and full email body translations for the notification mailables.
 */
 
 return [
     'signoff' => 'Best regards, The EziTour Team',
     'greeting' => 'Hi, :name',
     'help_footer' => 'Need help? Reach out to our support team anytime.',
+    'confirmed_title' => 'Thank you for booking!',
+    'confirmed_greeting' => 'Hi :name, your EziTour package booking has been received and is awaiting payment.',
+    'confirmed_panel_title' => 'Booking Details',
+    'label_booking_code' => 'Booking Code',
+    'label_package' => 'Package',
+    'label_travel_date' => 'Travel Date',
+    'label_pickup' => 'Pickup Point',
+    'label_total' => 'Total Payment',
+    'label_total_paid' => 'Total Paid',
+    'label_payment_method' => 'Payment Method',
+    'label_status' => 'Status',
+    'status_pending_payment' => 'Awaiting Payment',
+    'status_paid' => 'PAID',
+    'status_failed' => 'Failed',
+    'confirmed_cta_note' => 'Complete your payment within 24 hours to avoid automatic cancellation.',
+    'confirmed_cta_button' => 'View My Booking',
+    'confirmed_thank_you' => 'Thank you for trusting us with your holiday.',
+    'success_title' => 'Payment Successful!',
+    'success_greeting' => 'Hi :name, we have received and confirmed your payment. Your travel package is ready to enjoy!',
+    'success_panel_title' => 'E-Ticket',
+    'payment_method_midtrans' => 'Midtrans',
+    'success_note' => 'Keep this email as your booking confirmation. Our team will contact you before departure with pickup and drop-off details.',
+    'success_cta_button' => 'View Booking Details',
+    'success_closing' => 'See you on the journey!',
+    'failed_title' => 'Payment Unsuccessful',
+    'failed_greeting' => 'Hi :name, it looks like we could not process your payment.',
+    'failed_panel_title' => 'Booking Details',
+    'failed_note' => 'No worries — your booking is still active. You can try paying again anytime from your dashboard.',
+    'failed_cta_button' => 'View & Try Again',
+    'failed_help' => 'Need help? Reply to this email or contact our support team.',
+    'reminder_title' => 'Your Trip Is Tomorrow!',
+    'reminder_greeting' => 'Hi :name, get ready — your adventure with **:package** starts tomorrow!',
+    'reminder_panel_title' => 'Trip Details',
+    'reminder_tips_title' => 'Here are a few things to prepare:',
+    'reminder_tip_documents' => 'An identity document (ID card, driving licence, or passport) as required for your trip.',
+    'reminder_tip_clothing' => 'Comfortable clothing suitable for the destination weather.',
+    'reminder_tip_medicine' => 'Any personal medication you may need.',
+    'reminder_contact_note' => 'Our team will contact you to confirm the pickup time. Please make sure your WhatsApp number is active.',
+    'reminder_cta_button' => 'View Booking Details',
+    'reminder_closing' => 'See you on the journey!',
+    'expiry_title' => 'Your Payment Is Expiring Soon',
+    'expiry_greeting' => 'Hi :name, your EziTour booking will soon **expire** if payment is not completed. Do not miss out on your dream holiday!',
+    'expiry_panel_title' => 'Booking Details',
+    'expiry_note' => 'Complete your payment soon before your booking is automatically cancelled and your spot is released to other travelers.',
+    'expiry_cta_button' => 'Complete Payment',
+    'expiry_help' => 'Need help? Reply to this email or contact our support team.',
 ];
