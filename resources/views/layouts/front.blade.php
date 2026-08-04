@@ -122,6 +122,13 @@
                     </div>
                     @auth
                         <a href="{{ route('dashboard.index') }}" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">{{ __('front.nav_dashboard') }}</a>
+                        <a href="{{ route('front.wishlist.index') }}" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">
+                            {{ __('front.nav_wishlist') }}
+                            @php($favCount = auth()->user()->favorites()->count())
+                            @if($favCount > 0)
+                                <span class="ml-1 inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold rounded-pill bg-red-500 text-white">{{ $favCount }}</span>
+                            @endif
+                        </a>
                         <a href="{{ route('front.profile.edit') }}" class="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">{{ __('front.nav_profile') }}</a>
                         <form action="{{ route('logout') }}" method="POST" class="inline">
                             @csrf
