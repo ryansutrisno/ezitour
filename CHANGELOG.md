@@ -1,3 +1,10 @@
+## [1.17.0](https://github.com/ryansutrisno/ezitour/compare/v1.16.0...v1.17.0) (2026-08-04)
+
+
+### ✨ Features
+
+* add i18n phase 3 (email body translation via user locale) ([5e20105](https://github.com/ryansutrisno/ezitour/commit/5e20105483d16fdbf61f608918b22b33ba6cfd39))
+
 ## [1.16.0](https://github.com/ryansutrisno/ezitour/compare/v1.15.0...v1.16.0) (2026-08-04)
 
 
