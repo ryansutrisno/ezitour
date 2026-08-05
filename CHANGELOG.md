@@ -1,3 +1,11 @@
+## [1.18.1](https://github.com/ryansutrisno/ezitour/compare/v1.18.0...v1.18.1) (2026-08-05)
+
+
+### 🐛 Bug Fixes
+
+* remove redundant wishlist link from main navigation ([0f623dc](https://github.com/ryansutrisno/ezitour/commit/0f623dc0aa7273f8c168c91f247be59d0cab8a5b))
+* translate wishlist page, remove double sign out, reposition wishlist nav to auth block ([f78766c](https://github.com/ryansutrisno/ezitour/commit/f78766ca160b13cc1397b53d70dbf6c758fadb46))
+
 ## [1.18.0](https://github.com/ryansutrisno/ezitour/compare/v1.17.1...v1.18.0) (2026-08-04)
 
 
