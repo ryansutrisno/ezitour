@@ -1,3 +1,10 @@
+## [1.19.0](https://github.com/ryansutrisno/ezitour/compare/v1.18.1...v1.19.0) (2026-08-05)
+
+
+### ✨ Features
+
+* replace auth nav links with avatar dropdown menu (compact + professional) ([74e8ba1](https://github.com/ryansutrisno/ezitour/commit/74e8ba1e009c97e774ba691d02ec060a4a378335))
+
 ## [1.18.1](https://github.com/ryansutrisno/ezitour/compare/v1.18.0...v1.18.1) (2026-08-05)
 
 
