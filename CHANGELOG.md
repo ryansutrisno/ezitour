@@ -1,3 +1,10 @@
+## [1.19.2](https://github.com/ryansutrisno/ezitour/compare/v1.19.1...v1.19.2) (2026-08-07)
+
+
+### 🐛 Bug Fixes
+
+* save guest wishlist intent to login URL and auto-add after auth ([ac54421](https://github.com/ryansutrisno/ezitour/commit/ac544216872543d3ddf3ba7d118867888cde8343))
+
 ## [1.19.1](https://github.com/ryansutrisno/ezitour/compare/v1.19.0...v1.19.1) (2026-08-07)
 
 
