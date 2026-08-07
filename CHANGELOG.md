@@ -1,3 +1,10 @@
+## [1.19.1](https://github.com/ryansutrisno/ezitour/compare/v1.19.0...v1.19.1) (2026-08-07)
+
+
+### 🐛 Bug Fixes
+
+* wishlist toggle redirect to login with return URL + translate toggle-script strings ([06a351b](https://github.com/ryansutrisno/ezitour/commit/06a351b13ab092b92ec923b62b7d11c07a2488af))
+
 ## [1.19.0](https://github.com/ryansutrisno/ezitour/compare/v1.18.1...v1.19.0) (2026-08-05)
 
 
