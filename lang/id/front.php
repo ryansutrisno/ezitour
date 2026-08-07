@@ -274,6 +274,7 @@ return [
     'wishlist_empty_body' => 'Cari paket favoritmu dan simpan untuk akses cepat.',
     'wishlist_empty_cta' => 'Lihat Paket Wisata',
     'wishlist_breadcrumb' => 'Wishlist',
+    'wishlist_login_prompt' => 'Silakan login terlebih dahulu',
 
     // Misc shared strings
     'trust_secure_payment' => 'Pembayaran aman & terpercaya via Midtrans',

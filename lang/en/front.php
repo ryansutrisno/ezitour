@@ -273,6 +273,7 @@ return [
     'wishlist_empty_body' => 'Find your favorite packages and save them for quick access.',
     'wishlist_empty_cta' => 'Browse Travel Packages',
     'wishlist_breadcrumb' => 'Wishlist',
+    'wishlist_login_prompt' => 'Please log in first',
 
     // Misc shared strings
     'trust_secure_payment' => 'Secure & reliable payments via Midtrans',

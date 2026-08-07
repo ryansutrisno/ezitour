@@ -18,13 +18,13 @@
             if (isFavorited) {
                 button.classList.add('favorited');
                 button.innerHTML = FILLED_HEART;
-                button.setAttribute('title', 'Hapus dari Wishlist');
-                button.setAttribute('aria-label', 'Hapus dari Wishlist');
+                button.setAttribute('title', '{{ __("front.button_remove_wishlist") }}');
+                button.setAttribute('aria-label', '{{ __("front.button_remove_wishlist") }}');
             } else {
                 button.classList.remove('favorited');
                 button.innerHTML = OUTLINE_HEART;
-                button.setAttribute('title', 'Simpan ke Wishlist');
-                button.setAttribute('aria-label', 'Simpan ke Wishlist');
+                button.setAttribute('title', '{{ __("front.button_save_wishlist") }}');
+                button.setAttribute('aria-label', '{{ __("front.button_save_wishlist") }}');
             }
         }
 
@@ -41,7 +41,11 @@
                     }
                 });
                 if (res.status === 401) {
-                    window.location.href = '{{ route("login") }}';
+                    button.classList.remove('favorited');
+                    button.innerHTML = OUTLINE_HEART;
+                    button.setAttribute('title', '{{ __("front.wishlist_login_prompt") }}');
+                    button.setAttribute('aria-label', '{{ __("front.wishlist_login_prompt") }}');
+                    window.location.href = '{{ route("login") }}?redirect=' + encodeURIComponent(window.location.href);
                     return;
                 }
                 if (!res.ok) {
