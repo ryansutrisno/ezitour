@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Package;
 use App\Services\BookingCreationService;
 use App\Services\CheckoutSessionService;
 use Exception;
@@ -32,9 +33,23 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
+            // Process pending wishlist action from guest flow
+            $redirectUrl = null;
+            if ($request->filled('pending_wishlist')) {
+                $package = Package::where('slug', $request->pending_wishlist)->first();
+                if ($package) {
+                    Auth::user()->favorites()->syncWithoutDetaching([$package->id]);
+                }
+                $redirectUrl = $request->filled('redirect') ? $request->redirect : null;
+            }
+
             // Check if there's a pending booking from checkout flow
             if ($this->checkoutSessionService->hasPendingBooking()) {
                 return $this->processPendingBooking();
+            }
+
+            if ($redirectUrl) {
+                return redirect($redirectUrl);
             }
 
             return redirect()->intended(route('dashboard.index'));

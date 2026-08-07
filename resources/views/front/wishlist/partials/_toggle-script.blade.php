@@ -43,9 +43,7 @@
                 if (res.status === 401) {
                     button.classList.remove('favorited');
                     button.innerHTML = OUTLINE_HEART;
-                    button.setAttribute('title', '{{ __("front.wishlist_login_prompt") }}');
-                    button.setAttribute('aria-label', '{{ __("front.wishlist_login_prompt") }}');
-                    window.location.href = '{{ route("login") }}?redirect=' + encodeURIComponent(window.location.href);
+                    window.location.href = '{{ route("login") }}?pending_wishlist=' + encodeURIComponent(slug) + '&redirect=' + encodeURIComponent(window.location.href);
                     return;
                 }
                 if (!res.ok) {
