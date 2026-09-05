@@ -1,11 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
-# Optimize Laravel configuration on startup
-echo "Caching Laravel configuration and routes..."
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+# Create storage symbolic link
+echo "Linking storage..."
+php artisan storage:link || true
 
 # Run database migrations
 if [ "${RUN_MIGRATIONS:-true}" = "true" ]; then
@@ -13,10 +11,12 @@ if [ "${RUN_MIGRATIONS:-true}" = "true" ]; then
     php artisan migrate --force
 fi
 
-# Start PHP-FPM in background
-echo "Starting PHP-FPM..."
-php-fpm -D
+# Optimize Laravel cache for production
+echo "Caching Laravel configuration, routes, views, and events..."
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+php artisan event:cache
 
-# Start Nginx in foreground
-echo "Starting Nginx..."
-nginx -g "daemon off;"
+# Execute main container command (Supervisord)
+exec "$@"
