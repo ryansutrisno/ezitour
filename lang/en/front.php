@@ -170,6 +170,12 @@ return [
     'login_trust' => 'Secure & encrypted sign-in',
     'login_register_prompt' => "Don't have an account?",
     'login_register_link' => 'Sign up free',
+    'login_demo_title' => 'Demo accounts',
+    'login_demo_hint' => 'Click to autofill',
+    'login_demo_password_note' => 'Password: <span class="font-mono text-slate-600">password</span> is filled automatically too.',
+    'login_demo_role_admin' => 'Admin',
+    'login_demo_role_customer' => 'Customer',
+    'login_demo_fill_aria' => 'Autofill email and password for the :role account :email',
 
     // Auth — register
     'register_title' => 'Register',

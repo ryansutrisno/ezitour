@@ -171,6 +171,12 @@ return [
     'login_trust' => 'Login aman & terenkripsi',
     'login_register_prompt' => 'Belum punya akun?',
     'login_register_link' => 'Daftar gratis',
+    'login_demo_title' => 'Akun demo',
+    'login_demo_hint' => 'Klik untuk isi otomatis',
+    'login_demo_password_note' => 'Password: <span class="font-mono text-slate-600">password</span> juga terisi otomatis.',
+    'login_demo_role_admin' => 'Admin',
+    'login_demo_role_customer' => 'Customer',
+    'login_demo_fill_aria' => 'Isi otomatis email dan password akun :role :email',
 
     // Auth — register
     'register_title' => 'Daftar',

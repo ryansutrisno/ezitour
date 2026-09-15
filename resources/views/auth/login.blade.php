@@ -105,7 +105,7 @@
                             @enderror
                         </div>
 
-                        <button type="submit" class="w-full flex justify-center items-center py-3.5 px-4 rounded-button text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-soft focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all">
+                        <button id="login-submit" type="submit" class="w-full flex justify-center items-center py-3.5 px-4 rounded-button text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-soft focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all">
                             {{ __('front.login_submit') }}
                         </button>
                     </form>
@@ -116,6 +116,33 @@
                         {{ __('front.login_trust') }}
                     </div>
                 </div>
+            </div>
+
+            {{-- Demo accounts helper --}}
+            <div class="mt-5 rounded-card border border-slate-100 bg-white/70 p-4 shadow-soft">
+                <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+                    <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-400">{{ __('front.login_demo_title') }}</p>
+                    <p class="text-[11px] text-slate-400">{{ __('front.login_demo_hint') }}</p>
+                </div>
+                <div class="mt-2 space-y-0.5">
+                    <button type="button" onclick="fillDemoAccount('admin@ezitour.com')" aria-label="{{ __('front.login_demo_fill_aria', ['role' => 'Admin', 'email' => 'admin@ezitour.com']) }}" class="group flex w-full cursor-pointer items-center gap-3 rounded-input px-2 py-2 text-left transition-colors hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+                        <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-input bg-blue-50 text-xs font-bold text-blue-700">A</span>
+                        <span class="min-w-0 flex-1">
+                            <span class="block text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">{{ __('front.login_demo_role_admin') }}</span>
+                            <span class="block truncate text-[13px] font-medium text-slate-800">admin@ezitour.com</span>
+                        </span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="h-3.5 w-3.5 shrink-0 text-slate-300 transition group-hover:translate-x-0.5 group-hover:text-blue-600" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <button type="button" onclick="fillDemoAccount('customer@ezitour.com')" aria-label="{{ __('front.login_demo_fill_aria', ['role' => 'Customer', 'email' => 'customer@ezitour.com']) }}" class="group flex w-full cursor-pointer items-center gap-3 rounded-input px-2 py-2 text-left transition-colors hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+                        <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-input bg-blue-50 text-xs font-bold text-blue-700">C</span>
+                        <span class="min-w-0 flex-1">
+                            <span class="block text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">{{ __('front.login_demo_role_customer') }}</span>
+                            <span class="block truncate text-[13px] font-medium text-slate-800">customer@ezitour.com</span>
+                        </span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="h-3.5 w-3.5 shrink-0 text-slate-300 transition group-hover:translate-x-0.5 group-hover:text-blue-600" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+                <p class="mt-2 px-2 text-[11px] text-slate-400">{!! __('front.login_demo_password_note') !!}</p>
             </div>
 
             <p class="mt-6 text-center text-sm text-slate-600">
@@ -140,6 +167,24 @@
             input.type = 'password';
             eyeIcon.classList.remove('hidden');
             eyeOffIcon.classList.add('hidden');
+        }
+    }
+
+    function fillDemoAccount(email) {
+        var emailInput = document.getElementById('email');
+        var passwordInput = document.getElementById('password');
+        var submitButton = document.getElementById('login-submit');
+
+        if (emailInput) {
+            emailInput.value = email;
+        }
+
+        if (passwordInput) {
+            passwordInput.value = 'password';
+        }
+
+        if (submitButton) {
+            submitButton.focus();
         }
     }
 </script>
