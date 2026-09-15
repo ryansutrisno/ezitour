@@ -1,3 +1,10 @@
+## [1.21.0](https://github.com/ryansutrisno/ezitour/compare/v1.20.0...v1.21.0) (2026-09-15)
+
+
+### ✨ Features
+
+* add role-based login redirects and admin features ([380c72f](https://github.com/ryansutrisno/ezitour/commit/380c72f3934b5a3fe8adfe8cc1aab71424e3ff21))
+
 ## [1.20.0](https://github.com/ryansutrisno/ezitour/compare/v1.19.2...v1.20.0) (2026-09-15)
 
 
