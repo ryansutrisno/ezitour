@@ -37,6 +37,17 @@ class Package extends Model
     }
 
     /**
+     * Bookings created for this package.
+     *
+     * Inverse of {@link Booking::package()}. Needed by the admin dashboard
+     * aggregates (booking counts and paid revenue per package).
+     */
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    /**
      * Users who have saved this package as a favorite (wishlist).
      * Inverse of {@link User::favorites()}.
      */

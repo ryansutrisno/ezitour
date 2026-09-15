@@ -52,6 +52,11 @@ class LoginController extends Controller
                 return redirect($redirectUrl);
             }
 
+            // Admins land in the Filament panel; travelers continue to their booking history.
+            if (Auth::user()->isAdmin()) {
+                return redirect()->intended(route('filament.admin.pages.dashboard'));
+            }
+
             return redirect()->intended(route('dashboard.index'));
         }
 
